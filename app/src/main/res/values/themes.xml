@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.TrashApp" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TrashApp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.TrashApp</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+    </style>
+
+</resources>
