@@ -6,6 +6,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.TrashApp.Splash" parent="Theme.SplashScreen">

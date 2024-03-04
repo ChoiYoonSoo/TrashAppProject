@@ -3,4 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#B1D182</color>
+    <color name="button_border_grey">#727272</color>
+    <color name="grey">#727272</color>
+    <color name="kakao_background">#FEE500</color>
 </resources>
