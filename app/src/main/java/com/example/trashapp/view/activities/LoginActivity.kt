@@ -12,6 +12,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // 뒤로가기 버튼
         val backButton = findViewById<ImageButton>(R.id.backButton)
         backButton.setOnClickListener{
            finish()
