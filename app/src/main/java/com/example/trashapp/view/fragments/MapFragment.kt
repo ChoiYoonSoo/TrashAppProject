@@ -1,23 +1,34 @@
-package com.example.trashapp.view.activities
+package com.example.trashapp.view.fragments
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.trashapp.R
 import com.example.trashapp.data.MapData
-import com.example.trashapp.databinding.ActivityMapBinding
+import com.example.trashapp.databinding.FragmentIntroBinding
+import com.example.trashapp.databinding.FragmentMapBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-    class MapActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMapBinding   // 뷰 바인딩
+class MapFragment : Fragment() {
+
+    private lateinit var binding : FragmentMapBinding
     private lateinit var mapView : MapView              // 카카오 지도 뷰
     private var mapData = ArrayList<MapData>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMapBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentMapBinding.inflate(inflater,container,false)
         mapView = binding.mapView   // 카카오 지도 뷰
 
         // 위도 경도 테스트 하드 코딩
@@ -28,9 +39,13 @@ import net.daum.mf.map.api.MapView
         mapData.add(MapData("쓰레기통5",37.527534,127.028738))
 
         setMark(mapData)
+        return binding.root
     }
 
-        // 마커 생성
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     private fun setMark(dataList:ArrayList<MapData>){
         for (data in dataList){
             var marker = MapPOIItem()
@@ -45,7 +60,6 @@ import net.daum.mf.map.api.MapView
     }
 
 }
-
 
 //private val TAG = "SOL_LOG"
 //@RequiresApi(Build.VERSION_CODES.P)

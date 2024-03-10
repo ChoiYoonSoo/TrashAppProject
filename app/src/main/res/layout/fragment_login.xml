@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.LoginActivity">
+    tools:context=".view.fragments.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="back"
             android:layout_marginStart="20dp"
-           />
+            />
 
         <!-- 로그인 텍스트 -->
         <TextView
@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-           />
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

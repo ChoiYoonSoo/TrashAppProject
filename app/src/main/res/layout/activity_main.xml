@@ -6,66 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".view.activities.MainActivity">
 
-    <ImageView
-        android:id="@+id/splashImage1"
-        android:layout_width="177dp"
-        android:layout_height="60dp"
-        android:background="@drawable/title1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="198dp">
-    </ImageView>
-
-    <ImageView
-        android:id="@+id/splashImage2"
-        android:layout_width="234dp"
-        android:layout_height="14dp"
-        android:background="@drawable/title2"
-        app:layout_constraintTop_toBottomOf="@id/splashImage1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp">
-    </ImageView>
-
-    <Button
-        android:id="@+id/btnLoginSignUp"
-        android:layout_width="358dp"
-        android:layout_height="45dp"
-        android:text="로그인/회원가입"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splashImage2"
-        android:background="@drawable/login_button_border"
-       />
-
-    <Button
-        android:id="@+id/btnKakaoStart"
-        android:layout_width="358dp"
-        android:layout_height="45dp"
-        android:text="카카오톡으로 시작하기"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLoginSignUp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:drawableLeft="@drawable/kakao_image"
-        android:background="@drawable/kakao_button_border"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_nav"
         />
-
-    <TextView
-        android:id="@+id/startWithoutLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/startWithoutLogin"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnKakaoStart"
-        android:layout_marginTop="25dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
