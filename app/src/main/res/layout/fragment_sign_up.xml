@@ -10,7 +10,7 @@
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="회원가입"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:fontFamily="@font/gmarketsansttfmedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         android:id="@+id/container1"
         android:layout_width="358dp"
         android:layout_height="203dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="35dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +121,7 @@
                 ></EditText>
 
             <Button
+                android:id="@+id/confirmButton"
                 android:layout_width="111dp"
                 android:layout_height="45dp"
                 android:text="확인"
@@ -137,6 +138,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/authTimeText"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content"
+        android:text="3:51"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendardregular"
+        app:layout_constraintTop_toBottomOf="@id/container1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </TextView>
     
     <LinearLayout
         android:id="@+id/container2"
@@ -213,6 +227,20 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/pwdIncorrectText"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content"
+        android:text="비밀번호가 맞지 않습니다."
+        android:fontFamily="@font/pretendardregular"
+        android:textSize="11sp"
+        app:layout_constraintTop_toBottomOf="@id/container2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+      >
+
+    </TextView>
+
     <LinearLayout
         android:id="@+id/container3"
         android:layout_width="358dp"
@@ -224,6 +252,7 @@
         android:layout_marginTop="32dp">
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="닉네임"
@@ -262,6 +291,41 @@
                 ></Button>
         </FrameLayout>
     </LinearLayout>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/duplicateNickText"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container3">
+        
+        <ImageButton
+            android:id="@+id/warningIcon"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:src="@drawable/warningcircle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </ImageButton>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="이미 존재하는 닉네임 입니다."
+            android:textSize="11sp"
+            android:fontFamily="@font/pretendardregular"
+            android:layout_marginLeft="5dp"
+            app:layout_constraintStart_toEndOf="@id/warningIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </TextView>
+        
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
     
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container4"

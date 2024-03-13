@@ -36,6 +36,8 @@ class IntroFragment : Fragment() {
         binding.btnLoginSignUp.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_loginFragment2)
         }
+
+
     }
 
 }

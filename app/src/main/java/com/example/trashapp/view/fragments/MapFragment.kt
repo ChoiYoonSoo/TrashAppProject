@@ -32,11 +32,11 @@ class MapFragment : Fragment() {
         mapView = binding.mapView   // 카카오 지도 뷰
 
         // 위도 경도 테스트 하드 코딩
-        mapData.add(MapData("쓰레기통1",37.527126,127.044038))
-        mapData.add(MapData("쓰레기통2",37.527701,127.040818))
-        mapData.add(MapData("쓰레기통3",37.528211,127.039334))
-        mapData.add(MapData("쓰레기통4",37.528804,127.037537))
-        mapData.add(MapData("쓰레기통5",37.527534,127.028738))
+        mapData.add(MapData("쓰레기통1",37.577375,126.97216820000001))
+//        mapData.add(MapData("쓰레기통2",37.527701,127.040818))
+//        mapData.add(MapData("쓰레기통3",37.528211,127.039334))
+//        mapData.add(MapData("쓰레기통4",37.528804,127.037537))
+//        mapData.add(MapData("쓰레기통5",37.527534,127.028738))
 
         setMark(mapData)
         return binding.root
@@ -54,7 +54,7 @@ class MapFragment : Fragment() {
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude,data.longitude)
                 selectedMarkerType = MapPOIItem.MarkerType.RedPin
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.527126,127.044038),true)
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.577375,126.97216820000001),true)
             mapView.addPOIItem(marker)
         }
     }

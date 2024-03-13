@@ -10,6 +10,7 @@ import com.example.trashapp.databinding.FragmentSignUpBinding
 
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,9 +26,24 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val authTimeText = binding.authTimeText
+        authTimeText.visibility = View.GONE
+
+        val pwdIncorrectText = binding.pwdIncorrectText
+        pwdIncorrectText.visibility = View.GONE
+
+        val duplicateNickText = binding.duplicateNickText
+        duplicateNickText.visibility = View.GONE
+
+        binding.confirmButton.setOnClickListener {
+            authTimeText.visibility = View.VISIBLE
+        }
+
         binding.backButton.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
+
     }
 
 }
