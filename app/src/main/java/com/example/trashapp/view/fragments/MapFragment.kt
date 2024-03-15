@@ -12,6 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.trashapp.R
@@ -32,7 +33,6 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -45,10 +45,10 @@ class MapFragment : Fragment() {
 
         // 위도 경도 테스트 하드 코딩
         mapData.add(MapData("쓰레기통1",37.577375,126.97216820000001))
-//        mapData.add(MapData("쓰레기통2",37.527701,127.040818))
-//        mapData.add(MapData("쓰레기통3",37.528211,127.039334))
-//        mapData.add(MapData("쓰레기통4",37.528804,127.037537))
-//        mapData.add(MapData("쓰레기통5",37.527534,127.028738))
+        mapData.add(MapData("쓰레기통2",37.527380,126.962169))
+        mapData.add(MapData("쓰레기통3",37.528211,127.039334))
+        mapData.add(MapData("쓰레기통4",37.528804,127.037537))
+        mapData.add(MapData("쓰레기통5",37.527534,127.028738))
 
         setMark(mapData)
 
@@ -96,19 +96,37 @@ class MapFragment : Fragment() {
                 customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
                 markerType = MapPOIItem.MarkerType.CustomImage
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.577375,126.97216820000001),true)
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.528211,127.039334),true)
             mapView.addPOIItem(marker)
 
         }
 
         // 마커 클릭 이벤트 리스너 설정
+        // 다른마커 선택 시 레이아웃 업데이트되게 해야함
         mapView.setPOIItemEventListener(object : MapView.POIItemEventListener {
 
             override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
                 // 마커 클릭 시 동작
                 // 여기에 커스텀 뷰를 표시하는 로직을 구현
                 // 예: 커스텀 다이얼로그 띄우기, 다른 액티비티 또는 프래그먼트로 넘어가기 등
+                val markerName = poiItem?.itemName ?: "Unknown"
+                // bin_info 레이아웃의 TextView를 찾아 마커의 이름을 설정합니다.
+                val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)
+                binTitleTextView.text = markerName
+
                 val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+
+                if (binInfoLayout.visibility == View.VISIBLE) {
+                    binInfoLayout.visibility = View.GONE
+                }
+
+                // 애니메이션을 적용하고 레이아웃을 다시 표시
+                binInfoLayout.post {
+                    binInfoLayout.visibility = View.VISIBLE
+                    val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+                    binInfoLayout.startAnimation(slideUpAnimation)
+                }
+
                 val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
                 // 뷰에 애니메이션 적용
                 binInfoLayout.startAnimation(slideUpAnimation)
