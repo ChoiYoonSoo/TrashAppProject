@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -23,13 +24,12 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-class MapFragment : Fragment() {
+class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEventListener {
 
-    private lateinit var binding : FragmentMapBinding
-    private lateinit var mapView : MapView              // 카카오 지도 뷰
+    private lateinit var binding: FragmentMapBinding
+    private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var mapData = ArrayList<MapData>()
-    private var selectedMarker : MapPOIItem? = null
-    private var lastY : Float = 0.0f
+    private var lastY: Float = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,32 +40,48 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentMapBinding.inflate(inflater,container,false)
-        mapView = binding.mapView   // 카카오 지도 뷰
-
-        // 위도 경도 테스트 하드 코딩
-        mapData.add(MapData("쓰레기통1",37.577375,126.97216820000001))
-        mapData.add(MapData("쓰레기통2",37.527380,126.962169))
-        mapData.add(MapData("쓰레기통3",37.528211,127.039334))
-        mapData.add(MapData("쓰레기통4",37.528804,127.037537))
-        mapData.add(MapData("쓰레기통5",37.527534,127.028738))
-
-        setMark(mapData)
-
+        binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupDraggableBottomPanel()
+        mapView = binding.mapView   // 카카오 지도 뷰
 
+        // 위도 경도 테스트 하드 코딩
+        mapData.add(MapData("쓰레기통1", 37.577375, 126.97216820000001))
+        mapData.add(MapData("쓰레기통2", 37.527380, 126.962169))
+        mapData.add(MapData("쓰레기통3", 37.528211, 127.039334))
+        mapData.add(MapData("쓰레기통4", 37.528804, 127.037537))
+        mapData.add(MapData("쓰레기통5", 37.527534, 127.028738))
+
+        setMark(mapData)
+        setupDraggableBottomPanel()
+        mapView.setMapViewEventListener(this)
+        mapView.setPOIItemEventListener(this)
+
+    }
+
+    // 지도 마커 띄우기
+    private fun setMark(dataList: ArrayList<MapData>) {
+        for (data in dataList) {
+            var marker = MapPOIItem()
+            marker.apply {
+                itemName = data.name
+                mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
+                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
+                markerType = MapPOIItem.MarkerType.CustomImage
+            }
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.528211, 127.039334), true)
+            mapView.addPOIItem(marker)
+        }
 
     }
 
     // 스크롤 이동
     @SuppressLint("ClickableViewAccessibility")
     private fun setupDraggableBottomPanel() {
-        val draggableLayout = binding.root.findViewById<ConstraintLayout>(R.id.test) // yourDraggableLayoutId는 드래그 가능한 레이아웃의 ID로 교체해야 함.
+        val draggableLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
         draggableLayout.setOnTouchListener { view, event ->
             val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
             when (event.action) {
@@ -73,85 +89,31 @@ class MapFragment : Fragment() {
                     lastY = event.rawY
                     true
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val deltaY = event.rawY - lastY
                     val newHeight = (layoutParams.height + deltaY).toInt()
-                    layoutParams.height = newHeight.coerceAtLeast(300) // 여기서 300은 최소 높이, 필요에 따라 조정 가능
+                    layoutParams.height =
+                        newHeight.coerceAtLeast(300) // 여기서 300은 최소 높이, 필요에 따라 조정 가능
                     view.layoutParams = layoutParams
                     lastY = event.rawY
                     true
                 }
+
                 else -> false
             }
         }
     }
 
-    // 지도 마커 띄우기
-    private fun setMark(dataList:ArrayList<MapData>){
-        for (data in dataList){
-            var marker = MapPOIItem()
-            marker.apply {
-                itemName = data.name
-                mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude,data.longitude)
-                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
-                markerType = MapPOIItem.MarkerType.CustomImage
-            }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.528211,127.039334),true)
-            mapView.addPOIItem(marker)
-
-        }
-
-        // 마커 클릭 이벤트 리스너 설정
-        // 다른마커 선택 시 레이아웃 업데이트되게 해야함
-        mapView.setPOIItemEventListener(object : MapView.POIItemEventListener {
-
-            override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
-                // 마커 클릭 시 동작
-                // 여기에 커스텀 뷰를 표시하는 로직을 구현
-                // 예: 커스텀 다이얼로그 띄우기, 다른 액티비티 또는 프래그먼트로 넘어가기 등
-                val markerName = poiItem?.itemName ?: "Unknown"
-                // bin_info 레이아웃의 TextView를 찾아 마커의 이름을 설정합니다.
-                val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)
-                binTitleTextView.text = markerName
-
-                val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
-
-                if (binInfoLayout.visibility == View.VISIBLE) {
-                    binInfoLayout.visibility = View.GONE
-                }
-
-                // 애니메이션을 적용하고 레이아웃을 다시 표시
-                binInfoLayout.post {
-                    binInfoLayout.visibility = View.VISIBLE
-                    val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-                    binInfoLayout.startAnimation(slideUpAnimation)
-                }
-
-                val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-                // 뷰에 애니메이션 적용
-                binInfoLayout.startAnimation(slideUpAnimation)
-                binInfoLayout.visibility = View.VISIBLE // 여기를
-            }
-
-            override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {
-                // 기본 말풍선 클릭 시 동작 (이 경우 사용하지 않음)
-            }
-
-            override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {
-                // 말풍선의 버튼 클릭 시 동작 (이 경우 사용하지 않음)
-            }
-
-            override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {
-                // 마커 드래그 시 동작 (이 경우 사용하지 않음)
-            }
-        })
-    }
-
-    // Vector -> Bitmap 변환
+    // 마커 커스텀 이미지 Vector -> Bitmap 변환 함수
     private fun getBitmapFromVectorDrawable(drawableId: Int): Bitmap? {
         val drawable = context?.let { ContextCompat.getDrawable(it, drawableId) }
         if (drawable is VectorDrawable) {
-            val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val bitmap = Bitmap.createBitmap(
+                drawable.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)
@@ -160,5 +122,73 @@ class MapFragment : Fragment() {
             return drawable.bitmap
         }
         return null
+    }
+
+    // MapViewEventListener
+    override fun onMapViewInitialized(p0: MapView?) {
+
+    }
+
+    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
+
+    }
+
+    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
+        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+        if (binInfoLayout.visibility == View.VISIBLE) {
+            binInfoLayout.visibility = View.GONE
+            Log.d("Map", "${binInfoLayout.visibility}")
+        }
+    }
+
+    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+    // POIItemEventListener
+    override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
+        val markerName = p1?.itemName ?: "Unknown"
+        val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)
+        binTitleTextView.text = markerName
+
+        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+        binInfoLayout.visibility = View.VISIBLE
+
+        val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        // 뷰에 애니메이션 적용
+        binInfoLayout.startAnimation(slideUpAnimation)
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(p0: MapView?, p1: MapPOIItem?) {
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(
+        p0: MapView?,
+        p1: MapPOIItem?,
+        p2: MapPOIItem.CalloutBalloonButtonType?
+    ) {
+    }
+
+    override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
     }
 }
