@@ -2,56 +2,72 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:background="@drawable/rounded_background">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_background"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:padding="20dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/binInfoContainer"
+    <TextView
+        android:id="@+id/binTitle"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendardregular"
+        android:text="쓰레기통 위치"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/binTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendardregular"
-            android:text="글샘공원"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/binDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/pretendardregular"
-            android:text="서울 송파구 문정동 625"
-            android:textColor="@color/grey"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/binTitle"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/binDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="세부주소"
+        android:textColor="@color/grey"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@id/binTitle"
+        app:layout_constraintTop_toBottomOf="@id/binTitle"
+        app:layout_constraintEnd_toEndOf="@id/binTitle"/>
 
     <Button
+        android:id="@+id/report_button"
         android:layout_width="55dp"
         android:layout_height="25dp"
         android:text="신고"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/report_button_border"
         android:padding="5dp"
         android:drawableLeft="@drawable/siren2"
-        app:layout_constraintTop_toBottomOf="@id/binInfoContainer"
-        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="@id/binDetail"
+        app:layout_constraintTop_toBottomOf="@id/binDetail"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="2dp"
         />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/report_button">
+
+        <include
+            android:id="@+id/reportListContainer"
+            layout="@layout/report_list"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

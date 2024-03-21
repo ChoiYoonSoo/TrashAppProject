@@ -13,13 +13,21 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.R
 import com.example.trashapp.data.MapData
+import com.example.trashapp.data.ReportItemData
+import com.example.trashapp.databinding.BinInfoBinding
 import com.example.trashapp.databinding.FragmentIntroBinding
 import com.example.trashapp.databinding.FragmentMapBinding
+import com.example.trashapp.databinding.ReportListBinding
+import com.example.trashapp.view.adapter.ReportItemAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -56,10 +64,34 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         mapData.add(MapData("쓰레기통5", 37.527534, 127.028738))
 
         setMark(mapData)
-        setupDraggableBottomPanel()
         mapView.setMapViewEventListener(this)
         mapView.setPOIItemEventListener(this)
 
+        val reportButton = view.findViewById<Button>(R.id.report_button)
+        val reportList = view.findViewById<View>(R.id.reportListContainer)
+
+        reportButton.setOnClickListener{
+            if(reportList.visibility == View.GONE){
+                reportList.visibility = View.VISIBLE
+                Log.d("reportButton","click")
+            }
+        }
+
+        // 신고 RecyclerView 초기화
+        val reportRecyclerView = view.findViewById<RecyclerView>(R.id.reportRV)
+        val reportTextList = ArrayList<ReportItemData>()
+        reportTextList.add(ReportItemData("지도에 나온 위치에 정확히 있었어요."))
+        reportTextList.add(ReportItemData("분리수거 할 수 있게 되어 있어요."))
+        reportTextList.add(ReportItemData("쓰레기가 꽉 차 있어 버릴 수 없어요."))
+        reportTextList.add(ReportItemData("지도에 나온 위치와 다른 곳에 있어요."))
+        reportTextList.add(ReportItemData("지도에 나온 위치에 없어요."))
+
+        reportRecyclerView.adapter = ReportItemAdapter(reportTextList)
+        reportRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        binding.settingButton.setOnClickListener{
+            Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_settingFragment)
+        }
     }
 
     // 지도 마커 띄우기
@@ -81,7 +113,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     // 스크롤 이동
     @SuppressLint("ClickableViewAccessibility")
     private fun setupDraggableBottomPanel() {
-        val draggableLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+        val draggableLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         draggableLayout.setOnTouchListener { view, event ->
             val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
             when (event.action) {
@@ -89,7 +121,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
-
                 MotionEvent.ACTION_MOVE -> {
                     val deltaY = event.rawY - lastY
                     val newHeight = (layoutParams.height + deltaY).toInt()
@@ -99,7 +130,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
-
                 else -> false
             }
         }
@@ -138,7 +168,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
-        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
+
+        val reportList = binding.root.findViewById<View>(R.id.reportListContainer)
+        reportList.visibility = View.GONE
+
         if (binInfoLayout.visibility == View.VISIBLE) {
             binInfoLayout.visibility = View.GONE
             Log.d("Map", "${binInfoLayout.visibility}")
@@ -171,8 +205,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)
         binTitleTextView.text = markerName
 
-        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.test)
+        val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         binInfoLayout.visibility = View.VISIBLE
+
+        val reportList = binding.root.findViewById<View>(R.id.reportListContainer)
+        reportList.visibility = View.GONE
 
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         // 뷰에 애니메이션 적용

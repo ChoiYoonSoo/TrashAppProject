@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.MapFragment">
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +25,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="56dp">
 
             <EditText
@@ -47,6 +46,7 @@
                 />
 
             <ImageButton
+                android:id="@+id/settingButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/list"
@@ -62,9 +62,9 @@
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/test"
+        android:id="@+id/binInfoContainer"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,8 +72,9 @@
 
         <include
             layout="@layout/bin_info"
+            android:id="@+id/binInfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

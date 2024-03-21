@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.SettingFragment">
+
+    <ImageButton
+        android:id="@+id/settingBackButton"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/backbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/settingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="설정"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settingBackButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/baseInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="기본정보"
+        android:textColor="@color/reportBorder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingTitle" />
+
+    <ImageView
+        android:id="@+id/profIleImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baseInfo" />
+
+    <TextView
+        android:id="@+id/nickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="닉네임"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/profIleImage"
+        app:layout_constraintTop_toBottomOf="@id/baseInfo" />
+
+    <TextView
+        android:id="@+id/settingEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="이메일주소"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/profIleImage"
+        app:layout_constraintTop_toBottomOf="@+id/nickName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="내 정보 수정하기"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nickName" />
+
+    <TextView
+        android:id="@+id/privacyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="개인 정보 보호"
+        android:textColor="@color/reportBorder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profIleImage" />
+
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/next_button"
+        android:fontFamily="@font/pretendardregular"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="E-mail 계정"
+        android:textAlignment="textStart"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacyTitle" />
+
+    <Button
+        android:id="@+id/privacyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/next_button"
+        android:fontFamily="@font/pretendardregular"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="개인정보관리"
+        android:textAlignment="textStart"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailButton" />
+
+    <TextView
+        android:id="@+id/otherTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="기타"
+        android:textColor="@color/reportBorder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacyButton" />
+
+ <Button
+     android:id="@+id/contactButton"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@android:color/transparent"
+     android:drawableEnd="@drawable/next_button"
+     android:fontFamily="@font/pretendardregular"
+     android:paddingLeft="20dp"
+     android:paddingRight="20dp"
+     android:text="문의하기"
+     android:textAlignment="textStart"
+     android:textSize="14sp"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/otherTitle" />
+
+ <Button
+     android:id="@+id/unSubButton"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@android:color/transparent"
+     android:drawableEnd="@drawable/next_button"
+     android:fontFamily="@font/pretendardregular"
+     android:paddingLeft="20dp"
+     android:paddingRight="20dp"
+     android:text="탈퇴하기"
+     android:textAlignment="textStart"
+     android:textSize="14sp"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/contactButton" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
