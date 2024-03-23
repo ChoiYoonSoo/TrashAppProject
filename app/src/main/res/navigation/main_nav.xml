@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_settingFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_unsubFragment"
+            app:destination="@id/unsubFragment" />
     </fragment>
     <fragment
         android:id="@+id/emailFragment"
@@ -69,4 +72,9 @@
         android:name="com.example.trashapp.view.fragments.ContactFragment"
         android:label="fragment_contact"
         tools:layout="@layout/fragment_contact" />
+    <fragment
+        android:id="@+id/unsubFragment"
+        android:name="com.example.trashapp.view.fragments.UnsubFragment"
+        android:label="fragment_unsub"
+        tools:layout="@layout/fragment_unsub" />
 </navigation>
