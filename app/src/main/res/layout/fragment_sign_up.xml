@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/dimens_margin"
+    android:paddingRight="@dimen/dimens_margin"
     tools:context=".view.fragments.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topContainer"
+        android:id="@+id/signUpContainer"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginTop="44dp"
@@ -17,10 +19,9 @@
 
         <!-- 뒤로가기 버튼 -->
         <ImageButton
-            android:id="@+id/backButton"
+            android:id="@+id/signUpBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
             android:contentDescription="back"
             android:src="@drawable/ic_back_arrow"
@@ -30,13 +31,13 @@
 
         <!-- 회원가입 텍스트 -->
         <TextView
-            android:id="@+id/loginText"
+            android:id="@+id/signUpLoginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
             android:text="회원가입"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:fontFamily="@font/gmarketsansttfmedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,94 +46,87 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/container1"
-        android:layout_width="358dp"
-        android:layout_height="203dp"
+        android:id="@+id/signUpContainer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topContainer">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpContainer">
 
         <TextView
-            android:id="@+id/signUptext"
+            android:id="@+id/signUpText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendardregular"
             android:text="로그인에 사용할\n이메일 / 비밀번호를 입력해주세요."
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:fontFamily="@font/pretendardregular"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </TextView>
-        
+            app:layout_constraintTop_toTopOf="parent" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="35dp">
-            
-        <EditText
-            android:id="@+id/emailEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="이메일 입력"
-            android:paddingLeft="10dp"
-            android:fontFamily="@font/pretendardregular"
-            android:textSize="16dp"
-            android:background="@drawable/base_button_border">
-        </EditText>
-            
-            <Button
-                android:id="@+id/authButton"
-                android:layout_width="82dp"
-                android:layout_height="26dp"
-                android:text="인증번호 받기"
-                android:fontFamily="@font/pretendardregular"
-                android:textSize="12sp"
+
+            <EditText
+                android:id="@+id/signUpEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:hint="이메일 입력"
+                android:paddingLeft="10dp"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/signUpAuthButton"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="10dp"
-                ></Button>
+                android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:text="인증번호 받기"
+                android:textSize="12sp" />
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/authText"
+                android:id="@+id/signUpAuthText"
                 android:layout_width="235dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
                 android:hint="인증번호"
                 android:paddingLeft="10dp"
-                android:fontFamily="@font/pretendardregular"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                ></EditText>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/confirmButton"
+                android:id="@+id/signUpConfirmButton"
                 android:layout_width="111dp"
                 android:layout_height="45dp"
-                android:text="확인"
-                android:fontFamily="@font/pretendardregular"
                 android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:text="확인"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                >
-            </Button>
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -140,127 +134,36 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/authTimeText"
-        android:layout_width="358dp"
+        android:id="@+id/signUpAuthTimeText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendardregular"
         android:text="3:51"
         android:textSize="11sp"
-        android:fontFamily="@font/pretendardregular"
-        app:layout_constraintTop_toBottomOf="@id/container1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/signUpContainer1">
 
     </TextView>
-    
+
     <LinearLayout
-        android:id="@+id/container2"
-        android:layout_width="358dp"
+        android:id="@+id/signUpContainer2"
+        android:layout_width="match_parent"
         android:layout_height="146dp"
-        app:layout_constraintTop_toBottomOf="@+id/container1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호 설정"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendardregular"
-            android:textSize="20dp"
-            android:textColor="@color/black">
-        </TextView>
-        
-        <FrameLayout
-            android:layout_width="358dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp">
-            
-            <EditText
-                android:id="@+id/passwordEditText1"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/base_button_border"
-                android:hint="영문, 숫자, 특수문자 조합 8자리 이상"
-                android:fontFamily="@font/pretendardregular"
-                android:textSize="16sp"
-                android:padding="10dp"></EditText>
-
-            <ImageButton
-                android:id="@+id/togglePasswordVisibilityButton1"
-                android:src="@drawable/eye"
-                android:background="@android:color/transparent"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="end|center_vertical"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="358dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp">
-
-            <EditText
-                android:id="@+id/passwordEditText2"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/base_button_border"
-                android:hint="비밀번호 재입력"
-                android:fontFamily="@font/pretendardregular"
-                android:textSize="16sp"
-                android:padding="10dp"></EditText>
-
-            <ImageButton
-                android:id="@+id/togglePasswordVisibilityButton2"
-                android:src="@drawable/eye"
-                android:background="@android:color/transparent"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="end|center_vertical"/>
-
-        </FrameLayout>
-
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/pwdIncorrectText"
-        android:layout_width="358dp"
-        android:layout_height="wrap_content"
-        android:text="비밀번호가 맞지 않습니다."
-        android:fontFamily="@font/pretendardregular"
-        android:textSize="11sp"
-        app:layout_constraintTop_toBottomOf="@id/container2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-      >
-
-    </TextView>
-
-    <LinearLayout
-        android:id="@+id/container3"
-        android:layout_width="358dp"
-        android:layout_height="85dp"
-        app:layout_constraintTop_toBottomOf="@+id/container2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:orientation="vertical"
-        android:layout_marginTop="32dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpContainer1">
 
         <TextView
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="닉네임"
-            android:textStyle="bold"
             android:fontFamily="@font/pretendardregular"
+            android:text="비밀번호 설정"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            android:textColor="@color/black">
-        </TextView>
+            android:textStyle="bold" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -268,93 +171,179 @@
             android:layout_marginTop="8dp">
 
             <EditText
-                android:id="@+id/nickEditText"
+                android:id="@+id/passwordEditText1"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:hint="영문, 숫자, 특수문자 조합 8자리 이상"
+                android:padding="10dp"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/signUpPasswordVisibilityButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/eye" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/signUpPasswordEditText2"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:hint="비밀번호 재입력"
+                android:padding="10dp"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/signUpPasswordVisibilityButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/eye" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/signUpPwdIncorrectText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendardregular"
+        android:text="비밀번호가 맞지 않습니다."
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
+
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/signUpContainer3"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpContainer2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendardregular"
+            android:text="닉네임"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/signUpNickEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
                 android:hint="닉네임 입력"
                 android:paddingLeft="10dp"
-                android:fontFamily="@font/pretendardregular"
-                android:textSize="16dp"
-                android:background="@drawable/base_button_border">
-            </EditText>
+                android:textSize="16dp" />
 
             <Button
-                android:id="@+id/duplicateButton"
-                android:layout_width="82dp"
+                android:id="@+id/signUpDuplicateButton"
+                android:layout_width="wrap_content"
                 android:layout_height="26dp"
-                android:text="중복확인"
-                android:fontFamily="@font/pretendardregular"
-                android:textSize="12sp"
-                android:background="@drawable/base_button_border"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="10dp"
-                ></Button>
+                android:background="@drawable/base_button_border"
+                android:fontFamily="@font/pretendardregular"
+                android:text="중복확인"
+                android:textSize="12sp" />
         </FrameLayout>
     </LinearLayout>
-    
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/duplicateNickText"
-        android:layout_width="358dp"
+        android:id="@+id/signUpDuplicateNickText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container3">
-        
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpContainer3">
+
         <ImageButton
-            android:id="@+id/warningIcon"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
+            android:id="@+id/signUpWarningIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:src="@drawable/warningcircle"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/pretendardregular"
             android:text="이미 존재하는 닉네임 입니다."
             android:textSize="11sp"
-            android:fontFamily="@font/pretendardregular"
-            android:layout_marginLeft="5dp"
-            app:layout_constraintStart_toEndOf="@id/warningIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/signUpWarningIcon"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
-        
-        
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container4"
-        android:layout_width="358dp"
+        android:id="@+id/signUpContainer4"
+        android:layout_width="match_parent"
         android:layout_height="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container3"
         android:layout_marginTop="50dp"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpContainer3">
+
         <TextView
             android:id="@+id/acceptText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/acceptText"
-            android:textSize="11dp"
             android:textColor="@color/black"
+            android:textSize="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/checkcircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:src="@drawable/checkcircle"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
         </ImageButton>
 
@@ -362,18 +351,16 @@
 
     <Button
         android:id="@+id/signUpButton"
-        android:layout_width="358dp"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="가입완료"
-        android:fontFamily="@font/pretendardregular"
-        android:textColor="@color/grey"
         android:layout_marginTop="16dp"
+        android:background="@drawable/shape_button_border"
+        android:fontFamily="@font/pretendardregular"
+        android:text="가입완료"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container4"
-        android:background="@drawable/login_button_border"
-        />
-
+        app:layout_constraintTop_toBottomOf="@+id/signUpContainer4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

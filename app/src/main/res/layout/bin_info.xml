@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_background"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
+    android:padding="20dp"
     app:layout_constraintEnd_toEndOf="parent"
-    android:padding="20dp">
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
         android:id="@+id/binTitle"
@@ -18,9 +18,9 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/binDetail"
@@ -31,41 +31,40 @@
         android:text="세부주소"
         android:textColor="@color/grey"
         android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/binTitle"
         app:layout_constraintStart_toStartOf="@id/binTitle"
-        app:layout_constraintTop_toBottomOf="@id/binTitle"
-        app:layout_constraintEnd_toEndOf="@id/binTitle"/>
+        app:layout_constraintTop_toBottomOf="@id/binTitle" />
 
     <Button
-        android:id="@+id/report_button"
+        android:id="@+id/binReportBtn"
         android:layout_width="55dp"
         android:layout_height="25dp"
-        android:text="신고"
-        android:textSize="11sp"
-        android:background="@drawable/report_button_border"
-        android:padding="5dp"
-        android:drawableLeft="@drawable/siren2"
-        app:layout_constraintEnd_toEndOf="@id/binDetail"
-        app:layout_constraintTop_toBottomOf="@id/binDetail"
         android:layout_marginTop="40dp"
         android:layout_marginRight="2dp"
-        />
+        android:background="@drawable/report_button_border"
+        android:drawableLeft="@drawable/siren2"
+        android:padding="5dp"
+        android:text="신고"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/binDetail"
+        app:layout_constraintTop_toBottomOf="@id/binDetail" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/report_button">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/binReportBtn">
 
         <include
             android:id="@+id/reportListContainer"
             layout="@layout/report_list"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

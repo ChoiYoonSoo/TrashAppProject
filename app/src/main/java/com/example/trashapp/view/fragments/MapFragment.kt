@@ -67,7 +67,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         mapView.setMapViewEventListener(this)
         mapView.setPOIItemEventListener(this)
 
-        val reportButton = view.findViewById<Button>(R.id.report_button)
+        val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
 
         reportButton.setOnClickListener{
@@ -89,7 +89,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         reportRecyclerView.adapter = ReportItemAdapter(reportTextList)
         reportRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        binding.settingButton.setOnClickListener{
+        binding.mapSettingBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_settingFragment)
         }
     }

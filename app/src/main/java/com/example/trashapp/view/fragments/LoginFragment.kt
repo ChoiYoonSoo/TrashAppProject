@@ -30,11 +30,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backButton.setOnClickListener{
+        binding.loginBackButton.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
 
-        binding.btnSignUp.setOnClickListener{
+        binding.loginSignUpBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_loginFragment2_to_signUpFragment)
         }
     }

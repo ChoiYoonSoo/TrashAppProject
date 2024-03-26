@@ -27,20 +27,20 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val authTimeText = binding.authTimeText
+        val authTimeText = binding.signUpAuthTimeText
         authTimeText.visibility = View.GONE
 
-        val pwdIncorrectText = binding.pwdIncorrectText
+        val pwdIncorrectText = binding.signUpPwdIncorrectText
         pwdIncorrectText.visibility = View.GONE
 
-        val duplicateNickText = binding.duplicateNickText
+        val duplicateNickText = binding.signUpDuplicateNickText
         duplicateNickText.visibility = View.GONE
 
-        binding.confirmButton.setOnClickListener {
+        binding.signUpConfirmButton.setOnClickListener {
             authTimeText.visibility = View.VISIBLE
         }
 
-        binding.backButton.setOnClickListener{
+        binding.signUpBackButton.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
 

@@ -6,6 +6,6 @@
     <color name="grey">#727272</color>
     <color name="kakao_background">#FEE500</color>
     <color name="mapHintText">#EDEDED</color>
-    <color name="reportBorder">#97C751</color>
+    <color name="baseGreen">#97C751</color>
     <color name="red">#FF6565</color>
 </resources>

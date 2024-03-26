@@ -9,9 +9,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <net.daum.mf.map.api.MapView
@@ -29,33 +29,34 @@
             android:layout_marginTop="56dp">
 
             <EditText
-                android:id="@+id/search_edit_text"
-                android:layout_width="296dp"
+                android:id="@+id/mapSearchEdit"
+                android:layout_width="0dp"
                 android:layout_height="32dp"
+                android:layout_marginLeft="17dp"
+                android:background="@drawable/map_search_border"
+                android:fontFamily="@font/pretendardregular"
                 android:hint="장소, 주소 검색"
+                android:inputType="text"
+                android:paddingLeft="15dp"
                 android:textColorHint="@color/mapHintText"
                 android:textSize="13dp"
-                android:fontFamily="@font/pretendardregular"
-                android:inputType="text"
-                android:background="@drawable/map_search_border"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/mapSettingBtn"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginLeft="17dp"
-                android:paddingLeft="15dp"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/settingButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/list"
-                app:layout_constraintStart_toEndOf="@+id/search_edit_text"
+                android:id="@+id/mapSettingBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="29dp"
                 android:background="@android:color/transparent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/list"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-            </ImageButton>
+                app:layout_constraintStart_toEndOf="@+id/mapSearchEdit"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,18 +68,18 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <include
-            layout="@layout/bin_info"
             android:id="@+id/binInfo"
+            layout="@layout/bin_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -35,7 +35,7 @@ class SettingFragment : Fragment() {
 
         // 프로필 이미지 원형 변경
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val imageView = view.findViewById<ImageView>(R.id.profIleImage)
+            val imageView = view.findViewById<ImageView>(R.id.settingProfIleImage)
             imageView.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View?, outline: Outline?) {
                     // ImageView의 크기에 맞는 원형 outline 설정
@@ -49,19 +49,19 @@ class SettingFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        binding.emailButton.setOnClickListener{
+        binding.settingEmailButton.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_emailFragment)
         }
 
-        binding.privacyButton.setOnClickListener {
+        binding.settingPrivacyButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_personalInfoFragment)
         }
 
-        binding.contactButton.setOnClickListener {
+        binding.settingContactButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_contactFragment)
         }
 
-        binding.unSubButton.setOnClickListener {
+        binding.settingUnSubButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
         }
     }

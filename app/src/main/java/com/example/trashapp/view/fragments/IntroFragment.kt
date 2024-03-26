@@ -33,7 +33,7 @@ class IntroFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_mapFragment)
         }
 
-        binding.btnLoginSignUp.setOnClickListener{
+        binding.introLoginBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_loginFragment2)
         }
 

@@ -7,9 +7,9 @@
     tools:context=".view.activities.SplashActivity">
 
     <ImageView
-        android:id="@+id/splashImage1"
-        android:layout_width="177dp"
-        android:layout_height="60dp"
+        android:id="@+id/splashTitleImage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/title1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,11 +18,11 @@
     </ImageView>
     
     <ImageView
-        android:id="@+id/splashImage2"
-        android:layout_width="234dp"
-        android:layout_height="14dp"
+        android:id="@+id/splashTitleImage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/title2"
-        app:layout_constraintTop_toBottomOf="@id/splashImage1"
+        app:layout_constraintTop_toBottomOf="@id/splashTitleImage1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp">

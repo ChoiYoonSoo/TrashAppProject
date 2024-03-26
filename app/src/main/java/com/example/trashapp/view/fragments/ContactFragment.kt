@@ -37,8 +37,8 @@ class ContactFragment : Fragment() {
         }
 
         binding.contactText1.setOnClickListener {
-            binding.progressButton1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.reportBorder))
-            binding.progressButton2.setBackgroundColor(Color.parseColor("#EBEBEB"))
+            binding.contactProgressButton1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.baseGreen))
+            binding.contactProgressButton2.setBackgroundColor(Color.parseColor("#EBEBEB"))
             val contactViewVisible1 = view.findViewById<View>(R.id.contactViewContainer1)
             val contactViewVisible2 = view.findViewById<View>(R.id.contactViewContainer2)
             contactViewVisible1.visibility = View.VISIBLE
@@ -47,8 +47,8 @@ class ContactFragment : Fragment() {
         }
 
         binding.contactText2.setOnClickListener {
-            binding.progressButton1.setBackgroundColor(Color.parseColor("#EBEBEB"))
-            binding.progressButton2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.reportBorder))
+            binding.contactProgressButton1.setBackgroundColor(Color.parseColor("#EBEBEB"))
+            binding.contactProgressButton2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.baseGreen))
 
             val contactViewVisible1 = view.findViewById<View>(R.id.contactViewContainer1)
             val contactViewVisible2 = view.findViewById<View>(R.id.contactViewContainer2)
