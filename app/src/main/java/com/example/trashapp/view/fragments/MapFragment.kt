@@ -15,8 +15,10 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +30,7 @@ import com.example.trashapp.databinding.FragmentIntroBinding
 import com.example.trashapp.databinding.FragmentMapBinding
 import com.example.trashapp.databinding.ReportListBinding
 import com.example.trashapp.view.adapter.ReportItemAdapter
+import com.example.trashapp.viewmodel.CampViewModel
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -38,6 +41,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var mapData = ArrayList<MapData>()
     private var lastY: Float = 0.0f
+    private val viewModel : CampViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +59,17 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = binding.mapView   // 카카오 지도 뷰
+        viewModel.getCampsiteList()
 
         // 위도 경도 테스트 하드 코딩
-        mapData.add(MapData("쓰레기통1", 37.577375, 126.97216820000001))
-        mapData.add(MapData("쓰레기통2", 37.527380, 126.962169))
-        mapData.add(MapData("쓰레기통3", 37.528211, 127.039334))
-        mapData.add(MapData("쓰레기통4", 37.528804, 127.037537))
-        mapData.add(MapData("쓰레기통5", 37.527534, 127.028738))
+//        mapData.add(MapData("쓰레기통1", 37.577375, 126.97216820000001))
+//        mapData.add(MapData("쓰레기통2", 37.527380, 126.962169))
+//        mapData.add(MapData("쓰레기통3", 37.528211, 127.039334))
+//        mapData.add(MapData("쓰레기통4", 37.528804, 127.037537))
+//        mapData.add(MapData("쓰레기통5", 37.527534, 127.028738))
+        for(i in 0 until viewModel.facltNmList.size){
+            mapData.add(MapData(viewModel.facltNmList[i], viewModel.mapXList[i].toDouble(), viewModel.mapYList[i].toDouble()))
+        }
 
         setMark(mapData)
         mapView.setMapViewEventListener(this)
@@ -73,7 +81,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         reportButton.setOnClickListener{
             if(reportList.visibility == View.GONE){
                 reportList.visibility = View.VISIBLE
-                Log.d("reportButton","click")
             }
         }
 
@@ -104,7 +111,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
                 markerType = MapPOIItem.MarkerType.CustomImage
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.528211, 127.039334), true)
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(viewModel.mapXList[0].toDouble(), viewModel.mapYList[0].toDouble()), true)
             mapView.addPOIItem(marker)
         }
 
@@ -175,7 +182,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         if (binInfoLayout.visibility == View.VISIBLE) {
             binInfoLayout.visibility = View.GONE
-            Log.d("Map", "${binInfoLayout.visibility}")
         }
     }
 
