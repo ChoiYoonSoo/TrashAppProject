@@ -3,16 +3,15 @@ package com.example.trashapp.view.fragments
 import android.graphics.Outline
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentSettingBinding
-import com.google.android.material.navigation.NavigationBarItemView
 
 class SettingFragment : Fragment() {
     private lateinit var binding : FragmentSettingBinding

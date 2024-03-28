@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -15,23 +14,20 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.R
 import com.example.trashapp.data.MapData
 import com.example.trashapp.data.ReportItemData
-import com.example.trashapp.databinding.BinInfoBinding
-import com.example.trashapp.databinding.FragmentIntroBinding
 import com.example.trashapp.databinding.FragmentMapBinding
-import com.example.trashapp.databinding.ReportListBinding
+import com.example.trashapp.utils.hideKeyboard
+import com.example.trashapp.view.adapter.MapSearchAdapter
 import com.example.trashapp.view.adapter.ReportItemAdapter
-import com.example.trashapp.viewmodel.CampViewModel
+import com.example.trashapp.viewmodel.ApiListViewModel
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -41,7 +37,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var lastY: Float = 0.0f
-    private val viewModel : CampViewModel by activityViewModels()
+    private val viewModel: ApiListViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,8 +68,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 신고 버튼 클릭 시 이벤트
         val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
-        reportButton.setOnClickListener{
-            if(reportList.visibility == View.GONE){
+        reportButton.setOnClickListener {
+            if (reportList.visibility == View.GONE) {
                 reportList.visibility = View.VISIBLE
             }
         }
@@ -86,13 +82,23 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         reportTextList.add(ReportItemData("쓰레기가 꽉 차 있어 버릴 수 없어요."))
         reportTextList.add(ReportItemData("지도에 나온 위치와 다른 곳에 있어요."))
         reportTextList.add(ReportItemData("지도에 나온 위치에 없어요."))
-
         reportRecyclerView.adapter = ReportItemAdapter(reportTextList)
         reportRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        // 검색 RecyclerView 초기화
+        val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
+        searchRecyclerView.adapter = MapSearchAdapter(viewModel.mapData.value ?: emptyList())
+        searchRecyclerView.layoutManager = LinearLayoutManager(context)
+
         // 설정 버튼 클릭 시 이벤트
-        binding.mapSettingBtn.setOnClickListener{
+        binding.mapSettingBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_settingFragment)
+        }
+
+        // 검색창 클릭 시 이벤트
+        binding.mapSearchEdit.setOnClickListener {
+            val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
+            searchRecyclerView.visibility = View.VISIBLE
         }
     }
 
@@ -107,7 +113,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 markerType = MapPOIItem.MarkerType.CustomImage
                 userObject = data.addr
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.5978864, 127.4947241), true)
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.49855955, 127.0444754), true)
             mapView.addPOIItem(marker)
         }
     }
@@ -123,6 +129,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val deltaY = event.rawY - lastY
                     val newHeight = (layoutParams.height + deltaY).toInt()
@@ -132,6 +139,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
+
                 else -> false
             }
         }
@@ -176,6 +184,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         if (binInfoLayout.visibility == View.VISIBLE) {
             binInfoLayout.visibility = View.GONE
         }
+
+        val searchRecyclerView = binding.root.findViewById<RecyclerView>(R.id.mapSearchRV)
+        searchRecyclerView.visibility = View.GONE
+
+        hideKeyboard()
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {

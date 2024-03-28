@@ -6,31 +6,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.data.MapData
-import com.example.trashapp.network.model.Item
 import com.example.trashapp.repository.NetWorkRepository
 import kotlinx.coroutines.launch
 
-class CampViewModel : ViewModel() {
+class ApiListViewModel : ViewModel() {
 
     private val netWorkRepository = NetWorkRepository()
 
     private val _mapData = MutableLiveData<List<MapData>>()
     val mapData: LiveData<List<MapData>> get() = _mapData
 
-    fun getCampsiteList() = viewModelScope.launch {
+    fun getApiList() = viewModelScope.launch {
 
-        val result = netWorkRepository.getCampList()
+        val result = netWorkRepository.getApiTest()
 
         try {
-            val campsiteList = result.response.body.items.item
+            val apiList = result.data
 
             // 위도 경도 추가
-            val newMapData = campsiteList.map {
+            val newMapData = apiList.map {
                 MapData(
-                    it.facltNm,
-                    it.addr1,
-                    it.mapY.toDoubleOrNull() ?: 0.0,
-                    it.mapX.toDoubleOrNull() ?: 0.0
+                    it.district,
+                    it.address,
+                    it.latitude.toDoubleOrNull()?: 0.0,
+                    it.longitude.toDoubleOrNull() ?: 0.0
                 )
             }
             _mapData.postValue(newMapData)

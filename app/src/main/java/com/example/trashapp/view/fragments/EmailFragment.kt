@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentEmailBinding
 
 class EmailFragment : Fragment() {

@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://apis.data.go.kr/B551011/GoCamping/"
+    private const val BASE_URL = "https://api.odcloud.kr/api/15124273/v1/"
 
     private val client = Retrofit
         .Builder()

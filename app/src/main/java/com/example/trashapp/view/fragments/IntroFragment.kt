@@ -5,18 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentIntroBinding
-import com.example.trashapp.viewmodel.CampViewModel
+import com.example.trashapp.viewmodel.ApiListViewModel
 
 class IntroFragment : Fragment() {
 
     private lateinit var binding: FragmentIntroBinding
 
+    private val viewModel : ApiListViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -30,6 +32,7 @@ class IntroFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getApiList()
 
         binding.startWithoutLogin.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_mapFragment)

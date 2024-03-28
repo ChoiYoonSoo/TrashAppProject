@@ -1,13 +1,11 @@
 package com.example.trashapp.view.fragments
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentContactBinding
