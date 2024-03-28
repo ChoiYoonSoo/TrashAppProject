@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/binDetail"
+        android:id="@+id/binAddr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
@@ -46,8 +46,8 @@
         android:padding="5dp"
         android:text="신고"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="@id/binDetail"
-        app:layout_constraintTop_toBottomOf="@id/binDetail" />
+        app:layout_constraintEnd_toEndOf="@id/binAddr"
+        app:layout_constraintTop_toBottomOf="@id/binAddr" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

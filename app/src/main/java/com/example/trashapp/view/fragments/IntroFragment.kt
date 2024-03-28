@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentIntroBinding
+import com.example.trashapp.viewmodel.CampViewModel
 
 class IntroFragment : Fragment() {
 
     private lateinit var binding: FragmentIntroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,8 +38,5 @@ class IntroFragment : Fragment() {
         binding.introLoginBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_loginFragment2)
         }
-
-
     }
-
 }

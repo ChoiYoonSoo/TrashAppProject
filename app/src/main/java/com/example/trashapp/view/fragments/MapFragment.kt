@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,9 +40,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView              // 카카오 지도 뷰
-    private var mapData = ArrayList<MapData>()
     private var lastY: Float = 0.0f
-    private val viewModel : CampViewModel by viewModels()
+    private val viewModel : CampViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,25 +59,19 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = binding.mapView   // 카카오 지도 뷰
-        viewModel.getCampsiteList()
-
-        // 위도 경도 테스트 하드 코딩
-//        mapData.add(MapData("쓰레기통1", 37.577375, 126.97216820000001))
-//        mapData.add(MapData("쓰레기통2", 37.527380, 126.962169))
-//        mapData.add(MapData("쓰레기통3", 37.528211, 127.039334))
-//        mapData.add(MapData("쓰레기통4", 37.528804, 127.037537))
-//        mapData.add(MapData("쓰레기통5", 37.527534, 127.028738))
-        for(i in 0 until viewModel.facltNmList.size){
-            mapData.add(MapData(viewModel.facltNmList[i], viewModel.mapXList[i].toDouble(), viewModel.mapYList[i].toDouble()))
-        }
-
-        setMark(mapData)
         mapView.setMapViewEventListener(this)
         mapView.setPOIItemEventListener(this)
 
+        // mapData 관찰 후 마커 표시
+        viewModel.mapData.observe(viewLifecycleOwner) { mapData ->
+            if (mapData != null) {
+                setMark(mapData)
+            }
+        }
+
+        // 신고 버튼 클릭 시 이벤트
         val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
-
         reportButton.setOnClickListener{
             if(reportList.visibility == View.GONE){
                 reportList.visibility = View.VISIBLE
@@ -96,13 +90,14 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         reportRecyclerView.adapter = ReportItemAdapter(reportTextList)
         reportRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        // 설정 버튼 클릭 시 이벤트
         binding.mapSettingBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_settingFragment)
         }
     }
 
     // 지도 마커 띄우기
-    private fun setMark(dataList: ArrayList<MapData>) {
+    private fun setMark(dataList: List<MapData>) {
         for (data in dataList) {
             var marker = MapPOIItem()
             marker.apply {
@@ -110,11 +105,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
                 markerType = MapPOIItem.MarkerType.CustomImage
+                userObject = data.addr
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(viewModel.mapXList[0].toDouble(), viewModel.mapYList[0].toDouble()), true)
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.5978864, 127.4947241), true)
             mapView.addPOIItem(marker)
         }
-
     }
 
     // 스크롤 이동
@@ -163,17 +158,15 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
-
     }
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
-
     }
 
     override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
-
     }
 
+    // 지도 빈공간 클릭 시 이벤트
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
 
@@ -186,30 +179,32 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
-
     }
 
     override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
-
     }
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
-
     }
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
-
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
-
     }
 
     // POIItemEventListener
+    // 마커 클릭 시 이벤트
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
+        // 마커 이름 표시
         val markerName = p1?.itemName ?: "Unknown"
         val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)
         binTitleTextView.text = markerName
+
+        // 마커 주소 표시
+        val markerAddr = p1?.userObject as? String
+        val binAddrTextView = binding.root.findViewById<TextView>(R.id.binAddr)
+        binAddrTextView.text = markerAddr
 
         val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         binInfoLayout.visibility = View.VISIBLE

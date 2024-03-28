@@ -17,17 +17,10 @@
         android:theme="@style/Theme.TrashApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".view.activities.LoginActivity"
-            android:exported="false" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="49a500cba10fd2329e40f572594594af" />
-
-        <activity
-            android:name=".view.activities.MapActivity"
-            android:exported="true"></activity>
         <activity
             android:name=".view.activities.SplashActivity"
             android:exported="true"
