@@ -2,6 +2,7 @@ package com.example.trashapp.view.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
@@ -87,7 +88,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         // 검색 RecyclerView 초기화
         val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
-        searchRecyclerView.adapter = MapSearchAdapter(viewModel.mapData.value ?: emptyList())
+        searchRecyclerView.adapter = MapSearchAdapter(viewModel.mapData.value ?: emptyList(), viewModel)
         searchRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // 설정 버튼 클릭 시 이벤트
@@ -112,9 +113,15 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
                 markerType = MapPOIItem.MarkerType.CustomImage
                 userObject = data.addr
+                isShowCalloutBalloonOnTouch = false
+                customSelectedImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker_selected)
+                selectedMarkerType = MapPOIItem.MarkerType.CustomImage
             }
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.49855955, 127.0444754), true)
+//            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.49855955, 127.0444754), true)
             mapView.addPOIItem(marker)
+        }
+        viewModel.selectMapData.observe(viewLifecycleOwner) { mapData ->
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapData.latitude, mapData.longitude), true)
         }
     }
 
@@ -228,6 +235,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         // 뷰에 애니메이션 적용
         binInfoLayout.startAnimation(slideUpAnimation)
+
     }
 
     override fun onCalloutBalloonOfPOIItemTouched(p0: MapView?, p1: MapPOIItem?) {
