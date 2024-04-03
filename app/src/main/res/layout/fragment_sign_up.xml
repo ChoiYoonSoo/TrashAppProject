@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/dimens_margin"
-    android:paddingRight="@dimen/dimens_margin"
+    android:paddingLeft="@dimen/dimens20dp"
+    android:paddingRight="@dimen/dimens20dp"
     tools:context=".view.fragments.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signUpContainer"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="44dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="back"
-            android:src="@drawable/ic_back_arrow"
+            android:src="@drawable/backarrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
             android:fontFamily="@font/gmarketsansttfmedium"
             android:text="회원가입"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="@dimen/dimens16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
         android:id="@+id/signUpContainer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="@dimen/dimens35dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
             android:fontFamily="@font/pretendardregular"
             android:text="로그인에 사용할\n이메일 / 비밀번호를 입력해주세요."
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="@dimen/dimens20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,8 +70,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="35dp">
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginTop="@dimen/dimens35dp">
 
             <EditText
                 android:id="@+id/signUpEmailEditText"
@@ -81,7 +81,7 @@
                 android:fontFamily="@font/pretendardregular"
                 android:hint="이메일 입력"
                 android:paddingLeft="10dp"
-                android:textSize="16dp" />
+                android:textSize="@dimen/dimens16sp" />
 
             <Button
                 android:id="@+id/signUpAuthButton"
@@ -92,13 +92,13 @@
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:text="인증번호 받기"
-                android:textSize="12sp" />
+                android:textSize="@dimen/dimens12sp" />
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginTop="@dimen/dimens24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -111,7 +111,7 @@
                 android:fontFamily="@font/pretendardregular"
                 android:hint="인증번호"
                 android:paddingLeft="10dp"
-                android:textSize="16sp"
+                android:textSize="@dimen/dimens16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -119,11 +119,11 @@
             <Button
                 android:id="@+id/signUpConfirmButton"
                 android:layout_width="111dp"
-                android:layout_height="45dp"
+                android:layout_height="@dimen/dimens40dp"
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:text="확인"
-                android:textSize="16sp"
+                android:textSize="@dimen/dimens16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +139,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendardregular"
         android:text="3:51"
-        android:textSize="11sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signUpContainer1">
@@ -149,8 +149,8 @@
     <LinearLayout
         android:id="@+id/signUpContainer2"
         android:layout_width="match_parent"
-        android:layout_height="146dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens35dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,23 +162,23 @@
             android:fontFamily="@font/pretendardregular"
             android:text="비밀번호 설정"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="@dimen/dimens20sp"
             android:textStyle="bold" />
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dimens40dp"
             android:layout_marginTop="8dp">
 
             <EditText
                 android:id="@+id/passwordEditText1"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="@dimen/dimens40dp"
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:hint="영문, 숫자, 특수문자 조합 8자리 이상"
-                android:padding="10dp"
-                android:textSize="16sp" />
+                android:paddingLeft="10dp"
+                android:textSize="@dimen/dimens16sp" />
 
             <ImageButton
                 android:id="@+id/signUpPasswordVisibilityButton1"
@@ -193,18 +193,18 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp">
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginTop="@dimen/dimens20dp">
 
             <EditText
                 android:id="@+id/signUpPasswordEditText2"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="@dimen/dimens40dp"
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:hint="비밀번호 재입력"
                 android:padding="10dp"
-                android:textSize="16sp" />
+                android:textSize="@dimen/dimens16sp" />
 
             <ImageButton
                 android:id="@+id/signUpPasswordVisibilityButton2"
@@ -226,7 +226,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendardregular"
         android:text="비밀번호가 맞지 않습니다."
-        android:textSize="11sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
@@ -236,8 +236,8 @@
     <LinearLayout
         android:id="@+id/signUpContainer3"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens35dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -249,12 +249,12 @@
             android:fontFamily="@font/pretendardregular"
             android:text="닉네임"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="@dimen/dimens20sp"
             android:textStyle="bold" />
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/dimens40dp"
             android:layout_marginTop="8dp">
 
             <EditText
@@ -265,7 +265,7 @@
                 android:fontFamily="@font/pretendardregular"
                 android:hint="닉네임 입력"
                 android:paddingLeft="10dp"
-                android:textSize="16dp" />
+                android:textSize="@dimen/dimens16sp" />
 
             <Button
                 android:id="@+id/signUpDuplicateButton"
@@ -276,7 +276,7 @@
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:text="중복확인"
-                android:textSize="12sp" />
+                android:textSize="@dimen/dimens12sp" />
         </FrameLayout>
     </LinearLayout>
 
@@ -306,7 +306,7 @@
             android:layout_marginLeft="5dp"
             android:fontFamily="@font/pretendardregular"
             android:text="이미 존재하는 닉네임 입니다."
-            android:textSize="11sp"
+            android:textSize="@dimen/dimens12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/signUpWarningIcon"
             app:layout_constraintTop_toTopOf="parent">
@@ -319,11 +319,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signUpContainer4"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens65dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signUpContainer3">
+        app:layout_constraintTop_toBottomOf="@id/signUpDuplicateNickText">
 
         <TextView
             android:id="@+id/acceptText"
@@ -331,7 +331,7 @@
             android:layout_height="wrap_content"
             android:text="@string/acceptText"
             android:textColor="@color/black"
-            android:textSize="11dp"
+            android:textSize="@dimen/dimens12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -352,8 +352,8 @@
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="@dimen/dimens40dp"
+        android:layout_marginTop="@dimen/dimens16dp"
         android:background="@drawable/shape_button_border"
         android:fontFamily="@font/pretendardregular"
         android:text="가입완료"

@@ -2,11 +2,11 @@ package com.example.trashapp.view.fragments
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -14,21 +14,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.trashapp.R
 import com.example.trashapp.data.MapData
 import com.example.trashapp.data.ReportItemData
 import com.example.trashapp.databinding.FragmentMapBinding
+import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.utils.hideKeyboard
 import com.example.trashapp.view.adapter.MapSearchAdapter
 import com.example.trashapp.view.adapter.ReportItemAdapter
 import com.example.trashapp.viewmodel.ApiListViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -57,11 +67,14 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         super.onViewCreated(view, savedInstanceState)
         mapView = binding.mapView   // 카카오 지도 뷰
         mapView.setMapViewEventListener(this)
+        Log.d("맵 뷰 리스너","ok")
         mapView.setPOIItemEventListener(this)
 
         // mapData 관찰 후 마커 표시
         viewModel.mapData.observe(viewLifecycleOwner) { mapData ->
-            if (mapData != null) {
+            Log.d("맵데이터 관찰","ok")
+            if (mapData.isNotEmpty()) {
+                Log.d("맵데이터 들어옴",mapData.toString())
                 setMark(mapData)
             }
         }
@@ -101,28 +114,32 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
             searchRecyclerView.visibility = View.VISIBLE
         }
+
     }
 
     // 지도 마커 띄우기
     private fun setMark(dataList: List<MapData>) {
+        Log.d("마커찍기","ok")
         for (data in dataList) {
+            Log.d("마커찍기데이터",data.toString())
             var marker = MapPOIItem()
             marker.apply {
                 itemName = data.name
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 customImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker)
                 markerType = MapPOIItem.MarkerType.CustomImage
-                userObject = data.addr
+                userObject = data
                 isShowCalloutBalloonOnTouch = false
                 customSelectedImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker_selected)
                 selectedMarkerType = MapPOIItem.MarkerType.CustomImage
             }
-//            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.49855955, 127.0444754), true)
+            //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.5699684, 126.9807392), true)
             mapView.addPOIItem(marker)
         }
-        viewModel.selectMapData.observe(viewLifecycleOwner) { mapData ->
-            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapData.latitude, mapData.longitude), true)
-        }
+//        viewModel.selectMapData.observe(viewLifecycleOwner) { mapData ->
+//            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapData.latitude, mapData.longitude), true)
+//        }
+
     }
 
     // 스크롤 이동
@@ -136,7 +153,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
-
                 MotionEvent.ACTION_MOVE -> {
                     val deltaY = event.rawY - lastY
                     val newHeight = (layoutParams.height + deltaY).toInt()
@@ -146,7 +162,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     lastY = event.rawY
                     true
                 }
-
                 else -> false
             }
         }
@@ -171,8 +186,33 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         return null
     }
 
+    // 지도의 현재 보이는 영역의 좌표 범위를 가져오는 함수
+    private fun getCurrentMapBounds() {
+        val mapPointBounds = mapView.mapPointBounds
+        Log.d("현재 지도의 좌표 범위", mapPointBounds.toString())
+        val swLatLng = mapPointBounds.bottomLeft // 남서쪽(SW) 좌표
+        val neLatLng = mapPointBounds.topRight // 북동쪽(NE) 좌표
+
+        val swLat = swLatLng.mapPointGeoCoord.latitude
+        val swLng = swLatLng.mapPointGeoCoord.longitude
+        val neLat = neLatLng.mapPointGeoCoord.latitude
+        val neLng = neLatLng.mapPointGeoCoord.longitude
+
+        val gpsList = GpsList(swLat, swLng, neLat, neLng)
+        Log.d("현재 범위의 GPS List", gpsList.toString())
+        viewModel.getGpsList(gpsList)
+    }
+
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
+        Log.d("맵뷰초기화","ok")
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.5796466, 126.9820928), true)
+
+        lifecycleScope.launch {
+            // 중심점 설정 후 500밀리초(0.5초) 동안 기다립니다.
+            delay(500)
+            getCurrentMapBounds()
+        }
     }
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
@@ -222,9 +262,17 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         binTitleTextView.text = markerName
 
         // 마커 주소 표시
-        val markerAddr = p1?.userObject as? String
+        val markerAddr = p1?.userObject as MapData
         val binAddrTextView = binding.root.findViewById<TextView>(R.id.binAddr)
-        binAddrTextView.text = markerAddr
+        binAddrTextView.text = markerAddr.addr
+
+        // 로드뷰 이미지 표시
+        val markerImage = p1?.userObject as MapData
+        val binImageView = binding.root.findViewById<ImageView>(R.id.binLoadImage)
+        val imageUrl = markerImage.imageUrl
+        Glide.with(binImageView.context)
+            .load(imageUrl)
+            .into(binImageView)
 
         val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         binInfoLayout.visibility = View.VISIBLE

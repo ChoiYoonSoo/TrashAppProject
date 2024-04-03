@@ -11,29 +11,35 @@
 
     <TextView
         android:id="@+id/binTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendardregular"
         android:text="쓰레기통 위치"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/binAddr"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
         android:fontFamily="@font/pretendardregular"
         android:text="세부주소"
         android:textColor="@color/grey"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="@id/binTitle"
         app:layout_constraintStart_toStartOf="@id/binTitle"
         app:layout_constraintTop_toBottomOf="@id/binTitle" />
+
+    <ImageView
+        android:id="@+id/binLoadImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/noimage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/binReportBtn"
@@ -46,7 +52,7 @@
         android:padding="5dp"
         android:text="신고"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="@id/binAddr"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/binAddr" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

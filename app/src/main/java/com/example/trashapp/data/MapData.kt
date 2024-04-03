@@ -5,4 +5,5 @@ data class MapData(
     var addr: String? = null,
     var latitude : Double,  // 위도
     var longitude : Double, // 경도
+    var imageUrl : String? = null
 )

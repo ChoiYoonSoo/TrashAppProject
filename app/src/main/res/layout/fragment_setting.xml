@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/dimens_margin"
-    android:paddingRight="@dimen/dimens_margin"
+    android:paddingLeft="@dimen/dimens20dp"
+    android:paddingRight="@dimen/dimens20dp"
     tools:context=".view.fragments.SettingFragment">
 
     <ImageButton
         android:id="@+id/settingBackButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens40dp"
         android:background="@android:color/transparent"
         android:src="@drawable/backbutton"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,11 +22,11 @@
         android:id="@+id/settingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="@dimen/dimens40dp"
         android:fontFamily="@font/pretendardregular"
         android:text="설정"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="@dimen/dimens16sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/settingBackButton"
@@ -36,11 +36,11 @@
         android:id="@+id/settingBaseInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/dimens20dp"
         android:fontFamily="@font/pretendardregular"
         android:text="기본정보"
         android:textColor="@color/baseGreen"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingTitle" />
 
@@ -48,10 +48,10 @@
         android:id="@+id/settingProfIleImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/dimens20dp"
         android:background="@drawable/profile_image_border"
         android:scaleType="centerCrop"
-        android:src="@drawable/ohs"
+        android:src="@drawable/noimage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingBaseInfo" />
 
@@ -60,11 +60,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/dimens20dp"
         android:fontFamily="@font/pretendardregular"
         android:text="닉네임"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/dimens20sp"
         app:layout_constraintStart_toEndOf="@+id/settingProfIleImage"
         app:layout_constraintTop_toBottomOf="@id/settingBaseInfo" />
 
@@ -76,7 +76,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/pretendardregular"
         android:text="이메일주소"
-        android:textSize="10sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintStart_toEndOf="@+id/settingProfIleImage"
         app:layout_constraintTop_toBottomOf="@+id/settingNickName" />
 
@@ -86,7 +86,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/pretendardregular"
         android:text="내 정보 수정하기"
-        android:textSize="10sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingNickName" />
 
@@ -98,7 +98,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="개인 정보 보호"
         android:textColor="@color/baseGreen"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingProfIleImage" />
 
@@ -111,7 +111,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="E-mail 계정"
         android:textAlignment="textStart"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
@@ -125,7 +125,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="개인정보관리"
         android:textAlignment="textStart"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingEmailButton" />
@@ -138,7 +138,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="기타"
         android:textColor="@color/baseGreen"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingPrivacyButton" />
 
@@ -151,7 +151,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="문의하기"
         android:textAlignment="textStart"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingOtherTitle" />
@@ -165,7 +165,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="탈퇴하기"
         android:textAlignment="textStart"
-        android:textSize="14sp"
+        android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingContactButton" />

@@ -10,5 +10,7 @@ data class ApiValue(
     val roadviewImgpath: String,
     val userId: Int,
     val categories: String,
-    val state: String
+    val state: String,
+    val address: String,
+    val detailAddress: String
 )
