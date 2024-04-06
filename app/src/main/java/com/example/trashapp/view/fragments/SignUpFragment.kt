@@ -21,6 +21,7 @@ import com.example.trashapp.viewmodel.ApiListViewModel
 import com.example.trashapp.viewmodel.SignUpViewModel
 
 class SignUpFragment : Fragment() {
+    //test
     private lateinit var binding: FragmentSignUpBinding
 
     private val viewModel: SignUpViewModel by activityViewModels()
