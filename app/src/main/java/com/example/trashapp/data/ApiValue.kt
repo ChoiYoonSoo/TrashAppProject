@@ -12,5 +12,5 @@ data class ApiValue(
     val categories: String,
     val state: String,
     val address: String,
-    val detailAddress: String
+    val detail_address: String
 )

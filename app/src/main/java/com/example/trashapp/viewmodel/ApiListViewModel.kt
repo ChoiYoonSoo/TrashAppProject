@@ -31,11 +31,12 @@ class ApiListViewModel : ViewModel() {
             // 위도 경도 추가
             val newMapData: List<MapData> = result.map { data ->
                 MapData(
-                    data.detailAddress,
+                    data.detail_address,
                     data.address,
                     data.latitude,
                     data.longitude,
-                    data.roadviewImgpath
+                    data.roadviewImgpath,
+                    data.id
                 )
             }
             _mapData.postValue(newMapData)
@@ -45,6 +46,7 @@ class ApiListViewModel : ViewModel() {
     }
 
     fun getGpsList(paramGpsList: GpsList) = viewModelScope.launch {
+        _mapData.postValue(emptyList())
         Log.d("파라미터 값", paramGpsList.toString())
         val result = netWorkRepository.getGPS(paramGpsList)
         Log.d("API에서 받아 온 범위의 DB 값", result.toString())
@@ -53,11 +55,12 @@ class ApiListViewModel : ViewModel() {
             // 위도 경도 추가
             val newMapData: List<MapData> = result.map { data ->
                 MapData(
-                    data.detailAddress,
+                    data.detail_address,
                     data.address,
                     data.latitude,
                     data.longitude,
-                    data.roadviewImgpath
+                    data.roadviewImgpath,
+                    data.id
                 )
             }
             _mapData.postValue(newMapData)

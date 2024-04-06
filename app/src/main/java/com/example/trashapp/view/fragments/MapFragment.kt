@@ -3,6 +3,7 @@ package com.example.trashapp.view.fragments
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
@@ -39,6 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -49,6 +51,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var lastY: Float = 0.0f
     private val viewModel: ApiListViewModel by activityViewModels()
+
+    private val markerList : MutableList<MapPOIItem> = mutableListOf()
+    private val CIRCLE_RADIUS = 15 // 원의 반지름을 미터 단위로 설정
+    private val MIN_ZOOM_LEVEL_FOR_CIRCLE = -1 // 원을 표시할 최소 확대 레벨
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +121,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             searchRecyclerView.visibility = View.VISIBLE
         }
 
+        binding.refreshBtn.setOnClickListener {
+            getCurrentMapBounds()
+            binding.refreshBtn.visibility = View.GONE
+            binding.mapSearchRV.visibility = View.GONE
+            hideKeyboard()
+        }
+
     }
 
     // 지도 마커 띄우기
@@ -132,6 +145,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 isShowCalloutBalloonOnTouch = false
                 customSelectedImageBitmap = getBitmapFromVectorDrawable(R.drawable.bin_marker_selected)
                 selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                markerList.add(marker)
             }
             //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.5699684, 126.9807392), true)
             mapView.addPOIItem(marker)
@@ -203,10 +217,30 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         viewModel.getGpsList(gpsList)
     }
 
+    // 마커 위치를 기준으로 원을 생성하고 지도에 추가하는 함수
+    fun addCirclesAroundMarkers(mapView: MapView, markers: List<MapPOIItem>, radius: Int) {
+        markers.forEachIndexed { index, marker ->
+            // 마커의 위치를 가져옵니다.
+            val markerPoint = marker.mapPoint
+
+            // 원 객체를 생성합니다.
+            val mapCircle = MapCircle(
+                markerPoint,  // 원의 중심좌표
+                radius,  // 원의 반지름(미터 단위)
+                Color.TRANSPARENT,  // 선의 색깔(투명으로 설정)
+                Color.argb(3, 128, 128, 128)  // 채우기 색깔을 반투명한 회색으로 설정
+            ).apply {
+                tag = index  // 각 원에 고유한 태그를 설정
+            }
+            // 지도에 원을 추가합니다.
+            mapView.addCircle(mapCircle)
+        }
+    }
+
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d("맵뷰초기화","ok")
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.5796466, 126.9820928), true)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.571382699999994, 126.9921143), true)
 
         lifecycleScope.launch {
             // 중심점 설정 후 500밀리초(0.5초) 동안 기다립니다.
@@ -218,7 +252,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
     }
 
-    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
+    override fun onMapViewZoomLevelChanged(p0: MapView?, zoomLevel: Int) {
+        if(zoomLevel <= MIN_ZOOM_LEVEL_FOR_CIRCLE) {
+            addCirclesAroundMarkers(mapView, markerList, CIRCLE_RADIUS)
+        }
+        else{
+            mapView.removeAllCircles()
+        }
     }
 
     // 지도 빈공간 클릭 시 이벤트
@@ -248,6 +288,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
+        binding.refreshBtn.visibility = View.VISIBLE
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
