@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TrashApp</string>
+    <string name="app_name">여따버려</string>
     <string name="startWithoutLogin"><u>로그인 없이 시작하기</u></string>
     <string name="acceptText"><u>(선택)선택적 개인정보 수집 및 이용동의</u></string>
     <!-- TODO: Remove or change this placeholder text -->

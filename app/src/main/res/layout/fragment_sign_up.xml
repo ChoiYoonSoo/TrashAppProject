@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/test"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/dimens20dp"
-    android:paddingRight="@dimen/dimens20dp"
-    tools:context=".view.fragments.SignUpFragment">
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dimens20dp"
+        android:paddingRight="@dimen/dimens20dp"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        tools:context=".view.fragments.SignUpFragment">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signUpContainer"
@@ -95,6 +104,24 @@
                 android:textSize="@dimen/dimens12sp" />
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/duplicateEmailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중복된 이메일 입니다."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/validateEmailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일 형식을 올바르게 입력하세요."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimens40dp"
@@ -142,7 +169,8 @@
         android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signUpContainer1">
+        app:layout_constraintTop_toBottomOf="@id/signUpContainer1"
+        android:visibility="gone">
 
     </TextView>
 
@@ -177,6 +205,8 @@
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:hint="영문, 숫자, 특수문자 조합 8자리 이상"
+                android:inputType="textPassword"
+                android:maxLength="16"
                 android:paddingLeft="10dp"
                 android:textSize="@dimen/dimens16sp" />
 
@@ -203,6 +233,7 @@
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
                 android:hint="비밀번호 재입력"
+                android:maxLength="16"
                 android:padding="10dp"
                 android:textSize="@dimen/dimens16sp" />
 
@@ -226,7 +257,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendardregular"
         android:text="비밀번호가 맞지 않습니다."
+        android:textColor="@color/red"
         android:textSize="@dimen/dimens12sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
@@ -263,7 +296,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
-                android:hint="닉네임 입력"
+                android:hint="닉네임 입력."
+                android:maxLength="8"
                 android:paddingLeft="10dp"
                 android:textSize="@dimen/dimens16sp" />
 
@@ -278,6 +312,24 @@
                 android:text="중복확인"
                 android:textSize="@dimen/dimens12sp" />
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/validateNickText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="형식이 올바르지 않습니다."
+            android:textSize="@dimen/dimens12sp"
+            android:textColor="@color/red"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/validateSuccsessNickText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용 가능한 닉네임 입니다."
+            android:textSize="@dimen/dimens12sp"
+            android:textColor="@color/green"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -294,6 +346,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:src="@drawable/warningcircle"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -301,12 +354,14 @@
         </ImageButton>
 
         <TextView
+            android:id="@+id/duplicateNickText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:fontFamily="@font/pretendardregular"
             android:text="이미 존재하는 닉네임 입니다."
             android:textSize="@dimen/dimens12sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/signUpWarningIcon"
             app:layout_constraintTop_toTopOf="parent">
@@ -362,5 +417,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpContainer4" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
