@@ -3,8 +3,6 @@ package com.example.trashapp.network
 import com.example.trashapp.data.ApiValue
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.network.model.GpsList
-import com.google.android.gms.common.api.Response
-import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

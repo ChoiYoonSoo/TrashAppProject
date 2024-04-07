@@ -31,7 +31,7 @@ class ApiListViewModel : ViewModel() {
             // 위도 경도 추가
             val newMapData: List<MapData> = result.map { data ->
                 MapData(
-                    data.detail_address,
+                    data.detailAddress,
                     data.address,
                     data.latitude,
                     data.longitude,
@@ -55,7 +55,7 @@ class ApiListViewModel : ViewModel() {
             // 위도 경도 추가
             val newMapData: List<MapData> = result.map { data ->
                 MapData(
-                    data.detail_address,
+                    data.detailAddress,
                     data.address,
                     data.latitude,
                     data.longitude,
@@ -67,7 +67,5 @@ class ApiListViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.e("CampViewModel", "Error fetching campsite list", e)
         }
-
     }
-
 }

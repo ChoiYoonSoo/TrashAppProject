@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dimens20dp">150dp</dimen>
+    <dimen name="dimensTop20dp">25dp</dimen>
     <dimen name="dimens44dp">44dp</dimen>
     <dimen name="dimens16sp">16sp</dimen>
     <dimen name="dimens35dp">35dp</dimen>
