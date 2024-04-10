@@ -152,7 +152,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
@@ -168,8 +167,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpContainer1">
-
         </TextView>
+
+        <TextView
+            android:id="@+id/signUpAuthTimeText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="인증번호를 다시 요청하세요."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1"/>
 
         <LinearLayout
             android:id="@+id/signUpContainer2"
@@ -261,7 +271,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
+        </TextView>
 
+        <TextView
+            android:id="@+id/signUpPwdIncorrectText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendardregular"
+            android:text="비밀번호가 일치하지 않습니다."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
         </TextView>
 
         <LinearLayout
@@ -294,7 +317,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/base_button_border"
                     android:fontFamily="@font/pretendardregular"
-                    android:hint="닉네임 입력."
+                    android:hint="닉네임 입력"
                     android:maxLength="8"
                     android:paddingLeft="10dp"
                     android:textSize="@dimen/dimens16sp" />

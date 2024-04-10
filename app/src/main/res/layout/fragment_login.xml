@@ -61,6 +61,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginContainer1" />
 
+    <TextView
+        android:id="@+id/validateEmailErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이메일 형식이 올바르지 않습니다."
+        android:textColor="@color/red"
+        android:textSize="@dimen/dimens12sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginEmailText" />
+
 
     <!-- 비밀번호 입력 필드 -->
     <EditText

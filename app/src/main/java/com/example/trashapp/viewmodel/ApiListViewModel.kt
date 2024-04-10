@@ -17,8 +17,7 @@ class ApiListViewModel : ViewModel() {
     private val _mapData = MutableLiveData<List<MapData>>()
     val mapData: LiveData<List<MapData>> get() = _mapData
 
-    private val _selectMapData = MutableLiveData<MapData>()
-    val selectMapData: LiveData<MapData> get() = _selectMapData
+    var selectMapData: MapData? = null
 
     private val _gpsList = MutableLiveData<GpsList>()
     val gpsList: LiveData<GpsList> get() = _gpsList

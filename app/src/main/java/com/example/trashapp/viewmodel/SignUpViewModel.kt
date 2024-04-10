@@ -15,6 +15,7 @@ class SignUpViewModel : ViewModel() {
     var email: String = ""
     var password: String = ""
     var nickname: String = ""
+    var isAgree: Boolean = false
 
     private val _isDuplicateEmail = MutableLiveData<Boolean>()
     var isDuplicateEmail : LiveData<Boolean> = _isDuplicateEmail

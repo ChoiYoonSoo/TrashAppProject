@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,17 +30,18 @@ import com.example.trashapp.R
 import com.example.trashapp.data.MapData
 import com.example.trashapp.data.ReportItemData
 import com.example.trashapp.databinding.FragmentMapBinding
+import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.repository.UserTokenRepository
 import com.example.trashapp.utils.hideKeyboard
 import com.example.trashapp.view.adapter.MapSearchAdapter
 import com.example.trashapp.view.adapter.ReportItemAdapter
 import com.example.trashapp.viewmodel.ApiListViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.Dispatchers
+import com.example.trashapp.viewmodel.UserInfoViewModel
+import com.example.trashapp.viewmodel.UserTokenViewModel
+import com.example.trashapp.viewmodel.WebViewViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -50,7 +52,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var lastY: Float = 0.0f
+
+    private lateinit var userTokenViewModel: UserTokenViewModel
     private val viewModel: ApiListViewModel by activityViewModels()
+    private val userInfoViewModel: UserInfoViewModel by activityViewModels()
+    private val webViewViewModel: WebViewViewModel by activityViewModels()
 
     private val markerList : MutableList<MapPOIItem> = mutableListOf()
     private val CIRCLE_RADIUS = 15 // 원의 반지름을 미터 단위로 설정
@@ -64,13 +70,18 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // UserTokenViewModel 의존성 주입
+        val userRepository = UserTokenRepository(requireContext()) // UserTokenRepository 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
+        val factory = UserTokenViewModelFactory(userRepository)
+        userTokenViewModel = ViewModelProvider(this, factory).get(UserTokenViewModel::class.java)
+
         mapView = binding.mapView   // 카카오 지도 뷰
         mapView.setMapViewEventListener(this)
         Log.d("맵 뷰 리스너","ok")
@@ -85,13 +96,25 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             }
         }
 
+        // 로드뷰 띄우기 사용 변수
+        val reportImage = view.findViewById<ImageView>(R.id.binLoadImage)
+        val roadView = view.findViewById<ImageView>(R.id.roadView)
+        val roadViewContainer = view.findViewById<ConstraintLayout>(R.id.roadViewContainer)
+
         // 신고 버튼 클릭 시 이벤트
         val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
-        reportButton.setOnClickListener {
-            if (reportList.visibility == View.GONE) {
-                reportList.visibility = View.VISIBLE
+        if(userTokenViewModel.getToken() != null){
+            reportButton.isEnabled = true
+            reportButton.setOnClickListener {
+                roadView.visibility = View.GONE
+                if (reportList.visibility == View.GONE) {
+                    reportList.visibility = View.VISIBLE
+                }
             }
+        }
+        else{
+            reportButton.isEnabled = false
         }
 
         // 신고 RecyclerView 초기화
@@ -121,6 +144,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             searchRecyclerView.visibility = View.VISIBLE
         }
 
+        // 현 지도에서 다시 검색 버튼 이벤트
         binding.refreshBtn.setOnClickListener {
             getCurrentMapBounds()
             binding.refreshBtn.visibility = View.GONE
@@ -128,6 +152,20 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             hideKeyboard()
         }
 
+        // 로드뷰 이미지 띄우기
+        reportImage.setOnClickListener{
+            roadViewContainer.visibility = View.VISIBLE
+            val imageUrl = viewModel.selectMapData?.imageUrl
+            if(imageUrl!!.length > 10){
+                Glide.with(roadView.context)
+                    .load(imageUrl)
+                    .into(roadView)
+            }
+        }
+
+        binding.roadViewMoveBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_webViewFragment)
+        }
     }
 
     // 지도 마커 띄우기
@@ -240,7 +278,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d("맵뷰초기화","ok")
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.571382699999994, 126.9921143), true)
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.47960336657709, 126.8820342335089), true)
 
         lifecycleScope.launch {
             // 중심점 설정 후 500밀리초(0.5초) 동안 기다립니다.
@@ -274,6 +312,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         val searchRecyclerView = binding.root.findViewById<RecyclerView>(R.id.mapSearchRV)
         searchRecyclerView.visibility = View.GONE
+
+        val roadViewContainer = binding.root.findViewById<ConstraintLayout>(R.id.roadViewContainer)
+        roadViewContainer.visibility = View.GONE
 
         hideKeyboard()
     }
@@ -311,9 +352,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val markerImage = p1?.userObject as MapData
         val binImageView = binding.root.findViewById<ImageView>(R.id.binLoadImage)
         val imageUrl = markerImage.imageUrl
-        Glide.with(binImageView.context)
-            .load(imageUrl)
-            .into(binImageView)
+
+        if(imageUrl!!.length > 10){
+            Glide.with(binImageView.context)
+                .load(imageUrl)
+                .into(binImageView)
+        }
+        viewModel.selectMapData = markerImage
 
         val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         binInfoLayout.visibility = View.VISIBLE
@@ -324,6 +369,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
         // 뷰에 애니메이션 적용
         binInfoLayout.startAnimation(slideUpAnimation)
+
+        webViewViewModel.latitude = markerAddr.latitude
+        webViewViewModel.longitude = markerAddr.longitude
 
     }
 

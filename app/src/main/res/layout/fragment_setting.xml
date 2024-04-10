@@ -157,6 +157,20 @@
         app:layout_constraintTop_toBottomOf="@+id/settingOtherTitle" />
 
     <Button
+        android:id="@+id/settingLogoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/next_button"
+        android:fontFamily="@font/pretendardregular"
+        android:text="로그아웃"
+        android:textAlignment="textStart"
+        android:textSize="@dimen/dimens14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingContactButton" />
+
+    <Button
         android:id="@+id/settingUnSubButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -168,7 +182,7 @@
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingContactButton" />
+        app:layout_constraintTop_toBottomOf="@+id/settingLogoutButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

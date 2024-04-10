@@ -2,6 +2,7 @@ package com.example.trashapp.view.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,9 +13,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.trashapp.R
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.databinding.FragmentSignUpBinding
 import com.example.trashapp.viewmodel.SignUpViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment() {
 
@@ -22,13 +27,13 @@ class SignUpFragment : Fragment() {
 
     private val viewModel: SignUpViewModel by activityViewModels()
 
-    private var isEmailSuccess : Boolean = false
+    private var isEmailSuccess: Boolean = false
 
-    private var isNickSuccess : Boolean = false
+    private var isNickSuccess: Boolean = false
 
-    private var isPasswordSuccess : Boolean = false
+    private var isPasswordSuccess: Boolean = false
 
-    private var isSignUpSuccess : Boolean = false
+    private var isSignUpSuccess: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +50,17 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 인증번호 버튼 비활성화
+        binding.signUpConfirmBtn.isEnabled = false
+
         // 뒤로 가기 버튼 클릭 시
         binding.signUpBackButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        binding.passwordEditText2.isEnabled = false
+
+        binding.signUpDuplicateBtn.isEnabled = false
 
         // 인증번호 확인 버튼 클릭 시
         binding.signUpConfirmBtn.setOnClickListener {
@@ -57,8 +69,9 @@ class SignUpFragment : Fragment() {
 
         // 첫 번째 비밀번호 입력란의 비밀번호 가시성 버튼 클릭 시
         binding.signUpPwdVisibilityBtn1.setOnClickListener {
-            if(binding.passwordEditText1.transformationMethod == null) {
-                binding.passwordEditText1.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
+            if (binding.passwordEditText1.transformationMethod == null) {
+                binding.passwordEditText1.transformationMethod =
+                    android.text.method.PasswordTransformationMethod.getInstance()
             } else {
                 binding.passwordEditText1.transformationMethod = null
             }
@@ -66,8 +79,9 @@ class SignUpFragment : Fragment() {
 
         // 두 번째 비밀번호 입력란의 비밀번호 가시성 버튼 클릭 시
         binding.signUpPwdVisibilityBtn2.setOnClickListener {
-            if(binding.passwordEditText2.transformationMethod == null) {
-                binding.passwordEditText2.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
+            if (binding.passwordEditText2.transformationMethod == null) {
+                binding.passwordEditText2.transformationMethod =
+                    android.text.method.PasswordTransformationMethod.getInstance()
             } else {
                 binding.passwordEditText2.transformationMethod = null
             }
@@ -76,23 +90,26 @@ class SignUpFragment : Fragment() {
         // 이메일 인증번호 받기 버튼 클릭 시
         binding.signUpAuthBtn.setOnClickListener {
             hideKeyboard()
-            if(isSignUpSuccess){
+            if (isSignUpSuccess) {
                 viewModel.duplicateEmailCheck(viewModel.email)
 
                 viewModel.isDuplicateEmail.observe(viewLifecycleOwner) { isDuplicateEmail ->
-                    if(isDuplicateEmail) {
+                    if (isDuplicateEmail) {
                         Log.d("이메일 중복 검사 성공 ", viewModel.email)
                         isEmailSuccess = true
                         binding.duplicateEmailText.visibility = View.GONE
+                        binding.signUpAuthTimeText.visibility = View.VISIBLE
+                        binding.signUpAuthTimeText2.visibility = View.GONE
+                        startTimer(3 * 60 * 1000)
+                        binding.signUpConfirmBtn.isEnabled = true
                     } else {
                         Log.d("이메일 중복 검사 ", "실패")
                         isEmailSuccess = false
                         binding.duplicateEmailText.visibility = View.VISIBLE
                     }
                 }
-            }
-            else{
-                Log.d("이메일 유효성 검사 ","실패")
+            } else {
+                Log.d("이메일 유효성 검사 ", "실패")
             }
         }
 
@@ -101,16 +118,18 @@ class SignUpFragment : Fragment() {
             viewModel.duplicateNickCheck(viewModel.nickname)
             hideKeyboard()
             viewModel.isDuplicateNick.observe(viewLifecycleOwner) { isDuplicateNick ->
-                if(isDuplicateNick) {
+                if (isDuplicateNick) {
                     Log.d("닉네임 중복 검사 성공 ", viewModel.nickname)
                     isNickSuccess = true
                     binding.duplicateNickText.visibility = View.GONE
                     binding.signUpWarningIcon.visibility = View.GONE
+                    binding.validateSuccsessNickText.visibility = View.VISIBLE
                 } else {
                     Log.d("닉네임 중복 검사 ", "실패")
                     isNickSuccess = false
                     binding.duplicateNickText.visibility = View.VISIBLE
                     binding.signUpWarningIcon.visibility = View.VISIBLE
+                    binding.validateSuccsessNickText.visibility = View.GONE
                 }
             }
         }
@@ -118,17 +137,42 @@ class SignUpFragment : Fragment() {
         // 회원가입 버튼 클릭 시
         binding.signUpButton.setOnClickListener {
             hideKeyboard()
-            if(isEmailSuccess && isNickSuccess && isPasswordSuccess){
+            if (isEmailSuccess && isNickSuccess && isPasswordSuccess && viewModel.isAgree) {
                 val signUp = SignUp(viewModel.email, viewModel.password, viewModel.nickname)
-                viewModel.signUp(signUp)
+                lifecycleScope.launch {
+                    viewModel.signUp(signUp)
+                    delay(500)
+                }
+                parentFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(context, "회원 가입 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 개인정보 처리방침 클릭 시
+        binding.signUpContainer4.setOnClickListener {
+            viewModel.isAgree = !viewModel.isAgree
+            if(viewModel.isAgree){
+                binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircleselected)
             }
             else{
-                Toast.makeText(context, "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircle)
+            }
+        }
+
+        binding.signUpAcceptBtn.setOnClickListener {
+            viewModel.isAgree = !viewModel.isAgree
+            if(viewModel.isAgree){
+                binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircleselected)
+            }
+            else{
+                binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircle)
             }
         }
 
         val emailEditText = binding.signUpEmailEditText
         val passwordEditText = binding.passwordEditText1
+        val passwordEditText2 = binding.passwordEditText2
         val nicknameEditText = binding.signUpNickEditText
 
 
@@ -145,11 +189,11 @@ class SignUpFragment : Fragment() {
                 viewModel.email = s.toString()
                 Log.d("afterTextChanged email : ", viewModel.email)
 
-                if(isValidEmail(s.toString())) {
+                if (isValidEmail(s.toString())) {
                     isSignUpSuccess = true
                 }
 
-                if(isValidEmail(s.toString()) || s.toString().isEmpty()) {
+                if (isValidEmail(s.toString()) || s.toString().isEmpty()) {
                     binding.validateEmailText.visibility = View.GONE
                     binding.duplicateEmailText.visibility = View.GONE
                 } else {
@@ -167,18 +211,44 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                viewModel.password = s.toString()
-                Log.d("afterTextChanged password : ", viewModel.password)
-                viewModel.validatePassword(s.toString())
+                if(s.toString().isEmpty()){
+                    binding.signUpPwdIncorrectText.visibility = View.GONE
+                    binding.signUpPwdIncorrectText.visibility = View.GONE
+                }else{
+                    viewModel.password = s.toString()
+                    Log.d("afterTextChanged password : ", viewModel.password)
+                    viewModel.validatePassword(s.toString())
 
-                viewModel.isValidatePassword.observe(viewLifecycleOwner) { isValidatePassword ->
-                    if(isValidatePassword) {
-                        isPasswordSuccess = true
-                        binding.signUpPwdIncorrectText.visibility = View.GONE
-                    } else {
-                        isPasswordSuccess = false
-                        binding.signUpPwdIncorrectText.visibility = View.VISIBLE
+                    viewModel.isValidatePassword.observe(viewLifecycleOwner) { isValidatePassword ->
+                        if (isValidatePassword) {
+                            binding.signUpPwdIncorrectText.visibility = View.GONE
+                            binding.passwordEditText2.isEnabled = true
+                        } else {
+                            binding.signUpPwdIncorrectText2.visibility = View.GONE
+                            binding.passwordEditText2.isEnabled = false
+                            binding.signUpPwdIncorrectText.visibility = View.VISIBLE
+                        }
                     }
+                }
+            }
+        })
+
+        // 비밀번호 확인 텍스트 필드 이벤트 처리
+        passwordEditText2.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (viewModel.password == s.toString()) {
+                    isPasswordSuccess = true
+                    binding.signUpPwdIncorrectText2.visibility = View.GONE
+
+                } else {
+                    isPasswordSuccess = false
+                    binding.signUpPwdIncorrectText2.visibility = View.VISIBLE
                 }
             }
         })
@@ -192,18 +262,46 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                viewModel.nickname = s.toString()
-                Log.d("afterTextChanged nickname : ", viewModel.nickname)
-
-                if(isValidNickName(s.toString())) {
-                    binding.validateNickText.visibility = View.GONE
-                    binding.validateSuccsessNickText.visibility = View.VISIBLE
-                } else {
+                if(s.toString().isEmpty()){
                     binding.validateNickText.visibility = View.VISIBLE
                     binding.validateSuccsessNickText.visibility = View.GONE
+                    isNickSuccess = false
+                }
+                else{
+                    viewModel.nickname = s.toString()
+                    Log.d("afterTextChanged nickname : ", viewModel.nickname)
+
+                    if (isValidNickName(s.toString())) {
+                        binding.signUpDuplicateBtn.isEnabled = true
+                        binding.validateNickText.visibility = View.GONE
+                    } else {
+                        isNickSuccess = false
+                        binding.signUpDuplicateBtn.isEnabled = false
+                        binding.validateNickText.visibility = View.VISIBLE
+                        binding.validateSuccsessNickText.visibility = View.GONE
+                    }
                 }
             }
         })
+    }
+
+    // 3분 타이머
+    private fun startTimer(timeInMillis: Long) {
+        object : CountDownTimer(timeInMillis, 1000) { // 1000ms = 1초 간격
+            override fun onTick(millisUntilFinished: Long) {
+                // 남은 시간을 분:초 형태로 변환하여 텍스트 뷰에 표시
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                binding.signUpAuthTimeText.text = String.format("%02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                // 타이머가 끝나면 00:00 표시
+                binding.signUpAuthTimeText.visibility = View.GONE
+                binding.signUpConfirmBtn.isEnabled = false
+                binding.signUpAuthTimeText2.visibility = View.VISIBLE
+            }
+        }.start()
     }
 
     // 이메일 유효성 검사
@@ -235,7 +333,8 @@ class SignUpFragment : Fragment() {
 
     // 키보드 숨기기
     private fun Fragment.hideKeyboard() {
-        val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        val inputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }

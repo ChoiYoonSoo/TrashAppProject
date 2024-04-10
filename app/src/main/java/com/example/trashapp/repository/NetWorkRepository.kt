@@ -1,5 +1,6 @@
 package com.example.trashapp.repository
 
+import com.example.trashapp.data.Login
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.network.API
 import com.example.trashapp.network.RetrofitInstance
@@ -23,4 +24,10 @@ class NetWorkRepository {
 
     // 회원가입
     suspend fun signUp(signUp: SignUp) = client.signUp(signUp)
+
+    // 로그인
+    suspend fun login(login : Login) = client.login(login.username, login.password)
+
+    // 유저 정보 가져오기
+    suspend fun getUserdata(accessToken : String) = client.getUserdata(accessToken)
 }

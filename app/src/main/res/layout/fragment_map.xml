@@ -84,9 +84,50 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mapSearchEdit" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/roadViewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="@dimen/dimens20dp"
+                android:background="@drawable/map_search_border"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/refreshBtn">
+
+                <ImageView
+                    android:id="@+id/roadView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimensTop20dp"
+                    android:layout_marginTop="@dimen/dimensTop20dp"
+                    android:layout_marginRight="@dimen/dimensTop20dp"
+                    android:layout_marginBottom="50dp"
+                    android:src="@drawable/noimage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/roadViewMoveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/dimens16dp"
+                    android:background="@drawable/base_button_border"
+                    android:fontFamily="@font/pretendardregular"
+                    android:text="로드뷰 보기"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/dimens12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/roadView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/binInfoContainer"

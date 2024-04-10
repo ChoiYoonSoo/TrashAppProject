@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_loginFragment2_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment2_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -33,6 +36,9 @@
         <action
             android:id="@+id/action_mapFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -56,6 +62,9 @@
         <action
             android:id="@+id/action_settingFragment_to_unsubFragment"
             app:destination="@id/unsubFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_introFragment"
+            app:destination="@id/introFragment" />
     </fragment>
     <fragment
         android:id="@+id/emailFragment"
@@ -77,4 +86,8 @@
         android:name="com.example.trashapp.view.fragments.UnsubFragment"
         android:label="fragment_unsub"
         tools:layout="@layout/fragment_unsub" />
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.example.trashapp.view.fragments.WebViewFragment"
+        android:label="WebViewFragment" />
 </navigation>
