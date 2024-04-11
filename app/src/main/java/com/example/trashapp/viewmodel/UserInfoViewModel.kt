@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 class UserInfoViewModel : ViewModel() {
     private val netWorkRepository = NetWorkRepository()
 
+    var token : String = ""
+
     private val _email = MutableLiveData<String?>()
     val email: LiveData<String?> = _email
 

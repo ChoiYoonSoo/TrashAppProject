@@ -1,5 +1,6 @@
 package com.example.trashapp.view.fragments
 
+import android.content.Intent
 import android.graphics.Outline
 import android.os.Build
 import android.os.Bundle
@@ -12,12 +13,12 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentSettingBinding
 import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.repository.UserTokenRepository
+import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.UserInfoViewModel
 import com.example.trashapp.viewmodel.UserTokenViewModel
 
@@ -51,20 +52,11 @@ class SettingFragment : Fragment() {
         if(userTokenViewModel.getToken() != null){
             val userToken = userTokenViewModel.getToken().toString()
             userInfoViewModel.getUserInfo(userToken)
+            binding.settingLoginOrout.text = getString(R.string.logoutText)
         }else{
+            binding.settingLoginOrout.text = getString(R.string.loginText)
+            binding.settingEditMyInfo.visibility = View.GONE
             Log.d("유저 토큰 ","없음")
-        }
-
-        // 프로필 이미지 원형 변경
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val imageView = view.findViewById<ImageView>(R.id.settingProfIleImage)
-            imageView.outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(view: View?, outline: Outline?) {
-                    // ImageView의 크기에 맞는 원형 outline 설정
-                    outline?.setOval(0, 0, view!!.width, view.height)
-                }
-            }
-            imageView.clipToOutline = true
         }
 
         // 유저 정보가 들어오면 텍스트 변동
@@ -75,11 +67,12 @@ class SettingFragment : Fragment() {
             binding.settingNickName.text = nickname
         }
 
-        binding.settingLogoutButton.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.introFragment, true)
-                .build()
-            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_introFragment, null, navOptions)
+        // 로그인 or 로그아웃 클릭 시
+        binding.settingLoginOrout.setOnClickListener {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            activity?.finish()
         }
 
         binding.settingBackButton.setOnClickListener{
@@ -100,6 +93,18 @@ class SettingFragment : Fragment() {
 
         binding.settingUnSubButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
+        }
+
+        // 프로필 이미지 원형 변경
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val imageView = view.findViewById<ImageView>(R.id.settingProfIleImage)
+            imageView.outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View?, outline: Outline?) {
+                    // ImageView의 크기에 맞는 원형 outline 설정
+                    outline?.setOval(0, 0, view!!.width, view.height)
+                }
+            }
+            imageView.clipToOutline = true
         }
     }
 

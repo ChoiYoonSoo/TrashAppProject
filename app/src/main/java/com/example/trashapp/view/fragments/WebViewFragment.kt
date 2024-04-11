@@ -1,11 +1,13 @@
 package com.example.trashapp.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.activityViewModels
 import com.example.trashapp.R
@@ -26,7 +28,6 @@ class WebViewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentWebViewBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,8 +39,7 @@ class WebViewFragment : Fragment() {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             Log.d("웹뷰에 사용될 위도 경도", "latitude: ${webViewViewModel.latitude}, longitude: ${webViewViewModel.longitude}")
-//            loadUrl("https://map.kakao.com/link/roadview/${webViewViewModel.latitude},${webViewViewModel.longitude}")
-            loadUrl("https://map.kakao.com/link/roadview/37.47960336657709,126.8820342335089")
+            loadUrl("https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${webViewViewModel.latitude},${webViewViewModel.longitude}")
         }
 
         binding.webViewBackBtn.setOnClickListener {

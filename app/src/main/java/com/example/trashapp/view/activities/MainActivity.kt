@@ -15,18 +15,30 @@ import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
+import com.example.trashapp.R
 import com.example.trashapp.databinding.ActivityMainBinding
+import com.example.trashapp.view.fragments.IntroFragment
+import com.example.trashapp.view.fragments.MapFragment
+import com.example.trashapp.viewmodel.UserInfoViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val userInfoViewModel: UserInfoViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        intent.getStringExtra("token")?.let { token ->
+            userInfoViewModel.token = token
+        }
 
 //        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 //        val isGpsEnabled : Boolean = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -74,6 +86,15 @@ class MainActivity : AppCompatActivity() {
 //        override fun onProviderDisabled(provider: String) {
 //        }
 //    }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        when(intent.getStringExtra("fragmentToLoad")){
+            "mapFragment" -> {
+                binding.fragmentContainerView.findNavController().navigate(R.id.action_introFragment_to_mapFragment)
+            }
+        }
     }
 
     // 빈 화면 터치 시 키보드 내리기

@@ -34,6 +34,7 @@ import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.repository.UserTokenRepository
 import com.example.trashapp.utils.hideKeyboard
+import com.example.trashapp.view.SharedPreferencesManager
 import com.example.trashapp.view.adapter.MapSearchAdapter
 import com.example.trashapp.view.adapter.ReportItemAdapter
 import com.example.trashapp.viewmodel.ApiListViewModel
@@ -81,6 +82,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val userRepository = UserTokenRepository(requireContext()) // UserTokenRepository 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
         val factory = UserTokenViewModelFactory(userRepository)
         userTokenViewModel = ViewModelProvider(this, factory).get(UserTokenViewModel::class.java)
+
+        // 자동 로그인 토큰 확인
+        if(userInfoViewModel.token != ""){
+            val userToken = userInfoViewModel.token
+            userInfoViewModel.getUserInfo(userToken)
+            userTokenViewModel.saveToken(userToken)
+        }
 
         mapView = binding.mapView   // 카카오 지도 뷰
         mapView.setMapViewEventListener(this)
