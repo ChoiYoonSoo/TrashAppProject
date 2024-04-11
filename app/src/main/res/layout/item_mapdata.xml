@@ -2,30 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_margin="15dp">
+    android:layout_height="50dp"
+    android:background="@drawable/item_border2">
+
+    <ImageView
+        android:id="@+id/gpsIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/gpsicons"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:layout_marginTop="7dp"
         android:id="@+id/mapDataName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:fontFamily="@font/pretendardregular"
         android:text="Name"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gpsIcon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/mapDataAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:fontFamily="@font/pretendardregular"
         android:text="Address"
         android:textColor="@color/grey"
         android:textSize="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gpsIcon"
         app:layout_constraintTop_toBottomOf="@id/mapDataName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

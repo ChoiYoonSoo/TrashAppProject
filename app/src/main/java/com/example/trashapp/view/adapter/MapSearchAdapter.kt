@@ -5,21 +5,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.data.MapData
 import com.example.trashapp.databinding.ItemMapdataBinding
+import com.example.trashapp.network.model.Place
 import com.example.trashapp.viewmodel.ApiListViewModel
 
-class MapSearchAdapter(val mapDataList: List<MapData>, val viewModel : ApiListViewModel) :
+class MapSearchAdapter(val placeList: List<Place>, val viewModel : ApiListViewModel) :
     RecyclerView.Adapter<MapSearchAdapter.Holder>() {
 
     inner class Holder(val binding: ItemMapdataBinding) : RecyclerView.ViewHolder(binding.root) {
-        // 아이템 클릭 시 뷰모델에 값 변경된 후 -> 맵프래그먼트에서 변동 감지한 후 마커이동 구현해야 함
-//        init {
-//            binding.root.setOnClickListener {
-//                val position = adapterPosition
-//                if (position != RecyclerView.NO_POSITION) {
-//                    viewModel.selectMapData = mapDataList[position]
-//                }
-//            }
-//        }
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    viewModel.selectPlace.postValue(placeList[position])
+                }
+            }
+        }
         val name = binding.mapDataName
         val addr = binding.mapDataAddress
     }
@@ -30,11 +30,16 @@ class MapSearchAdapter(val mapDataList: List<MapData>, val viewModel : ApiListVi
     }
 
     override fun onBindViewHolder(holder: MapSearchAdapter.Holder, position: Int) {
-        holder.name.text = mapDataList[position].name
-        holder.addr.text = mapDataList[position].addr
+        holder.name.text = placeList[position].address_name
+        if(placeList[position].road_address_name == ""){
+            holder.addr.text = "주소 정보 없음"
+        }
+        else{
+            holder.addr.text = placeList[position].road_address_name
+        }
     }
 
     override fun getItemCount(): Int {
-        return mapDataList.size
+        return placeList.size
     }
 }

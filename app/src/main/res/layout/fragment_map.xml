@@ -28,21 +28,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp">
 
-            <EditText
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/mapSearchEdit"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="17dp"
                 android:background="@drawable/map_search_border"
                 android:fontFamily="@font/pretendardregular"
-                android:hint="장소, 주소 검색"
-                android:inputType="text"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/mapHintText"
-                android:textSize="13dp"
+                app:iconifiedByDefault="false"
                 app:layout_constraintEnd_toStartOf="@id/mapSettingBtn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="@string/searchText" />
 
             <ImageButton
                 android:id="@+id/mapSettingBtn"
@@ -62,7 +59,7 @@
                 android:layout_height="200dp"
                 android:layout_marginLeft="@dimen/dimens20dp"
                 android:layout_marginRight="@dimen/dimens20dp"
-                android:background="@color/white"
+                android:background="@drawable/item_border"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

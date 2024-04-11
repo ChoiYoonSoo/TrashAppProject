@@ -4,6 +4,7 @@ import com.example.trashapp.data.ApiValue
 import com.example.trashapp.data.Login
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.User
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -13,6 +14,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 
 interface API {
@@ -40,4 +42,10 @@ interface API {
 
     @POST("getUserdata")
     suspend fun getUserdata(@Header("Authorization") accessToken : String) : User
+
+    @GET("v2/local/search/keyword.json")
+    suspend fun searchKeyword(
+        @Header("Authorization") key: String,
+        @Query("query") query: String,
+    ) : ResultSearchKeyword
 }

@@ -10,6 +10,8 @@ class NetWorkRepository {
 
     private val client = RetrofitInstance.getInstance().create(API::class.java)
 
+    private val kakaoClient = RetrofitInstance.getKakaoInstance().create(API::class.java)
+
     // 전체 위도 경도 API 호출
     suspend fun getApiTest() = client.getApiTest()
 
@@ -30,4 +32,7 @@ class NetWorkRepository {
 
     // 유저 정보 가져오기
     suspend fun getUserdata(accessToken : String) = client.getUserdata(accessToken)
+
+    // 카카오 키워드 검색
+    suspend fun searchKeyword(key : String, query : String) = kakaoClient.searchKeyword(key, query)
 }

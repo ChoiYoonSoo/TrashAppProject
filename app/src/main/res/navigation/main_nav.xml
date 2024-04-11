@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_mapFragment_to_webViewFragment"
             app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_TMapFragment"
+            app:destination="@id/TMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -90,4 +93,8 @@
         android:id="@+id/webViewFragment"
         android:name="com.example.trashapp.view.fragments.WebViewFragment"
         android:label="WebViewFragment" />
+    <fragment
+        android:id="@+id/TMapFragment"
+        android:name="com.example.trashapp.view.fragments.TMapFragment"
+        android:label="TMapFragment" />
 </navigation>

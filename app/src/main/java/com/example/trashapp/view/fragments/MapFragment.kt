@@ -7,7 +7,9 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -16,6 +18,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -78,8 +81,14 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Tmap 길찾기
+        val tMapBtn = view.findViewById<Button>(R.id.tMapBtn)
+        tMapBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_TMapFragment)
+        }
+
         // UserTokenViewModel 의존성 주입
-        val userRepository = UserTokenRepository(requireContext()) // UserTokenRepository 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
+        val userRepository = UserTokenRepository(requireContext()) // UserTokenReposddㅇㅇitory 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
         val factory = UserTokenViewModelFactory(userRepository)
         userTokenViewModel = ViewModelProvider(this, factory).get(UserTokenViewModel::class.java)
 
@@ -115,7 +124,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         if(userTokenViewModel.getToken() != null){
             reportButton.isEnabled = true
             reportButton.setOnClickListener {
-                roadView.visibility = View.GONE
+                binding.roadViewContainer.visibility = View.GONE
                 if (reportList.visibility == View.GONE) {
                     reportList.visibility = View.VISIBLE
                 }
@@ -138,18 +147,52 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         // 검색 RecyclerView 초기화
         val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
-        searchRecyclerView.adapter = MapSearchAdapter(viewModel.mapData.value ?: emptyList(), viewModel)
-        searchRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewModel.placeList.observe(viewLifecycleOwner) { placeList ->
+            searchRecyclerView.adapter = MapSearchAdapter(placeList, viewModel)
+            searchRecyclerView.layoutManager = LinearLayoutManager(context)
+            if(placeList.isEmpty()){
+                searchRecyclerView.visibility = View.GONE
+            }
+            else{
+                searchRecyclerView.visibility = View.VISIBLE
+            }
+        }
+
+        // 검색창에서 선택한 위치로 이동
+        viewModel.selectPlace.observe(viewLifecycleOwner){selectPlace ->
+            val mapPoint = MapPoint.mapPointWithGeoCoord(selectPlace!!.y.toDouble(), selectPlace!!.x.toDouble())
+            mapView.setMapCenterPoint(mapPoint, true)
+            searchRecyclerView.visibility = View.GONE
+            binding.refreshBtn.visibility = View.VISIBLE
+        }
+
+        // SearchView QueryHint 설정
+        val searchView = binding.mapSearchEdit
+        searchView.queryHint = Html.fromHtml("<font color = #EDEDED>" + resources.getString(R.string.searchText) + "</font>")
+
+        binding.mapSearchEdit.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                binding.refreshBtn.visibility = View.GONE
+                Log.d("검색어", newText.toString())
+                if(newText.toString().isNotEmpty()){
+                    viewModel.getKaKaoKeyword("KakaoAK 9f69cb1d980918e3b79b5d8c7b49892c",newText.toString())
+                }
+                else{
+                    searchRecyclerView.visibility = View.GONE
+                }
+                return true
+            }
+        })
 
         // 설정 버튼 클릭 시 이벤트
         binding.mapSettingBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_settingFragment)
-        }
-
-        // 검색창 클릭 시 이벤트
-        binding.mapSearchEdit.setOnClickListener {
-            val searchRecyclerView = view.findViewById<RecyclerView>(R.id.mapSearchRV)
-            searchRecyclerView.visibility = View.VISIBLE
         }
 
         // 현 지도에서 다시 검색 버튼 이벤트
@@ -163,6 +206,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 로드뷰 이미지 띄우기
         reportImage.setOnClickListener{
             roadViewContainer.visibility = View.VISIBLE
+            reportList.visibility = View.GONE
             val imageUrl = viewModel.selectMapData?.imageUrl
             if(imageUrl!!.length > 10){
                 Glide.with(roadView.context)

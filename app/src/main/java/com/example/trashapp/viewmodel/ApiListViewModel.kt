@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.data.MapData
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.Place
+import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.repository.NetWorkRepository
 import kotlinx.coroutines.launch
 
@@ -21,6 +23,11 @@ class ApiListViewModel : ViewModel() {
 
     private val _gpsList = MutableLiveData<GpsList>()
     val gpsList: LiveData<GpsList> get() = _gpsList
+
+    private val _placeList = MutableLiveData<List<Place>>()
+    val placeList: LiveData<List<Place>> get() = _placeList
+
+    var selectPlace: MutableLiveData<Place?> = MutableLiveData()
 
     fun getApiList() = viewModelScope.launch {
 
@@ -66,5 +73,19 @@ class ApiListViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.e("CampViewModel", "Error fetching campsite list", e)
         }
+    }
+
+    fun getKaKaoKeyword(key : String, query : String) = viewModelScope.launch {
+
+        try{
+            val result = netWorkRepository.searchKeyword(key, query)
+            Log.d("카카오 API에서 받아 온 값", result.documents.toString())
+
+            _placeList.postValue(result.documents)
+        }catch (e: Exception){
+            Log.e("카카오맵 키워드 검색", "실패")
+        }
+
+
     }
 }
