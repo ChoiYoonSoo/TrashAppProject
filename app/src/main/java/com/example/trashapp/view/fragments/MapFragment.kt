@@ -1,6 +1,5 @@
 package com.example.trashapp.view.fragments
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,10 +8,8 @@ import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -37,10 +34,10 @@ import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.repository.UserTokenRepository
 import com.example.trashapp.utils.hideKeyboard
-import com.example.trashapp.view.SharedPreferencesManager
 import com.example.trashapp.view.adapter.MapSearchAdapter
 import com.example.trashapp.view.adapter.ReportItemAdapter
 import com.example.trashapp.viewmodel.ApiListViewModel
+import com.example.trashapp.viewmodel.CurrentGpsViewModel
 import com.example.trashapp.viewmodel.UserInfoViewModel
 import com.example.trashapp.viewmodel.UserTokenViewModel
 import com.example.trashapp.viewmodel.WebViewViewModel
@@ -61,6 +58,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private val viewModel: ApiListViewModel by activityViewModels()
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private val webViewViewModel: WebViewViewModel by activityViewModels()
+    private val currentGpsViewModel : CurrentGpsViewModel by activityViewModels()
 
     private val markerList : MutableList<MapPOIItem> = mutableListOf()
     private val CIRCLE_RADIUS = 15 // 원의 반지름을 미터 단위로 설정
@@ -85,10 +83,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val tMapBtn = view.findViewById<Button>(R.id.tMapBtn)
         tMapBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_TMapFragment)
+            binding.mapSearchEdit.setQuery("",false)
         }
 
         // UserTokenViewModel 의존성 주입
-        val userRepository = UserTokenRepository(requireContext()) // UserTokenReposddㅇㅇitory 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
+        val userRepository = UserTokenRepository(requireContext()) // UserTokenRepository 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
         val factory = UserTokenViewModelFactory(userRepository)
         userTokenViewModel = ViewModelProvider(this, factory).get(UserTokenViewModel::class.java)
 
@@ -237,37 +236,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                 markerList.add(marker)
             }
-            //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.5699684, 126.9807392), true)
             mapView.addPOIItem(marker)
-        }
-//        viewModel.selectMapData.observe(viewLifecycleOwner) { mapData ->
-//            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapData.latitude, mapData.longitude), true)
-//        }
-
-    }
-
-    // 스크롤 이동
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupDraggableBottomPanel() {
-        val draggableLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
-        draggableLayout.setOnTouchListener { view, event ->
-            val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    lastY = event.rawY
-                    true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val deltaY = event.rawY - lastY
-                    val newHeight = (layoutParams.height + deltaY).toInt()
-                    layoutParams.height =
-                        newHeight.coerceAtLeast(300) // 여기서 300은 최소 높이, 필요에 따라 조정 가능
-                    view.layoutParams = layoutParams
-                    lastY = event.rawY
-                    true
-                }
-                else -> false
-            }
         }
     }
 
@@ -330,11 +299,33 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d("맵뷰초기화","ok")
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord( 37.47960336657709, 126.8820342335089), true)
+        currentGpsViewModel.latitude.observe(viewLifecycleOwner) { lat ->
+            currentGpsViewModel.longitude.observe(viewLifecycleOwner) { lng ->
+                Log.d("!!!!!!!!!!!!!","${lat}, ${lng}")
+                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(lat, lng), true)
+
+                // 기존 마커 제거
+                mapView.findPOIItemByTag(1001)?.let {
+                    mapView.removePOIItem(it)
+                }
+
+                var marker = MapPOIItem()
+                marker.apply {
+                    itemName = "현재 위치"
+                    mapPoint = MapPoint.mapPointWithGeoCoord(lat, lng)
+                    customImageBitmap = getBitmapFromVectorDrawable(R.drawable.startgps)
+                    markerType = MapPOIItem.MarkerType.CustomImage
+                    isShowCalloutBalloonOnTouch = false
+                    tag = 1001
+                }
+                mapView.addPOIItem(marker)
+            }
+        }
+//        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.47960336657709, 126.8820342335089), true)
 
         lifecycleScope.launch {
-            // 중심점 설정 후 500밀리초(0.5초) 동안 기다립니다.
-            delay(500)
+            // 중심점 설정 후 500밀리초(1초) 동안 기다립니다.
+            delay(1000)
             getCurrentMapBounds()
         }
     }
@@ -390,6 +381,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     // POIItemEventListener
     // 마커 클릭 시 이벤트
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
+
+        if(p1?.tag == 1001){
+            return
+        }
         // 마커 이름 표시
         val markerName = p1?.itemName ?: "Unknown"
         val binTitleTextView = binding.root.findViewById<TextView>(R.id.binTitle)

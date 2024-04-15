@@ -15,7 +15,22 @@ class SignUpViewModel : ViewModel() {
     var email: String = ""
     var password: String = ""
     var nickname: String = ""
-    var isAgree: Boolean = false
+    var agree: Boolean = false
+
+    private val _isAgree = MutableLiveData<Boolean>()
+    var isAgree: LiveData<Boolean> = _isAgree
+
+    private val _isEmailSuccess = MutableLiveData<Boolean>()
+    var isEmailSuccess : LiveData<Boolean> = _isEmailSuccess
+
+    private val _isNickSuccess = MutableLiveData<Boolean>()
+    var isNickSuccess: LiveData<Boolean> = _isNickSuccess
+
+    private val _isPasswordSuccess = MutableLiveData<Boolean>()
+    var isPasswordSuccess: LiveData<Boolean> = _isPasswordSuccess
+
+    private val _isSignUpSuccess = MutableLiveData<Boolean>()
+    var isSignUpSuccess: LiveData<Boolean> = _isSignUpSuccess
 
     private val _isDuplicateEmail = MutableLiveData<Boolean>()
     var isDuplicateEmail : LiveData<Boolean> = _isDuplicateEmail
@@ -34,8 +49,12 @@ class SignUpViewModel : ViewModel() {
             Log.d("이메일 통신 ", "성공")
         }catch (e: Exception) {
             _isDuplicateEmail.value = false
-            Log.e("이메일 통신 ", "실패")
+            Log.e("이메일 통신 ", e.toString())
         }
+    }
+
+    fun isDuplicateEmail(value: Boolean) {
+        _isDuplicateEmail.postValue(value)
     }
 
     // 닉네임 중복 체크
@@ -69,7 +88,27 @@ class SignUpViewModel : ViewModel() {
             val response = newWorkRepository.signUp(signUp)
             Log.d("회원 가입 통신 ", "성공")
         }catch (e: Exception) {
-            Log.e("회원 가입 통신 ", "실패")
+            Log.e("회원 가입 통신 ", e.toString())
         }
+    }
+
+    fun isEmailSuccess(value: Boolean) {
+        _isEmailSuccess.postValue(value)
+    }
+
+    fun isNickSuccess(value: Boolean) {
+        _isNickSuccess.postValue(value)
+    }
+
+    fun isPasswordSuccess(value: Boolean) {
+        _isPasswordSuccess.postValue(value)
+    }
+
+    fun isAgree(value: Boolean) {
+        _isAgree.postValue(value)
+    }
+
+    fun isSignUpSuccess(value: Boolean) {
+        _isSignUpSuccess.postValue(value)
     }
 }

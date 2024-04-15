@@ -3,8 +3,10 @@ package com.example.trashapp.network
 import com.example.trashapp.data.ApiValue
 import com.example.trashapp.data.Login
 import com.example.trashapp.data.SignUp
+import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ResultSearchKeyword
+import com.example.trashapp.network.model.TmapApi
 import com.example.trashapp.network.model.User
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -13,6 +15,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -48,4 +51,14 @@ interface API {
         @Header("Authorization") key: String,
         @Query("query") query: String,
     ) : ResultSearchKeyword
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json",
+        "appKey: aV91GWA72uaSSfI8rtqpda7n69nzB8OpKoO0Znse"
+    )
+    @POST("routes/pedestrian?version=1")
+    suspend fun getTmapApi(
+        @Body requestBody: TmapApiRequest
+    ) : TmapApi
 }

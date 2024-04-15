@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.data.MapData
+import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.Place
 import com.example.trashapp.network.model.ResultSearchKeyword
@@ -28,6 +29,12 @@ class ApiListViewModel : ViewModel() {
     val placeList: LiveData<List<Place>> get() = _placeList
 
     var selectPlace: MutableLiveData<Place?> = MutableLiveData()
+
+    private val _totalDistance = MutableLiveData<Int>()
+    val totalDistance: LiveData<Int> get() = _totalDistance
+
+    private val _totalTime = MutableLiveData<Int>()
+    val totalTime: LiveData<Int> get() = _totalTime
 
     fun getApiList() = viewModelScope.launch {
 
@@ -52,12 +59,10 @@ class ApiListViewModel : ViewModel() {
     }
 
     fun getGpsList(paramGpsList: GpsList) = viewModelScope.launch {
-        _mapData.postValue(emptyList())
         Log.d("파라미터 값", paramGpsList.toString())
-        val result = netWorkRepository.getGPS(paramGpsList)
-        Log.d("API에서 받아 온 범위의 DB 값", result.toString())
-
         try {
+            val result = netWorkRepository.getGPS(paramGpsList)
+            Log.d("API에서 받아 온 범위의 DB 값", result.toString())
             // 위도 경도 추가
             val newMapData: List<MapData> = result.map { data ->
                 MapData(
@@ -72,6 +77,7 @@ class ApiListViewModel : ViewModel() {
             _mapData.postValue(newMapData)
         } catch (e: Exception) {
             Log.e("CampViewModel", "Error fetching campsite list", e)
+            _mapData.postValue(emptyList())
         }
     }
 
@@ -86,6 +92,16 @@ class ApiListViewModel : ViewModel() {
             Log.e("카카오맵 키워드 검색", "실패")
         }
 
+    }
 
+    fun getTmapApi(data: TmapApiRequest) = viewModelScope.launch {
+        try {
+            val result = netWorkRepository.getTmapApi(data)
+            Log.d("Tmap API에서 받아 온 값", "${result.features[0].properties.totalDistance.toString()}, ${result.features[0].properties.totalTime.toString()}")
+            _totalDistance.postValue(result.features[0].properties.totalDistance)
+            _totalTime.postValue(result.features[0].properties.totalTime)
+        } catch (e: Exception) {
+            Log.e("Tmap API", e.toString())
+        }
     }
 }
