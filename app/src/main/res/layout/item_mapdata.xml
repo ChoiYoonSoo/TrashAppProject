@@ -6,6 +6,7 @@
     android:background="@drawable/item_border2">
 
     <ImageView
+        android:layout_margin="5dp"
         android:id="@+id/gpsIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"

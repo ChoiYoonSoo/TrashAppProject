@@ -76,18 +76,19 @@ class LoginFragment : Fragment() {
             }
         }
 
+        viewModel.isLoginSuccess.observe(viewLifecycleOwner) { isLoginSuccess ->
+            viewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
+               binding.loginBtn.isEnabled = isLoginSuccess && isPasswordSuccess
+            }
+        }
+
         // 로그인 버튼 및 유저 토큰값 SharedPreferences에 저장
         binding.loginBtn.setOnClickListener {
             Log.d("login email : ", viewModel.email)
             Log.d("login password : ", viewModel.password)
 
-            if (viewModel.isLoginSeccess && viewModel.password.isNotEmpty()) {
-                val login = Login(viewModel.email, viewModel.password)
-                viewModel.login(login)
-
-            } else {
-                Toast.makeText(context, "아이디와 비밀번호가 맞지 않습니다.", Toast.LENGTH_SHORT).show()
-            }
+            val login = Login(viewModel.email, viewModel.password)
+            viewModel.login(login)
         }
 
         // 이메일 텍스트필드
@@ -106,20 +107,20 @@ class LoginFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 Log.d("afterTextChanged email : ", s.toString())
                 if (isValidEmail(s.toString()) && s.toString().isNotEmpty()) {
-                    viewModel.isLoginSeccess = true
+                    viewModel.isLoginSuccess(true)
                     viewModel.email = s.toString()
                     binding.validateEmailErrorText.visibility = View.GONE
-                }else if (s.toString().isEmpty()) {
-                    viewModel.isLoginSeccess = false
+                } else if (s.toString().isEmpty()) {
+                    viewModel.isLoginSuccess(false)
                     binding.validateEmailErrorText.visibility = View.GONE
-                }
-                else {
-                    viewModel.isLoginSeccess = false
+                } else {
+                    viewModel.isLoginSuccess(false)
                     binding.validateEmailErrorText.visibility = View.VISIBLE
                 }
             }
         })
 
+        // 비밀번호 텍스트필드
         binding.loginPasswordText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
@@ -134,14 +135,18 @@ class LoginFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 Log.d("afterTextChanged password : ", s.toString())
-                viewModel.password = s.toString()
+                if (s.toString().isNotEmpty()) {
+                    viewModel.isPasswordSuccess(true)
+                    viewModel.password = s.toString()
+                } else {
+                    viewModel.isPasswordSuccess(false)
+                }
             }
         })
     }
-
-    // 이메일 유효성 검사
-    fun isValidEmail(email: String): Boolean {
-        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$")
-        return emailRegex.matches(email)
+        // 이메일 유효성 검사
+        fun isValidEmail(email: String): Boolean {
+            val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$")
+            return emailRegex.matches(email)
+        }
     }
-}

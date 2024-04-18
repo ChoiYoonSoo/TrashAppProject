@@ -14,8 +14,10 @@ class SignUpViewModel : ViewModel() {
 
     var email: String = ""
     var password: String = ""
+    var afterPassword: String = ""
     var nickname: String = ""
     var agree: Boolean = false
+    var afterEmail: String = ""
 
     private val _isAgree = MutableLiveData<Boolean>()
     var isAgree: LiveData<Boolean> = _isAgree

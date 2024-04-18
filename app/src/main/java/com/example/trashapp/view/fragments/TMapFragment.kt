@@ -3,7 +3,6 @@ package com.example.trashapp.view.fragments
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
@@ -11,6 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +25,6 @@ import com.skt.Tmap.TMapData
 import com.skt.Tmap.TMapMarkerItem
 import com.skt.Tmap.TMapPoint
 import com.skt.Tmap.TMapView
-import com.skt.Tmap.poi_item.TMapPOIItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,19 +65,18 @@ class TMapFragment : Fragment() {
         }
 
         tMapView.postDelayed({
-            currentGpsViewModel.latitude.observe(viewLifecycleOwner) { lat ->
-                currentGpsViewModel.longitude.observe(viewLifecycleOwner) { lon ->
-                    tMapView.setCenterPoint(lon, lat)
-                    setMarker(lat, lon, "start")
+            currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
+                    tMapView.setCenterPoint(location.longitude, location.latitude)
+                    setMarker(location.latitude, location.longitude, "start")
                     setMarker(
                         viewModel.selectMapData!!.latitude,
                         viewModel.selectMapData!!.longitude,
                         "end"
                     )
-                    drawPedestrianPath(lat, lon)
+                    drawPedestrianPath(location.latitude, location.longitude)
                     val tmapApi = TmapApiRequest(
-                        lon,
-                        lat,
+                        location.longitude,
+                        location.latitude,
                         viewModel.selectMapData!!.longitude,
                         viewModel.selectMapData!!.latitude,
                         "출발지",
@@ -86,7 +85,7 @@ class TMapFragment : Fragment() {
                     )
                     viewModel.getTmapApi(tmapApi)
                 }
-            }
+
         }, 1000)
 
         viewModel.totalDistance.observe(viewLifecycleOwner) { distance ->

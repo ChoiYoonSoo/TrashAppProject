@@ -14,7 +14,12 @@ class LoginViewModel : ViewModel(){
 
     var email: String = ""
     var password: String = ""
-    var isLoginSeccess = false
+
+    private val _isLoginSuccess = MutableLiveData<Boolean>()
+    var isLoginSuccess = _isLoginSuccess
+
+    private val _isPasswordSuccess = MutableLiveData<Boolean>()
+    var isPasswordSuccess: LiveData<Boolean> = _isPasswordSuccess
 
     private val _token = MutableLiveData<String?>()
     val token: LiveData<String?> = _token
@@ -32,6 +37,14 @@ class LoginViewModel : ViewModel(){
             Log.e("로그인 통신 ", "실패")
             _token.postValue(null)
         }
+    }
+
+    fun isLoginSuccess(value: Boolean) {
+        _isLoginSuccess.postValue(value)
+    }
+
+    fun isPasswordSuccess(value: Boolean) {
+        _isPasswordSuccess.postValue(value)
     }
 
 }

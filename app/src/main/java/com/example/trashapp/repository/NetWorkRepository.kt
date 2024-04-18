@@ -5,6 +5,7 @@ import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.API
 import com.example.trashapp.network.RetrofitInstance
+import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
 
 class NetWorkRepository {
@@ -41,4 +42,7 @@ class NetWorkRepository {
 
     // Tmap API 호출
     suspend fun getTmapApi(requestBody: TmapApiRequest) = tmapClient.getTmapApi(requestBody)
+
+    // 이메일 인증
+    suspend fun getEmailAuth(emailAuth: EmailAuth) = client.getEmailAuth(emailAuth)
 }

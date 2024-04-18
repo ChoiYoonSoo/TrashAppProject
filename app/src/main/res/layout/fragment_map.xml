@@ -96,10 +96,10 @@
                     android:id="@+id/roadView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dimensTop20dp"
-                    android:layout_marginBottom="50dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="@dimen/dimensTop20dp"
                     android:layout_marginRight="5dp"
+                    android:layout_marginBottom="50dp"
                     android:src="@drawable/noimage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -121,6 +121,36 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/loading"
+            layout="@layout/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:paddingRight="1dp"
+        android:layout_margin="@dimen/dimensTop20dp"
+        android:id="@+id/gpsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_white"
+        android:src="@drawable/gps"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/binInfoContainer"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

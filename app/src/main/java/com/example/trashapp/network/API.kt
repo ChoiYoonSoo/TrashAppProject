@@ -4,6 +4,7 @@ import com.example.trashapp.data.ApiValue
 import com.example.trashapp.data.Login
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
+import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.TmapApi
@@ -61,4 +62,8 @@ interface API {
     suspend fun getTmapApi(
         @Body requestBody: TmapApiRequest
     ) : TmapApi
+
+    @POST("mailAuth")
+    suspend fun getEmailAuth(@Body emailAuth: EmailAuth)
+
 }
