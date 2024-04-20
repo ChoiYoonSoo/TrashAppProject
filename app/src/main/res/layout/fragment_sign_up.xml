@@ -9,7 +9,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/dimens20dp"
         android:paddingRight="@dimen/dimens20dp"
         tools:context=".view.fragments.SignUpFragment">
 
@@ -30,6 +29,8 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:contentDescription="back"
+                android:paddingLeft="@dimen/dimens20dp"
+                android:paddingRight="@dimen/dimens20dp"
                 android:src="@drawable/backarrow"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimens35dp"
             android:orientation="vertical"
+            android:paddingLeft="@dimen/dimens20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpContainer">
@@ -166,8 +168,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpContainer1">
-        </TextView>
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1"></TextView>
 
         <TextView
             android:id="@+id/signUpAuthTimeText2"
@@ -179,7 +180,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpContainer1"/>
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1" />
 
         <LinearLayout
             android:id="@+id/signUpContainer2"
@@ -187,6 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimens35dp"
             android:orientation="vertical"
+            android:paddingLeft="@dimen/dimens20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpContainer1">
@@ -270,8 +272,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
-        </TextView>
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer2"></TextView>
 
         <TextView
             android:id="@+id/signUpPwdIncorrectText2"
@@ -284,8 +285,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpContainer2">
-        </TextView>
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer2"></TextView>
 
         <LinearLayout
             android:id="@+id/signUpContainer3"
@@ -293,6 +293,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimens35dp"
             android:orientation="vertical"
+            android:paddingLeft="@dimen/dimens20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpContainer2">
@@ -397,6 +398,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimens65dp"
+            android:paddingLeft="@dimen/dimens20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpDuplicateNickText">
@@ -430,11 +432,12 @@
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimens40dp"
+            android:layout_marginLeft="@dimen/dimens20dp"
             android:layout_marginTop="@dimen/dimens16dp"
             android:background="@drawable/button_background"
+            android:enabled="false"
             android:fontFamily="@font/pretendardregular"
             android:text="가입완료"
-            android:enabled="false"
             android:textColor="@color/button_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_centerInParent="true"
         android:visibility="visible"
         android:text="위치를 불러오는 중입니다.."
-        android:textColor="@color/white"
+        android:textColor="@color/green"
         android:textSize="@dimen/dimens20sp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"

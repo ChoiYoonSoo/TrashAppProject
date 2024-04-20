@@ -11,25 +11,30 @@
 
     <TextView
         android:id="@+id/binTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:fontFamily="@font/pretendardregular"
+        android:scrollHorizontally="true"
         android:text="쓰레기통 위치"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
+        app:layout_constraintEnd_toStartOf="@id/binLoadImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/binAddr"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
+        android:layout_marginRight="5dp"
         android:fontFamily="@font/pretendardregular"
         android:text="세부주소"
         android:textColor="@color/grey"
         android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@id/binLoadImage"
         app:layout_constraintStart_toStartOf="@id/binTitle"
         app:layout_constraintTop_toBottomOf="@id/binTitle" />
 

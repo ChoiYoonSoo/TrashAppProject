@@ -28,6 +28,7 @@
         <activity
             android:name=".view.activities.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.TrashApp.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +38,7 @@
         </activity>
         <activity
             android:name=".view.activities.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
     </application>

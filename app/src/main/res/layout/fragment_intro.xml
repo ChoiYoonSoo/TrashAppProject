@@ -61,6 +61,7 @@
         android:id="@+id/startWithoutLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="15dp"
         android:layout_marginTop="@dimen/dimens27dp"
         android:fontFamily="@font/pretendardregular"
         android:text="@string/startWithoutLogin"
