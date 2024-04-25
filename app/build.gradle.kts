@@ -79,4 +79,11 @@ dependencies {
 
     // Google Location
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    // CameraX core library
+    implementation ("androidx.camera:camera-camera2:1.1.0-alpha06")
+    // CameraX Lifecycle library
+    implementation ("androidx.camera:camera-lifecycle:1.1.0-alpha06")
+    // CameraX View class
+    implementation ("androidx.camera:camera-view:1.0.0-alpha27")
 }

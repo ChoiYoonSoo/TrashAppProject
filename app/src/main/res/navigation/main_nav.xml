@@ -66,6 +66,9 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_mapFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -125,4 +128,9 @@
         android:id="@+id/TMapFragment"
         android:name="com.example.trashapp.view.fragments.TMapFragment"
         android:label="TMapFragment" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.trashapp.view.fragments.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 </navigation>

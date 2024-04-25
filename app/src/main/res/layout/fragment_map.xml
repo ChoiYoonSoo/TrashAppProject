@@ -126,7 +126,7 @@
         android:id="@+id/loadingContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,6 +139,20 @@
             android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/createBinBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:paddingLeft="5dp"
+        android:background="@drawable/report_button_border"
+        android:drawableLeft="@drawable/siren2"
+        android:text="쓰레기통 등록"
+        android:textSize="10sp"
+        android:visibility="gone"
+        android:layout_margin="@dimen/dimensTop20dp"
+        app:layout_constraintBottom_toTopOf="@id/binInfoContainer"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageButton
         android:paddingRight="1dp"

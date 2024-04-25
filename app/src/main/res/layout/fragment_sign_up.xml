@@ -168,7 +168,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signUpContainer1"></TextView>
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1"/>
 
         <TextView
             android:id="@+id/signUpAuthTimeText2"

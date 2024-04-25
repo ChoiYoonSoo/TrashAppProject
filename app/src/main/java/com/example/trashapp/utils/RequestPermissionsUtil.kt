@@ -6,11 +6,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import android.Manifest
+import androidx.core.app.ActivityCompat.requestPermissions
 
 class RequestPermissionsUtil(private val activity: Activity) {
 
     companion object {
         const val REQUEST_LOCATION = 100
+        const val REQUEST_CAMERA = 101  // 카메라 권한 요청 코드 추가
     }
 
     /** 위치 권한 SDK 버전 29 이상**/
@@ -27,6 +29,18 @@ class RequestPermissionsUtil(private val activity: Activity) {
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
+    /** 카메라 권한 요청 **/
+    fun requestCameraPermission() {
+        val permissionsNeeded = arrayOf(Manifest.permission.CAMERA)
+        val permissionsToRequest = permissionsNeeded.filter {
+            ActivityCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
+        }.toTypedArray()
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(activity, permissionsToRequest, REQUEST_CAMERA)
+        }
+    }
+
     /** 위치정보 권한 요청**/
     fun requestLocation() {
         val permissionsNeeded = if (Build.VERSION.SDK_INT >= 29) permissionsLocationUpApi29Impl else permissionsLocationDownApi29Impl
@@ -38,4 +52,5 @@ class RequestPermissionsUtil(private val activity: Activity) {
             ActivityCompat.requestPermissions(activity, permissionsToRequest, REQUEST_LOCATION)
         }
     }
+
 }

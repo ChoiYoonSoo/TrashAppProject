@@ -1,5 +1,7 @@
 package com.example.trashapp.view.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -17,7 +19,17 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.CameraXThreads.TAG
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +45,7 @@ import com.example.trashapp.databinding.FragmentMapBinding
 import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.repository.UserTokenRepository
+import com.example.trashapp.utils.RequestPermissionsUtil
 import com.example.trashapp.utils.hideKeyboard
 import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.view.adapter.MapSearchAdapter
@@ -56,18 +69,29 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private var lastY: Float = 0.0f
     private var isEnable = false
 
+    private lateinit var permissionsUtil: RequestPermissionsUtil
     private lateinit var userTokenViewModel: UserTokenViewModel
     private val viewModel: ApiListViewModel by activityViewModels()
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private val webViewViewModel: WebViewViewModel by activityViewModels()
     private val currentGpsViewModel: CurrentGpsViewModel by activityViewModels()
 
+    private lateinit var requestCameraPermission: ActivityResultLauncher<String>
     private val markerList: MutableList<MapPOIItem> = mutableListOf()
     private val CIRCLE_RADIUS = 15 // 원의 반지름을 미터 단위로 설정
     private val MIN_ZOOM_LEVEL_FOR_CIRCLE = -1 // 원을 표시할 최소 확대 레벨
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestCameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                moveToCameraFragment()
+            } else {
+                // 권한 거부 시 토스트 메시지 출력
+                Toast.makeText(context, "설정앱에서 카메라 권한을 허용하세요.", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -80,6 +104,26 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 카메라 권한 설정
+        permissionsUtil = RequestPermissionsUtil(requireActivity())
+
+        // 쓰레기통 등록 버튼 클릭 시
+        binding.createBinBtn.setOnClickListener {
+            // 권한 상태 검사 후 필요시 요청
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    // 권한이 이미 있으면 카메라 실행
+                    Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_cameraFragment)
+                }
+                else -> {
+                    // 권한 요청
+                    requestCameraPermission.launch(Manifest.permission.CAMERA)
+                }
+            }
+        }
 
         // 로딩 이미지 애니메이션
         val imageView = view.findViewById<ImageView>(R.id.loadingImage)
@@ -282,6 +326,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         }
     }
 
+    private fun moveToCameraFragment() {
+        view?.let { Navigation.findNavController(it).navigate(R.id.action_mapFragment_to_cameraFragment) }
+    }
+
     // 지도 마커 띄우기
     private fun setMark(dataList: List<MapData>) {
         Log.d("마커찍기", "ok")
@@ -387,6 +435,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
             binding.loadingContainer.visibility = View.GONE
+            binding.createBinBtn.visibility = View.VISIBLE
             binding.gpsBtn.visibility = View.VISIBLE
             Log.d("lastGps!!!", "${location.latitude}, ${location.longitude}")
             mapView.setMapCenterPoint(
