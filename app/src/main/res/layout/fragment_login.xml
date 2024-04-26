@@ -18,12 +18,12 @@
 
         <!-- 뒤로가기 버튼 -->
         <ImageButton
-            android:paddingLeft="@dimen/dimens20dp"
             android:id="@+id/loginBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="back"
+            android:paddingLeft="@dimen/dimens20dp"
             android:paddingRight="20dp"
             android:src="@drawable/backarrow"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,6 +38,8 @@
             android:fontFamily="@font/gmarketsansttfmedium"
             android:text="로그인"
             android:textColor="@color/black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:textSize="@dimen/dimens16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,10 +51,10 @@
 
     <!-- 이메일 입력 필드 -->
     <EditText
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:id="@+id/loginEmailText"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimens40dp"
+        android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="@dimen/dimens35dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/pretendardregular"
@@ -64,10 +66,10 @@
         app:layout_constraintTop_toBottomOf="@+id/loginContainer1" />
 
     <TextView
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:id="@+id/validateEmailErrorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimens20dp"
         android:text="이메일 형식이 올바르지 않습니다."
         android:textColor="@color/red"
         android:textSize="@dimen/dimens12sp"
@@ -78,10 +80,10 @@
 
     <!-- 비밀번호 입력 필드 -->
     <EditText
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:id="@+id/loginPasswordText"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimens40dp"
+        android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="@dimen/dimens27dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/pretendardregular"
@@ -95,15 +97,15 @@
 
     <!-- 로그인 버튼 -->
     <Button
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimens40dp"
+        android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="@dimen/dimens35dp"
         android:background="@drawable/button_background"
+        android:enabled="false"
         android:fontFamily="@font/pretendardregular"
         android:text="로그인"
-        android:enabled="false"
         android:textColor="@color/button_text_color"
         android:textSize="@dimen/dimens16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,10 +127,10 @@
 
     <!-- 회원가입 버튼 -->
     <Button
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:id="@+id/loginSignUpBtn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimens40dp"
+        android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="@dimen/dimens27dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/pretendardregular"

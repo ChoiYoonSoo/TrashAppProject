@@ -59,6 +59,8 @@ class LoginFragment : Fragment() {
 
         // 회원가입 버튼
         binding.loginSignUpBtn.setOnClickListener {
+            binding.loginEmailText.setText("")
+            binding.loginPasswordText.setText("")
             Navigation.findNavController(view)
                 .navigate(R.id.action_loginFragment2_to_signUpFragment)
         }

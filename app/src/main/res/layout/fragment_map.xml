@@ -146,7 +146,7 @@
         android:layout_height="22dp"
         android:paddingLeft="5dp"
         android:background="@drawable/report_button_border"
-        android:drawableLeft="@drawable/siren2"
+        android:drawableLeft="@drawable/camera_icon"
         android:text="쓰레기통 등록"
         android:textSize="10sp"
         android:visibility="gone"

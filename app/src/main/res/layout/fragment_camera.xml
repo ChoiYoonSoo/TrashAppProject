@@ -43,24 +43,83 @@
             android:layout_height="match_parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="250dp"
-            android:layout_height="450dp"
+            android:layout_width="@dimen/dimens250dp"
+            android:layout_height="@dimen/dimens450dp"
             android:layout_gravity="center"
             android:background="@drawable/camera_border">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="박스 안에 맞춰 쓰레기통을 찍어주세요."
-                android:padding="3dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimens12sp"
+                android:layout_marginBottom="@dimen/dimens16dp"
+                android:background="@drawable/base_button_border"
                 android:fontFamily="@font/pretendardregular"
-                android:background="@drawable/edittext_focused"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="5dp"
+                android:text="박스 안에 맞춰 쓰레기통을 찍어주세요"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/dimens12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/dimens16dp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cameraContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens450dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dimens35dp"
+            android:layout_marginRight="@dimen/dimens35dp"
+            android:background="@drawable/map_search_border"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/cameraCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/close"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="10dp"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cameraImageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cameraCloseBtn"
+                app:layout_constraintBottom_toTopOf="@id/cameraReportBtn">
+
+                <ImageView
+                    android:id="@+id/cameraImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/camera_loading"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/cameraReportBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="@dimen/dimens16dp"
+                android:background="@drawable/report_button_border"
+                android:drawableLeft="@drawable/siren2"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:drawablePadding="5dp"
+                android:text="쓰레기통 등록"
+                android:textSize="@dimen/dimens16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -23,6 +23,7 @@
         android:layout_centerInParent="true"
         android:visibility="visible"
         android:text="위치를 불러오는 중입니다.."
+        android:fontFamily="@font/pretendardregular"
         android:textColor="@color/green"
         android:textSize="@dimen/dimens20sp"
         android:layout_marginTop="10dp"
