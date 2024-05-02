@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.data.Location
 import kotlinx.coroutines.launch
+import net.daum.mf.map.api.MapPoint
 
 class CurrentGpsViewModel : ViewModel() {
 
@@ -21,6 +22,8 @@ class CurrentGpsViewModel : ViewModel() {
     var location : Location? = null
 
     var isGpsEnabled = MutableLiveData<Boolean>()
+
+    var isMapPoint = false
 
     fun setGps(latitude: Double, longitude: Double) = viewModelScope.launch {
         if(location == null || location!!.latitude != latitude || location!!.longitude != longitude){

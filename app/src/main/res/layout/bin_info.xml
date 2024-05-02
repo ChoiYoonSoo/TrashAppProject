@@ -18,8 +18,8 @@
         android:scrollHorizontally="true"
         android:text="쓰레기통 위치"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="normal"
+        android:textSize="@dimen/dimens16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/binLoadImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,10 +33,51 @@
         android:fontFamily="@font/pretendardregular"
         android:text="세부주소"
         android:textColor="@color/grey"
-        android:textSize="11sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toStartOf="@id/binLoadImage"
         app:layout_constraintStart_toStartOf="@id/binTitle"
-        app:layout_constraintTop_toBottomOf="@id/binTitle" />
+        app:layout_constraintTop_toBottomOf="@id/binTitle"/>
+
+    <TextView
+        android:id="@+id/binNickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="닉네임"
+        android:textSize="@dimen/dimens12sp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintTop_toBottomOf="@id/binAddr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/binLoadImage"/>
+
+    <Button
+        android:id="@+id/baseBinCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        app:layout_constraintTop_toBottomOf="@id/binNickname"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/dimens35dp"
+        android:text="일반 쓰레기통"
+        android:fontFamily="@font/pretendardregular"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/dimens12sp"
+        android:visibility="gone"
+        android:background="@drawable/bin_category"/>
+
+    <Button
+        android:id="@+id/bothBinCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        app:layout_constraintTop_toBottomOf="@id/binNickname"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/dimens35dp"
+        android:text="일반/재활용 쓰레기통"
+        android:fontFamily="@font/pretendardregular"
+        android:textColor="@color/grey"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:textSize="@dimen/dimens12sp"
+        android:background="@drawable/bin_category"/>
 
     <ImageView
         android:id="@+id/binLoadImage"
@@ -50,7 +91,7 @@
         android:id="@+id/tMapBtn"
         android:layout_width="55dp"
         android:layout_height="25dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/dimens35dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/report_button_border"
         android:fontFamily="@font/pretendardregular"
@@ -58,22 +99,22 @@
         android:text="길찾기"
         android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toStartOf="@id/binReportBtn"
-        app:layout_constraintTop_toBottomOf="@id/binAddr" />
+        app:layout_constraintTop_toBottomOf="@id/binNickname" />
 
     <Button
         android:id="@+id/binReportBtn"
         android:layout_width="55dp"
         android:layout_height="25dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/dimens35dp"
         android:layout_marginRight="2dp"
         android:background="@drawable/report_button_border"
         android:fontFamily="@font/pretendardregular"
         android:drawableLeft="@drawable/siren2"
         android:padding="5dp"
         android:text="신고"
-        android:textSize="11sp"
+        android:textSize="@dimen/dimens12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/binAddr" />
+        app:layout_constraintTop_toBottomOf="@id/binNickname" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

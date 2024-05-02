@@ -7,6 +7,10 @@ import com.example.trashapp.network.API
 import com.example.trashapp.network.RetrofitInstance
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.TrashcanLocation
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Multipart
 
 class NetWorkRepository {
 
@@ -45,4 +49,7 @@ class NetWorkRepository {
 
     // 이메일 인증
     suspend fun getEmailAuth(emailAuth: EmailAuth) = client.getEmailAuth(emailAuth)
+
+    // 쓰레기통 등록
+    suspend fun newTrashcan(token: String, location: RequestBody, image: MultipartBody.Part) = client.newTrashcan(token, location, image)
 }

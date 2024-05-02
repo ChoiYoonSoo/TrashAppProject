@@ -107,7 +107,7 @@
                 android:id="@+id/duplicateEmailText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="중복된 이메일 입니다."
+                android:text="사용할 수 없는 이메일 주소입니다."
                 android:textColor="@color/red"
                 android:textSize="@dimen/dimens12sp"
                 android:visibility="gone" />

@@ -1,5 +1,6 @@
 package com.example.trashapp.data
 
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,10 +9,10 @@ data class ApiValue(
     val latitude: Double,
     val longitude: Double,
     val roadviewImgpath: String,
-    val userId: Int,
+    val nickname: String,
     val categories: String,
     val state: String,
     val date: String,
-    val address: String,
-    val detailAddress: String
+    val address: String? = "",
+    val detailAddress: String? = ""
 )

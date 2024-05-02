@@ -36,6 +36,8 @@ class ApiListViewModel : ViewModel() {
     private val _totalTime = MutableLiveData<Int>()
     val totalTime: LiveData<Int> get() = _totalTime
 
+    var id : Int = 0
+
     fun getApiList() = viewModelScope.launch {
 
         val result = netWorkRepository.getApiTest()
@@ -49,7 +51,8 @@ class ApiListViewModel : ViewModel() {
                     data.latitude,
                     data.longitude,
                     data.roadviewImgpath,
-                    data.id
+                    data.id,
+                    data.nickname
                 )
             }
             _mapData.postValue(newMapData)
@@ -71,7 +74,9 @@ class ApiListViewModel : ViewModel() {
                     data.latitude,
                     data.longitude,
                     data.roadviewImgpath,
-                    data.id
+                    data.id,
+                    data.nickname,
+                    data.categories
                 )
             }
             _mapData.postValue(newMapData)
@@ -102,6 +107,14 @@ class ApiListViewModel : ViewModel() {
             _totalTime.postValue(result.features[0].properties.totalTime)
         } catch (e: Exception) {
             Log.e("Tmap API", e.toString())
+        }
+    }
+
+    fun reportApi(id: Int, reportText : String) = viewModelScope.launch {
+        try {
+            Log.d("신고 API 호출", reportText + " 쓰레기통 아이디: $id")
+        } catch (e: Exception) {
+            Log.e("신고 API 호출", "실패")
         }
     }
 }

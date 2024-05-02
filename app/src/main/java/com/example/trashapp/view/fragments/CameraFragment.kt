@@ -7,6 +7,8 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,8 +23,21 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentCameraBinding
+import com.example.trashapp.network.model.TrashcanLocation
+import com.example.trashapp.view.SharedPreferencesManager
+import com.example.trashapp.view.activities.MainActivity
+import com.example.trashapp.viewmodel.CameraViewModel
+import com.example.trashapp.viewmodel.CurrentGpsViewModel
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -34,7 +49,11 @@ class CameraFragment : Fragment() {
 
     private lateinit var imageCapture: ImageCapture
 
-    private lateinit var binding : FragmentCameraBinding
+    private lateinit var binding: FragmentCameraBinding
+
+    private val currentGpsViewModel: CurrentGpsViewModel by activityViewModels()
+
+    private val cameraViewModel: CameraViewModel by activityViewModels()
 
     private var isCameraReady = false
 
@@ -59,37 +78,130 @@ class CameraFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        // 카메라 닫기 버튼 클릭 시
         binding.cameraCloseBtn.setOnClickListener {
             binding.cameraContainer.visibility = View.GONE
+            binding.cameraCaptureBtn.visibility = View.VISIBLE
+            binding.addressText.text = ""
+            binding.addressEditText.setText("")
+            binding.recyclingBin.isSelected = false
+            binding.baseBin.isSelected = false
         }
 
         startCamera()
 
+        // 카메라 버튼 애니메이션 효과
         val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
 
+        // 카메라 캡처 버튼 터치 시
         binding.cameraCaptureBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     v.startAnimation(scaleDown)
                     true
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     v.startAnimation(scaleUp)
                     v.performClick()
                     true
                 }
+
                 else -> false
             }
         }
 
+        // 토큰 및 현재 위치 받기
+        val token = SharedPreferencesManager.getToken(requireContext())
+        cameraViewModel.token = token
+        currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) {
+            cameraViewModel.currentLatitude = it.latitude
+            cameraViewModel.currentLongitude = it.longitude
+        }
+
+        // 카메라 캡처 버튼 클릭 시
         binding.cameraCaptureBtn.setOnClickListener {
+            cameraViewModel.category = null
             binding.cameraImage.setImageResource(R.drawable.camera_loading)
             val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
             binding.cameraContainer.startAnimation(slideUpAnimation)
             binding.cameraContainer.visibility = View.VISIBLE
+            binding.cameraCaptureBtn.visibility = View.GONE
+
+            (activity as? MainActivity)?.getLocation()
             takePhoto()
         }
+
+        // 재활용 쓰레기통 버튼 클릭 시
+        binding.recyclingBin.setOnClickListener {
+            binding.recyclingBin.isSelected = true
+            binding.baseBin.isSelected = false
+            cameraViewModel.category = "both"
+            Log.d("재활용 쓰레기통 버튼 클릭", "카테고리 : ${cameraViewModel.category}")
+        }
+
+        // 일반 쓰레기통 버튼 클릭 시
+        binding.baseBin.setOnClickListener {
+            binding.recyclingBin.isSelected = false
+            binding.baseBin.isSelected = true
+            cameraViewModel.category = "general"
+            Log.d("일반 쓰레기통 버튼 클릭", "카테고리 : ${cameraViewModel.category}")
+        }
+
+
+        // 쓰레기통 통신 성공 여부
+        cameraViewModel.isSuccess.observe(viewLifecycleOwner) {
+            binding.addressText.text = ""
+            binding.addressEditText.setText("")
+            binding.recyclingBin.isSelected = false
+            binding.baseBin.isSelected = false
+            if (it) {
+                Toast.makeText(context, "쓰레기통 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(context, "쓰레기통 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 쓰레기통 등록 버튼 클릭 시
+        binding.cameraReportBtn.setOnClickListener {
+            if (cameraViewModel.category == null) {
+                Toast.makeText(context, "쓰레기통 종류를 선택해주세요", Toast.LENGTH_SHORT).show()
+            } else if (cameraViewModel.addressEditText == "") {
+                Toast.makeText(context, "위치를 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d(
+                    "쓰레기통 등록 버튼 클릭",
+                    "위도 : ${cameraViewModel.currentLatitude}, 경도 : ${cameraViewModel.currentLongitude})), 토큰 : ${cameraViewModel.token}"
+                )
+                var location = TrashcanLocation(
+                    cameraViewModel.currentLatitude!!,
+                    cameraViewModel.currentLongitude!!,
+                    cameraViewModel.category!!,
+                    cameraViewModel.addressEditText!!
+                )
+                Log.d("쓰레기통을 등록합니다.", "위도 : ${location.latitude} 경도 : ${location.longitude} 주소 : ${location.address} 종류 : ${location.category}")
+                val locationRequestBody = location.toJsonRequestBody()
+                cameraViewModel.newTrashcan(
+                    cameraViewModel.token!!,
+                    locationRequestBody,
+                    cameraViewModel.image!!
+                )
+            }
+        }
+
+        binding.addressEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                cameraViewModel.addressEditText = s.toString()
+            }
+        })
 
     }
 
@@ -113,8 +225,8 @@ class CameraFragment : Fragment() {
                 )
                 isCameraReady = true // 카메라 준비 완료
             } catch (exc: Exception) {
-            Log.e("카메라 API", "실패", exc)
-        }
+                Log.e("카메라 API", "실패", exc)
+            }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
@@ -126,7 +238,10 @@ class CameraFragment : Fragment() {
         }
         val photoFile = File(
             requireContext().getExternalFilesDir(null),
-            SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg"
+            SimpleDateFormat(
+                "yyyy-MM-dd-HH-mm-ss-SSS",
+                Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg"
         )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -140,6 +255,21 @@ class CameraFragment : Fragment() {
                     // UI Thread에서 ImageView 업데이트
                     activity?.runOnUiThread {
                         updateImageView(Uri.fromFile(photoFile))
+                    }
+
+                    // 이미지 파일
+                    val file = output.savedUri?.path?.let { File(it) }
+                    // 파일이 null이 아닐 경우에만 업로드 수행
+                    file?.let {
+                        // 파일을 RequestBody로 변환
+                        val requestFile = it.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                        Log.d("파일생성", "성공 ${requestFile}")
+
+                        // MultipartBody.Part 생성
+                        cameraViewModel.image =
+                            MultipartBody.Part.createFormData("image", it.name, requestFile)
+                        Log.d("MultipartBody.Part 생성", "성공 ${cameraViewModel.image}")
+
                     }
                 }
 
@@ -163,7 +293,10 @@ class CameraFragment : Fragment() {
             // Exif 정보를 위한 새로운 스트림
             inputStream = requireContext().contentResolver.openInputStream(imageUri)
             val exif = ExifInterface(inputStream!!)
-            val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
             inputStream.close()  // 두 번째 스트림 닫기
 
             if (bitmap == null) {
@@ -196,4 +329,9 @@ class CameraFragment : Fragment() {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
+    fun TrashcanLocation.toJsonRequestBody(): RequestBody {
+        val gson = Gson()
+        val json = gson.toJson(this)
+        return json.toRequestBody("application/json".toMediaTypeOrNull())
+    }
 }

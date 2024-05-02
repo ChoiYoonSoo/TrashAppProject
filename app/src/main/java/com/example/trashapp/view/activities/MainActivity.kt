@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
             .addOnSuccessListener { success: Location? ->
                 success?.let { location ->
+//                    currentGpsViewModel.currentGps(36.8330149230957, 127.17927825927734)
                     currentGpsViewModel.currentGps(location.latitude, location.longitude)
                 }
             }

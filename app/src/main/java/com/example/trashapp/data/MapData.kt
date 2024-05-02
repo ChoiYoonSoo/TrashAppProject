@@ -6,5 +6,7 @@ data class MapData(
     var latitude : Double,  // 위도
     var longitude : Double, // 경도
     var imageUrl : String? = null,
-    var id : Int
+    var id : Int,
+    var nickname : String? = null,
+    var category: String? = null
 )

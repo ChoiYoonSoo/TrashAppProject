@@ -5,10 +5,16 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.text.Html
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -104,26 +110,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 카메라 권한 설정
-        permissionsUtil = RequestPermissionsUtil(requireActivity())
-
-        // 쓰레기통 등록 버튼 클릭 시
-        binding.createBinBtn.setOnClickListener {
-            // 권한 상태 검사 후 필요시 요청
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    // 권한이 이미 있으면 카메라 실행
-                    Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_cameraFragment)
-                }
-                else -> {
-                    // 권한 요청
-                    requestCameraPermission.launch(Manifest.permission.CAMERA)
-                }
-            }
-        }
 
         // 로딩 이미지 애니메이션
         val imageView = view.findViewById<ImageView>(R.id.loadingImage)
@@ -217,27 +203,24 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 신고 버튼 클릭 시 이벤트
         val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
-        if (userTokenViewModel.getToken() != null) {
-            reportButton.isEnabled = true
-            reportButton.setOnClickListener {
+        reportButton.setOnClickListener {
+            if (userTokenViewModel.getToken() != null) {
                 binding.roadViewContainer.visibility = View.GONE
                 if (reportList.visibility == View.GONE) {
                     reportList.visibility = View.VISIBLE
                 }
+            } else {
+                Toast.makeText(context, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            reportButton.isEnabled = false
         }
 
         // 신고 RecyclerView 초기화
         val reportRecyclerView = view.findViewById<RecyclerView>(R.id.reportRV)
         val reportTextList = ArrayList<ReportItemData>()
-        reportTextList.add(ReportItemData("지도에 나온 위치에 정확히 있었어요."))
-        reportTextList.add(ReportItemData("분리수거 할 수 있게 되어 있어요."))
-        reportTextList.add(ReportItemData("쓰레기가 꽉 차 있어 버릴 수 없어요."))
         reportTextList.add(ReportItemData("지도에 나온 위치와 다른 곳에 있어요."))
         reportTextList.add(ReportItemData("지도에 나온 위치에 없어요."))
-        reportRecyclerView.adapter = ReportItemAdapter(reportTextList)
+        reportTextList.add(ReportItemData("쓰레기통 종류가 일치하지 않아요."))
+        reportRecyclerView.adapter = ReportItemAdapter(reportTextList, viewModel)
         reportRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // 검색 RecyclerView 초기화
@@ -249,6 +232,32 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 searchRecyclerView.visibility = View.GONE
             } else {
                 searchRecyclerView.visibility = View.VISIBLE
+            }
+        }
+
+        // 카메라 권한 설정
+        permissionsUtil = RequestPermissionsUtil(requireActivity())
+
+        // 쓰레기통 등록 버튼 클릭 시
+        binding.createBinBtn.setOnClickListener {
+            if (userTokenViewModel.getToken() != null) {
+                // 권한 상태 검사 후 필요시 요청
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        // 권한이 이미 있으면 카메라 실행
+                        Navigation.findNavController(view)
+                            .navigate(R.id.action_mapFragment_to_cameraFragment)
+                    }
+                    else -> {
+                        // 권한 요청
+                        requestCameraPermission.launch(Manifest.permission.CAMERA)
+                    }
+                }
+            } else {
+                Toast.makeText(context, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -437,7 +446,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             binding.loadingContainer.visibility = View.GONE
             binding.createBinBtn.visibility = View.VISIBLE
             binding.gpsBtn.visibility = View.VISIBLE
-            Log.d("lastGps!!!", "${location.latitude}, ${location.longitude}")
+            Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
             mapView.setMapCenterPoint(
                 MapPoint.mapPointWithGeoCoord(
                     location.latitude,
@@ -460,12 +469,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 tag = 1001
             }
             mapView.addPOIItem(marker)
-        }
-
-        lifecycleScope.launch {
-            // 중심점 설정 후 500밀리초(1초) 동안 기다립니다.
-            delay(1000)
-            getCurrentMapBounds()
         }
     }
 
@@ -514,11 +517,21 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+        // 첫 지도 로딩 시에만 현재 범위의 쓰레기통 데이터를 가져옴
+        if(!currentGpsViewModel.isMapPoint){
+            getCurrentMapBounds()
+            currentGpsViewModel.isMapPoint = true
+        }
     }
 
     // POIItemEventListener
     // 마커 클릭 시 이벤트
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
+
+        // 신고 할 때 필요한 쓰레기통 ID
+        val id = p1?.userObject as MapData
+        viewModel.id = id.id
+
         isEnable = false
         currentGpsViewModel.setGpsEnabled(isEnable)
 
@@ -547,6 +560,41 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         }
         viewModel.selectMapData = markerImage
 
+        // 닉네임 표시
+        val nickname = p1?.userObject as MapData
+        val binNicknameTextView = binding.root.findViewById<TextView>(R.id.binNickname)
+        val fullText = "${nickname.nickname}님께서 발견한 쓰레기통입니다."
+        val spannableString = SpannableString(fullText)
+
+        val boldSpan = StyleSpan(Typeface.BOLD) // 굵은 글씨 스타일
+        val greyColor = ContextCompat.getColor(requireContext(), R.color.grey)
+        val colorSpan = ForegroundColorSpan(greyColor) // 색상 변경
+        val sizeSpan = RelativeSizeSpan(1.25f) // 글자 크기 1.5배로 설정
+
+        // "nickname.nickname" 단어의 시작과 끝 인덱스를 찾습니다.
+        val start = fullText.indexOf(nickname.nickname!!)
+        val end = start + nickname.nickname!!.length
+
+        // "nickname.nickname" 부분에 스타일 적용
+        spannableString.setSpan(boldSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(colorSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(sizeSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        // TextView에 SpannableString 설정
+        binNicknameTextView.text = spannableString
+
+        // 쓰레기통 종류 표시하기
+        val category = p1?.userObject as MapData
+        val bothBinButton = binding.root.findViewById<Button>(R.id.bothBinCategory)
+        val baseBinButton = binding.root.findViewById<Button>(R.id.baseBinCategory)
+        if(category.category == "both"){
+            bothBinButton.visibility = View.VISIBLE
+        }
+        else{
+            baseBinButton.visibility = View.VISIBLE
+        }
+
+
         val binInfoLayout = binding.root.findViewById<ConstraintLayout>(R.id.binInfoContainer)
         binInfoLayout.visibility = View.VISIBLE
 
@@ -559,6 +607,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         webViewViewModel.latitude = markerAddr.latitude
         webViewViewModel.longitude = markerAddr.longitude
+        Log.d("웹 뷰 위도 경도", "latitude: ${webViewViewModel.latitude}, longitude: ${webViewViewModel.longitude}")
 
     }
 
@@ -575,3 +624,4 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
     }
 }
+
