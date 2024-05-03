@@ -19,29 +19,29 @@ class SignUpViewModel : ViewModel() {
     var agree: Boolean = false
     var afterEmail: String = ""
 
-    private val _isAgree = MutableLiveData<Boolean>()
-    var isAgree: LiveData<Boolean> = _isAgree
+    private val _isAgree = MutableLiveData<Boolean?>()
+    var isAgree: LiveData<Boolean?> = _isAgree
 
-    private val _isEmailSuccess = MutableLiveData<Boolean>()
-    var isEmailSuccess : LiveData<Boolean> = _isEmailSuccess
+    private val _isEmailSuccess = MutableLiveData<Boolean?>()
+    var isEmailSuccess : LiveData<Boolean?> = _isEmailSuccess
 
-    private val _isNickSuccess = MutableLiveData<Boolean>()
-    var isNickSuccess: LiveData<Boolean> = _isNickSuccess
+    private val _isNickSuccess = MutableLiveData<Boolean?>()
+    var isNickSuccess: LiveData<Boolean?> = _isNickSuccess
 
-    private val _isPasswordSuccess = MutableLiveData<Boolean>()
-    var isPasswordSuccess: LiveData<Boolean> = _isPasswordSuccess
+    private val _isPasswordSuccess = MutableLiveData<Boolean?>()
+    var isPasswordSuccess: LiveData<Boolean?> = _isPasswordSuccess
 
-    private val _isSignUpSuccess = MutableLiveData<Boolean>()
-    var isSignUpSuccess: LiveData<Boolean> = _isSignUpSuccess
+    private val _isSignUpSuccess = MutableLiveData<Boolean?>()
+    var isSignUpSuccess: LiveData<Boolean?> = _isSignUpSuccess
 
-    private val _isDuplicateEmail = MutableLiveData<Boolean>()
-    var isDuplicateEmail : LiveData<Boolean> = _isDuplicateEmail
+    private val _isDuplicateEmail = MutableLiveData<Boolean?>()
+    var isDuplicateEmail : LiveData<Boolean?> = _isDuplicateEmail
 
-    private val _isDuplicateNick = MutableLiveData<Boolean>()
-    var isDuplicateNick : LiveData<Boolean> = _isDuplicateNick
+    private val _isDuplicateNick = MutableLiveData<Boolean?>()
+    var isDuplicateNick : LiveData<Boolean?> = _isDuplicateNick
 
-    private val _isValidatePassword = MutableLiveData<Boolean>()
-    var isValidatePassword : LiveData<Boolean> = _isValidatePassword
+    private val _isValidatePassword = MutableLiveData<Boolean?>()
+    var isValidatePassword : LiveData<Boolean?> = _isValidatePassword
 
     // 이메일 중복 체크
     fun duplicateEmailCheck(email: String) = viewModelScope.launch {
@@ -112,5 +112,22 @@ class SignUpViewModel : ViewModel() {
 
     fun isSignUpSuccess(value: Boolean) {
         _isSignUpSuccess.postValue(value)
+    }
+
+    fun clearAll() {
+        email = ""
+        password = ""
+        afterPassword = ""
+        nickname = ""
+        agree = false
+        afterEmail = ""
+        _isAgree.value = null
+        _isEmailSuccess.value = null
+        _isNickSuccess.value = null
+        _isPasswordSuccess.value = null
+        _isSignUpSuccess.value = null
+        _isDuplicateEmail.value = null
+        _isDuplicateNick.value = null
+        _isValidatePassword.value = null
     }
 }

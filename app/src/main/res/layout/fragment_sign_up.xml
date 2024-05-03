@@ -184,6 +184,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpContainer1" />
 
+        <TextView
+            android:id="@+id/signUpAuthTimeText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="인증번호가 일치하지 않습니다."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:paddingLeft="@dimen/dimens20dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1" />
+
+        <TextView
+            android:id="@+id/signUpAuthTimeText4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="인증이 완료 되었습니다."
+            android:textColor="@color/green"
+            android:textSize="@dimen/dimens12sp"
+            android:paddingLeft="@dimen/dimens20dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer1" />
+
         <LinearLayout
             android:id="@+id/signUpContainer2"
             android:layout_width="match_parent"
@@ -359,6 +385,7 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingLeft="@dimen/dimens20dp"
             android:id="@+id/signUpDuplicateNickText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -366,30 +393,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpContainer3">
 
-            <ImageButton
-                android:id="@+id/signUpWarningIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/warningcircle"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </ImageButton>
-
             <TextView
                 android:id="@+id/duplicateNickText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
                 android:fontFamily="@font/pretendardregular"
                 android:text="이미 존재하는 닉네임 입니다."
                 android:textSize="@dimen/dimens12sp"
+                android:textColor="@color/red"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/signUpWarningIcon"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
             </TextView>

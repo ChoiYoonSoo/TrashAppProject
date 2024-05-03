@@ -48,6 +48,8 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.clearAll()
+
         // 인증번호 버튼 비활성화
         binding.signUpConfirmBtn.isEnabled = false
 
@@ -64,8 +66,31 @@ class SignUpFragment : Fragment() {
 
         // 인증번호 확인 버튼 클릭 시
         binding.signUpConfirmBtn.setOnClickListener {
+            Log.d("이메일 인증번호 확인 ", emailAuthViewModel.authNumber)
             val emailAuth = EmailAuth(viewModel.afterEmail, emailAuthViewModel.authNumber)
             emailAuthViewModel.getEmailAuth(emailAuth)
+        }
+
+        // 이메일 인증번호 확인 결과
+        emailAuthViewModel.isEmailAuthSuccess.observe(viewLifecycleOwner){ isEmailAuthSuccess ->
+            if(isEmailAuthSuccess){
+                if(timer != null){
+                    timer?.cancel()
+                    timer = null
+                }
+                binding.signUpAuthTimeText4.visibility = View.VISIBLE
+                binding.signUpAuthTimeText3.visibility = View.GONE
+                binding.signUpAuthTimeText2.visibility = View.GONE
+                binding.signUpAuthTimeText.visibility = View.GONE
+                binding.signUpEmailEditText.isEnabled = false
+                binding.signUpAuthText.isEnabled = false
+            }
+            else{
+                binding.signUpAuthTimeText3.visibility = View.VISIBLE
+                binding.signUpAuthTimeText2.visibility = View.GONE
+                binding.signUpAuthTimeText.visibility = View.GONE
+                binding.signUpAuthTimeText4.visibility = View.GONE
+            }
         }
 
         // 첫 번째 비밀번호 입력란의 비밀번호 가시성 버튼 클릭 시
@@ -91,7 +116,10 @@ class SignUpFragment : Fragment() {
         // 이메일 인증번호 받기 버튼 클릭 시
         binding.signUpAuthBtn.setOnClickListener {
             hideKeyboard()
-            if (viewModel.isSignUpSuccess.value == true) {
+            if(viewModel.email.isEmpty()) {
+                Toast.makeText(context, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()
+            }
+            else if (viewModel.isSignUpSuccess.value == true) {
                 viewModel.afterEmail = viewModel.email
                 viewModel.duplicateEmailCheck(viewModel.email)
             } else {
@@ -101,7 +129,7 @@ class SignUpFragment : Fragment() {
 
         // 이메일 중복 확인
         viewModel.isDuplicateEmail.observe(viewLifecycleOwner) { isDuplicateEmail ->
-            if (isDuplicateEmail) {
+            if (isDuplicateEmail == true) {
                 Log.d("이메일 중복 검사 성공 ", viewModel.email)
                 if(timer != null){
                     timer?.cancel()
@@ -113,7 +141,7 @@ class SignUpFragment : Fragment() {
                 binding.signUpAuthTimeText.visibility = View.VISIBLE
                 binding.signUpAuthTimeText2.visibility = View.GONE
                 binding.signUpConfirmBtn.isEnabled = true
-            } else {
+            } else if(isDuplicateEmail == false) {
                 Log.d("이메일 중복 검사 ", "실패")
                 viewModel.isEmailSuccess(false)
                 binding.duplicateEmailText.visibility = View.VISIBLE
@@ -126,17 +154,15 @@ class SignUpFragment : Fragment() {
             viewModel.duplicateNickCheck(viewModel.nickname)
             hideKeyboard()
             viewModel.isDuplicateNick.observe(viewLifecycleOwner) { isDuplicateNick ->
-                if (isDuplicateNick) {
+                if (isDuplicateNick == true) {
                     Log.d("닉네임 중복 검사 성공 ", viewModel.nickname)
                     viewModel.isNickSuccess(true)
                     binding.duplicateNickText.visibility = View.GONE
-                    binding.signUpWarningIcon.visibility = View.GONE
                     binding.validateSuccsessNickText.visibility = View.VISIBLE
-                } else {
+                } else if(isDuplicateNick == false) {
                     Log.d("닉네임 중복 검사 ", "실패")
                     viewModel.isNickSuccess(false)
                     binding.duplicateNickText.visibility = View.VISIBLE
-                    binding.signUpWarningIcon.visibility = View.VISIBLE
                     binding.validateSuccsessNickText.visibility = View.GONE
                 }
             }
@@ -148,7 +174,9 @@ class SignUpFragment : Fragment() {
                 viewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
                     viewModel.isAgree.observe(viewLifecycleOwner) { isAgree ->
                         viewModel.isSignUpSuccess.observe(viewLifecycleOwner){ isSignUpSuccess ->
-                            binding.signUpButton.isEnabled = isEmailSuccess && isNickSuccess && isPasswordSuccess && isAgree && isSignUpSuccess
+                            emailAuthViewModel.isEmailAuthSuccess.observe(viewLifecycleOwner){isEmailSuccess ->
+                                binding.signUpButton.isEnabled = isEmailSuccess && isNickSuccess!! && isPasswordSuccess!! && isAgree!! && isSignUpSuccess!! && isEmailSuccess
+                            }
                         }
                     }
                 }
@@ -256,10 +284,10 @@ class SignUpFragment : Fragment() {
                     viewModel.validatePassword(s.toString())
 
                     viewModel.isValidatePassword.observe(viewLifecycleOwner) { isValidatePassword ->
-                        if (isValidatePassword) {
+                        if (isValidatePassword == true) {
                             binding.signUpPwdIncorrectText.visibility = View.GONE
                             binding.passwordEditText2.isEnabled = true
-                        } else {
+                        } else if(isValidatePassword == false) {
                             binding.signUpPwdIncorrectText2.visibility = View.GONE
                             binding.passwordEditText2.isEnabled = false
                             binding.signUpPwdIncorrectText.visibility = View.VISIBLE
@@ -356,6 +384,8 @@ class SignUpFragment : Fragment() {
                 binding.signUpAuthTimeText.visibility = View.GONE
                 binding.signUpConfirmBtn.isEnabled = false
                 binding.signUpAuthTimeText2.visibility = View.VISIBLE
+                binding.signUpAuthTimeText3.visibility = View.GONE
+                binding.signUpAuthTimeText4.visibility = View.GONE
             }
         }.start()
     }

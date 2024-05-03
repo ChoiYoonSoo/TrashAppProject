@@ -1,6 +1,7 @@
 package com.example.trashapp.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,7 @@ import com.example.trashapp.data.MapData
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.Place
-import com.example.trashapp.network.model.ResultSearchKeyword
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.repository.NetWorkRepository
 import kotlinx.coroutines.launch
 
@@ -36,7 +37,17 @@ class ApiListViewModel : ViewModel() {
     private val _totalTime = MutableLiveData<Int>()
     val totalTime: LiveData<Int> get() = _totalTime
 
+    // 쓰레기통 id
     var id : Int = 0
+
+    // 신고 횟수
+    var reportCount : Int = 0
+
+    private val _trashcanReportCount = MutableLiveData<Int>()
+    val trashcanReportCount: LiveData<Int> get() = _trashcanReportCount
+
+    private val _isReportSuccess : MutableLiveData<Boolean?> = MutableLiveData()
+    var isReportSuccess : LiveData<Boolean?> = _isReportSuccess
 
     fun getApiList() = viewModelScope.launch {
 
@@ -110,11 +121,33 @@ class ApiListViewModel : ViewModel() {
         }
     }
 
-    fun reportApi(id: Int, reportText : String) = viewModelScope.launch {
+    fun reportApi(reportTrashCan: ReportTrashCan, token: String) = viewModelScope.launch {
+        Log.d("신고 API 호출로 필요한 파라미터 값 확인 : ","${reportTrashCan.trashcanId}, ${reportTrashCan.reportCategory}")
         try {
-            Log.d("신고 API 호출", reportText + " 쓰레기통 아이디: $id")
+            Log.d("신고 API 호출",  " 쓰레기통 아이디: ${reportTrashCan.trashcanId}, 카테고리 번호 : ${reportTrashCan.reportCategory}")
+            val result = netWorkRepository.reportTrashcan(reportTrashCan , token)
+            findReportCount(reportTrashCan.trashcanId.toInt())
+            Log.d("신고 API 호출 성공", result.toString())
+            _isReportSuccess.postValue(true)
         } catch (e: Exception) {
-            Log.e("신고 API 호출", "실패")
+            Log.e("신고 API 호출 실패", e.toString())
+            _isReportSuccess.postValue(false)
         }
+    }
+
+    fun findReportCount(trashcanid : Int) = viewModelScope.launch {
+        Log.d("쓰레기통 신고 횟수 API 호출", "쓰레기통 아이디 : $trashcanid")
+        try{
+            val result = netWorkRepository.findReportCount(trashcanid.toString())
+            reportCount = result
+            _trashcanReportCount.postValue(reportCount)
+            Log.d("쓰레기통 신고 횟수 API 호출", "신고횟수 : $reportCount")
+        }catch (e: Exception){
+            Log.d("쓰레기통 신고 횟수 API 호출","실패")
+        }
+    }
+
+    fun resetReportSuccess(){
+        _isReportSuccess.value = null
     }
 }

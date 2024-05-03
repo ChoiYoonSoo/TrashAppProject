@@ -1,6 +1,7 @@
 package com.example.trashapp.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,8 +22,8 @@ class CameraViewModel : ViewModel() {
     var currentLongitude : Double? = null
     var location : TrashcanLocation? = null
     var addressEditText = ""
-    private val _isSuccess : MutableLiveData<Boolean> = MutableLiveData()
-    var isSuccess = _isSuccess
+    private val _isSuccess : MutableLiveData<Boolean?> = MutableLiveData()
+    var isSuccess : LiveData<Boolean?> = _isSuccess
 
     // 사용자 쓰레기통 등록 요청
     fun newTrashcan(token : String, location : RequestBody, image : MultipartBody.Part) = viewModelScope.launch {
@@ -35,5 +36,9 @@ class CameraViewModel : ViewModel() {
            Log.d("이미지 서버 통신 실패", e.toString())
             _isSuccess.postValue(false)
         }
+    }
+
+    fun resetIsSuccess() {
+        _isSuccess.value = null
     }
 }

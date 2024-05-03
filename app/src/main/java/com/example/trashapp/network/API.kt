@@ -1,14 +1,13 @@
 package com.example.trashapp.network
 
 import com.example.trashapp.data.ApiValue
-import com.example.trashapp.data.Login
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.TmapApi
-import com.example.trashapp.network.model.TrashcanLocation
 import com.example.trashapp.network.model.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -78,4 +77,10 @@ interface API {
         @Part("RegisterTrashcanDTO") location: RequestBody,
         @Part image: MultipartBody.Part
     )
+    
+    @POST("findReportCount")
+    suspend fun findReportCount(@Body trashcanId: String) : Int
+
+    @POST("reportTrashcan")
+    suspend fun reportTrashcan(@Body reportTrashcan : ReportTrashCan, @Header("Authorization") token : String)
 }

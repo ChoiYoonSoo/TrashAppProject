@@ -111,6 +111,17 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 신고 성공 변화 감지
+        viewModel.isReportSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess == true) {
+                Toast.makeText(context, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                viewModel.resetReportSuccess()
+            } else if(isSuccess == false) {
+                Toast.makeText(context, "이미 신고한 쓰레기통입니다.", Toast.LENGTH_SHORT).show()
+                viewModel.resetReportSuccess()
+            }
+        }
+
         // 로딩 이미지 애니메이션
         val imageView = view.findViewById<ImageView>(R.id.loadingImage)
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.turn_around)
@@ -203,8 +214,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 신고 버튼 클릭 시 이벤트
         val reportButton = view.findViewById<Button>(R.id.binReportBtn)
         val reportList = view.findViewById<View>(R.id.reportListContainer)
+        val reportCount = view.findViewById<TextView>(R.id.reportCount)
         reportButton.setOnClickListener {
             if (userTokenViewModel.getToken() != null) {
+                reportCount.text = viewModel.reportCount.toString()
                 binding.roadViewContainer.visibility = View.GONE
                 if (reportList.visibility == View.GONE) {
                     reportList.visibility = View.VISIBLE
@@ -219,7 +232,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         val reportTextList = ArrayList<ReportItemData>()
         reportTextList.add(ReportItemData("지도에 나온 위치와 다른 곳에 있어요."))
         reportTextList.add(ReportItemData("지도에 나온 위치에 없어요."))
-        reportTextList.add(ReportItemData("쓰레기통 종류가 일치하지 않아요."))
         reportRecyclerView.adapter = ReportItemAdapter(reportTextList, viewModel)
         reportRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -233,6 +245,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             } else {
                 searchRecyclerView.visibility = View.VISIBLE
             }
+        }
+
+        viewModel.trashcanReportCount.observe(viewLifecycleOwner) { count ->
+            reportCount.text = count.toString()
         }
 
         // 카메라 권한 설정
@@ -531,6 +547,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 신고 할 때 필요한 쓰레기통 ID
         val id = p1?.userObject as MapData
         viewModel.id = id.id
+
+        // 신고 횟수 API 호출
+        viewModel.findReportCount(viewModel.id)
 
         isEnable = false
         currentGpsViewModel.setGpsEnabled(isEnable)

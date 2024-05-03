@@ -152,15 +152,16 @@ class CameraFragment : Fragment() {
 
         // 쓰레기통 통신 성공 여부
         cameraViewModel.isSuccess.observe(viewLifecycleOwner) {
-            binding.addressText.text = ""
             binding.addressEditText.setText("")
             binding.recyclingBin.isSelected = false
             binding.baseBin.isSelected = false
-            if (it) {
+            if (it == true) {
                 Toast.makeText(context, "쓰레기통 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                cameraViewModel.resetIsSuccess()
                 parentFragmentManager.popBackStack()
-            } else {
-                Toast.makeText(context, "쓰레기통 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            } else if(it == false) {
+                Toast.makeText(context, "이미 신고되어 있는 지역입니다.", Toast.LENGTH_SHORT).show()
+                cameraViewModel.resetIsSuccess()
             }
         }
 
@@ -181,7 +182,7 @@ class CameraFragment : Fragment() {
                     cameraViewModel.category!!,
                     cameraViewModel.addressEditText!!
                 )
-                Log.d("쓰레기통을 등록합니다.", "위도 : ${location.latitude} 경도 : ${location.longitude} 주소 : ${location.address} 종류 : ${location.category}")
+                Log.d("쓰레기통을 등록합니다.", "위도 : ${location.latitude} 경도 : ${location.longitude} 주소 : ${location.detailAddress} 종류 : ${location.categories}")
                 val locationRequestBody = location.toJsonRequestBody()
                 cameraViewModel.newTrashcan(
                     cameraViewModel.token!!,

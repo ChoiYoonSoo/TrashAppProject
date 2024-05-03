@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.R
 import com.example.trashapp.data.ReportItemData
 import com.example.trashapp.databinding.ItemReportBinding
+import com.example.trashapp.network.model.ReportTrashCan
+import com.example.trashapp.view.SharedPreferencesManager
 import com.example.trashapp.viewmodel.ApiListViewModel
 
 class ReportItemAdapter(val reportList : ArrayList<ReportItemData>, private val viewModel : ApiListViewModel) : RecyclerView.Adapter<ReportItemAdapter.Holder>(){
@@ -20,7 +22,7 @@ class ReportItemAdapter(val reportList : ArrayList<ReportItemData>, private val 
         val scaleDown = AnimationUtils.loadAnimation(context, R.anim.scale_down)
         val scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up)
 
-        fun bind(item: ReportItemData) {
+        fun bind(item: ReportItemData, position: Int) {
             binding.reportText.text = item.reportText
             itemView.setOnTouchListener { v, event ->
                 when (event.action) {
@@ -40,9 +42,10 @@ class ReportItemAdapter(val reportList : ArrayList<ReportItemData>, private val 
             }
 
             itemView.setOnClickListener {
-                Log.d("신고 버튼 클릭","${item.reportText}")
-                viewModel.reportApi(viewModel.id, item.reportText!!)
-                Toast.makeText(context, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                Log.d("신고 버튼 클릭","${item.reportText} 카테고리 : $position, 아이디 : ${viewModel.id}")
+                val token = SharedPreferencesManager.getToken(context)
+                val report = ReportTrashCan(viewModel.id.toString(), position.toString())
+                viewModel.reportApi(report, token!!)
             }
         }
 
@@ -55,7 +58,7 @@ class ReportItemAdapter(val reportList : ArrayList<ReportItemData>, private val 
 
     override fun onBindViewHolder(holder: ReportItemAdapter.Holder, position: Int) {
         val item = reportList[position]
-        holder.bind(item)
+        holder.bind(item, position)
     }
 
     override fun getItemCount(): Int {

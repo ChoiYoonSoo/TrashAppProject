@@ -7,6 +7,7 @@ import com.example.trashapp.network.API
 import com.example.trashapp.network.RetrofitInstance
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.TrashcanLocation
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -52,4 +53,10 @@ class NetWorkRepository {
 
     // 쓰레기통 등록
     suspend fun newTrashcan(token: String, location: RequestBody, image: MultipartBody.Part) = client.newTrashcan(token, location, image)
+
+    // 쓰레기통 신고 횟수
+    suspend fun findReportCount(trashcanId: String) = client.findReportCount(trashcanId)
+
+    // 쓰레기통 신고
+    suspend fun reportTrashcan(reportTrashcan : ReportTrashCan, token : String) = client.reportTrashcan(reportTrashcan, token)
 }
