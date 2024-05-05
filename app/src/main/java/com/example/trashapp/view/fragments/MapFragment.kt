@@ -28,18 +28,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.CameraXThreads.TAG
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,8 +53,6 @@ import com.example.trashapp.viewmodel.CurrentGpsViewModel
 import com.example.trashapp.viewmodel.UserInfoViewModel
 import com.example.trashapp.viewmodel.UserTokenViewModel
 import com.example.trashapp.viewmodel.WebViewViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -425,7 +415,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 markerPoint,  // 원의 중심좌표
                 radius,  // 원의 반지름(미터 단위)
                 Color.argb(128, 135, 206, 250), // 선 색상을 하늘색으로, 반투명
-                Color.argb(70, 135, 206, 250)  // 채우기 색깔을 반투명한 회색으로 설정
+                Color.argb(70, 145, 216, 255)  // 약간 더 밝고, 블루 색상을 최대로
             ).apply {
                 tag = index  // 각 원에 고유한 태그를 설정
             }

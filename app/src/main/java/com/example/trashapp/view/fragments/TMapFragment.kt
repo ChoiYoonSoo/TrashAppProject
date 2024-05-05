@@ -10,8 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,8 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import com.example.trashapp.R
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.databinding.FragmentTMapBinding
+import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.ApiListViewModel
 import com.example.trashapp.viewmodel.CurrentGpsViewModel
+import com.skt.Tmap.TMapCircle
 import com.skt.Tmap.TMapData
 import com.skt.Tmap.TMapMarkerItem
 import com.skt.Tmap.TMapPoint
@@ -28,6 +28,8 @@ import com.skt.Tmap.TMapView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 
 class TMapFragment : Fragment() {
 
@@ -54,20 +56,35 @@ class TMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as? MainActivity)?.startLocationUpdates()
+
         tMapView = TMapView(activity).apply {
             setSKTMapApiKey("aV91GWA72uaSSfI8rtqpda7n69nzB8OpKoO0Znse")
         }
         binding.tmapView.addView(tMapView)
         Log.d("지도", "ok")
 
+        // 뒤로가기 버튼 클릭 시
         binding.tmapBackBtn.setOnClickListener {
+            (activity as? MainActivity)?.stopLocationUpdates()
             parentFragmentManager.popBackStack()
         }
 
+        // 실시간 위치 업데이트
+        currentGpsViewModel.lastLocation.observe(viewLifecycleOwner) { location ->
+            Log.d("티맵 실시간 위치 업데이트", "${location.latitude}, ${location.longitude}")
+
+            tMapView.removeMarkerItem("current")
+
+            setMarker(location.latitude, location.longitude, "current")
+        }
+
+        // 지도에 마커 찍기
         tMapView.postDelayed({
             currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
                     tMapView.setCenterPoint(location.longitude, location.latitude)
-                    setMarker(location.latitude, location.longitude, "start")
+                    setMarker(location.latitude + 0.0001, location.longitude, "start")
+                setMarker(location.latitude, location.longitude, "current")
                     setMarker(
                         viewModel.selectMapData!!.latitude,
                         viewModel.selectMapData!!.longitude,
@@ -88,6 +105,7 @@ class TMapFragment : Fragment() {
 
         }, 1000)
 
+        // 출발지와 도착지 거리 구하기
         viewModel.totalDistance.observe(viewLifecycleOwner) { distance ->
             val distanceText = if (distance < 1000) {
                 "${distance}m"
@@ -99,6 +117,7 @@ class TMapFragment : Fragment() {
             binding.tmapCardView.visibility = View.VISIBLE
         }
 
+        // 출발지와 도착지 소요시간 구하기
         viewModel.totalTime.observe(viewLifecycleOwner) { time ->
             val timeText = if (time < 60) {
                 "1분 미만"
@@ -124,13 +143,17 @@ class TMapFragment : Fragment() {
         val markerItem = TMapMarkerItem()
         val tMapPoint = TMapPoint(latitude, longitude)
 
-        if (markerId == "start") markerItem.icon =
-            getBitmapFromVectorDrawable(R.drawable.startmarker)
-        else if (markerId == "end") markerItem.icon =
-            getBitmapFromVectorDrawable(R.drawable.endmarker)
+        // 마커 아이콘 설정
+        when (markerId) {
+            "start" -> markerItem.icon = getBitmapFromVectorDrawable(R.drawable.startmarker)
+            "end" -> markerItem.icon = getBitmapFromVectorDrawable(R.drawable.endmarker)
+            "current" -> markerItem.icon = getBitmapFromVectorDrawable(R.drawable.current_gps)
+        }
+
         markerItem.tMapPoint = tMapPoint // 마커의 좌표 지정
         markerItem.name = "marker" // 마커의 타이틀 지정
         tMapView.addMarkerItem(markerId, markerItem) // 지도에 마커 추가
+
     }
 
     // 경로 그리기
