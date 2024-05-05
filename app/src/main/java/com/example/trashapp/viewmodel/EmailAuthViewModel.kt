@@ -1,6 +1,7 @@
 package com.example.trashapp.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,8 +14,8 @@ class EmailAuthViewModel : ViewModel() {
 
     var authNumber : String = ""
 
-    private val _isEmailAuthSuccess = MutableLiveData<Boolean>()
-    var isEmailAuthSuccess = _isEmailAuthSuccess
+    private val _isEmailAuthSuccess = MutableLiveData<Boolean?>()
+    var isEmailAuthSuccess : LiveData<Boolean?> = _isEmailAuthSuccess
 
     fun getEmailAuth(emailAuth: EmailAuth) = viewModelScope.launch {
         try {
@@ -25,6 +26,10 @@ class EmailAuthViewModel : ViewModel() {
             _isEmailAuthSuccess.postValue(false)
             Log.d("이메일 인증 통신 실패", e.toString())
         }
+    }
+
+    fun resetClear() {
+        _isEmailAuthSuccess.value = null
     }
 
 }

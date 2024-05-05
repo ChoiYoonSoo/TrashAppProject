@@ -55,6 +55,8 @@ class SignUpFragment : Fragment() {
 
         // 뒤로 가기 버튼 클릭 시
         binding.signUpBackButton.setOnClickListener {
+            viewModel.clearAll()
+            emailAuthViewModel.resetClear()
             parentFragmentManager.popBackStack()
         }
 
@@ -73,7 +75,7 @@ class SignUpFragment : Fragment() {
 
         // 이메일 인증번호 확인 결과
         emailAuthViewModel.isEmailAuthSuccess.observe(viewLifecycleOwner){ isEmailAuthSuccess ->
-            if(isEmailAuthSuccess){
+            if(isEmailAuthSuccess == true){
                 if(timer != null){
                     timer?.cancel()
                     timer = null
@@ -84,8 +86,10 @@ class SignUpFragment : Fragment() {
                 binding.signUpAuthTimeText.visibility = View.GONE
                 binding.signUpEmailEditText.isEnabled = false
                 binding.signUpAuthText.isEnabled = false
+                binding.signUpConfirmBtn.isEnabled = false
+                binding.signUpAuthBtn.isEnabled = false
             }
-            else{
+            else if (isEmailAuthSuccess == false){
                 binding.signUpAuthTimeText3.visibility = View.VISIBLE
                 binding.signUpAuthTimeText2.visibility = View.GONE
                 binding.signUpAuthTimeText.visibility = View.GONE
@@ -129,6 +133,7 @@ class SignUpFragment : Fragment() {
 
         // 이메일 중복 확인
         viewModel.isDuplicateEmail.observe(viewLifecycleOwner) { isDuplicateEmail ->
+            Log.d("이메일 증복 검사 확인", "$isDuplicateEmail")
             if (isDuplicateEmail == true) {
                 Log.d("이메일 중복 검사 성공 ", viewModel.email)
                 if(timer != null){
@@ -175,7 +180,7 @@ class SignUpFragment : Fragment() {
                     viewModel.isAgree.observe(viewLifecycleOwner) { isAgree ->
                         viewModel.isSignUpSuccess.observe(viewLifecycleOwner){ isSignUpSuccess ->
                             emailAuthViewModel.isEmailAuthSuccess.observe(viewLifecycleOwner){isEmailSuccess ->
-                                binding.signUpButton.isEnabled = isEmailSuccess && isNickSuccess!! && isPasswordSuccess!! && isAgree!! && isSignUpSuccess!! && isEmailSuccess
+                                binding.signUpButton.isEnabled = isEmailSuccess == true && isNickSuccess == true && isPasswordSuccess == true && isAgree == true && isSignUpSuccess == true && isEmailSuccess == true
                             }
                         }
                     }
@@ -194,6 +199,9 @@ class SignUpFragment : Fragment() {
                     viewModel.signUp(signUp)
                     delay(500)
                 }
+                Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                emailAuthViewModel.resetClear()
+                viewModel.clearAll()
                 parentFragmentManager.popBackStack()
             }
         }
@@ -309,10 +317,12 @@ class SignUpFragment : Fragment() {
                 viewModel.afterPassword = s.toString()
                 if (viewModel.password == s.toString()) {
                     viewModel.isPasswordSuccess(true)
+                    binding.signUpPwdIncorrectText3.visibility = View.VISIBLE
                     binding.signUpPwdIncorrectText2.visibility = View.GONE
 
                 } else {
                     viewModel.isPasswordSuccess(false)
+                    binding.signUpPwdIncorrectText3.visibility = View.GONE
                     binding.signUpPwdIncorrectText2.visibility = View.VISIBLE
                 }
             }
@@ -345,6 +355,7 @@ class SignUpFragment : Fragment() {
                         viewModel.isNickSuccess(false)
                         binding.signUpDuplicateBtn.isEnabled = false
                         binding.validateNickText.visibility = View.VISIBLE
+                        binding.duplicateNickText.visibility = View.GONE
                         binding.validateSuccsessNickText.visibility = View.GONE
                     }
                 }

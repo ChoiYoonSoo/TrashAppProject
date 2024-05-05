@@ -15,11 +15,11 @@ class LoginViewModel : ViewModel(){
     var email: String = ""
     var password: String = ""
 
-    private val _isLoginSuccess = MutableLiveData<Boolean>()
-    var isLoginSuccess = _isLoginSuccess
+    private val _isLoginSuccess = MutableLiveData<Boolean?>()
+    var isLoginSuccess : LiveData<Boolean?> = _isLoginSuccess
 
-    private val _isPasswordSuccess = MutableLiveData<Boolean>()
-    var isPasswordSuccess: LiveData<Boolean> = _isPasswordSuccess
+    private val _isPasswordSuccess = MutableLiveData<Boolean?>()
+    var isPasswordSuccess: LiveData<Boolean?> = _isPasswordSuccess
 
     private val _token = MutableLiveData<String?>()
     val token: LiveData<String?> = _token
@@ -45,6 +45,11 @@ class LoginViewModel : ViewModel(){
 
     fun isPasswordSuccess(value: Boolean) {
         _isPasswordSuccess.postValue(value)
+    }
+
+    fun resetClear() {
+        _isLoginSuccess.value = null
+        _isPasswordSuccess.value = null
     }
 
 }

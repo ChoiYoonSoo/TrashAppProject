@@ -1,5 +1,6 @@
 package com.example.trashapp.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -55,6 +57,7 @@ class LoginFragment : Fragment() {
         // 뒤로가기 버튼
         binding.loginBackButton.setOnClickListener {
             parentFragmentManager.popBackStack()
+            viewModel.resetClear()
         }
 
         // 회원가입 버튼
@@ -80,7 +83,7 @@ class LoginFragment : Fragment() {
 
         viewModel.isLoginSuccess.observe(viewLifecycleOwner) { isLoginSuccess ->
             viewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
-               binding.loginBtn.isEnabled = isLoginSuccess && isPasswordSuccess
+               binding.loginBtn.isEnabled = isLoginSuccess == true && isPasswordSuccess == true
             }
         }
 
@@ -91,6 +94,8 @@ class LoginFragment : Fragment() {
 
             val login = Login(viewModel.email, viewModel.password)
             viewModel.login(login)
+            viewModel.resetClear()
+            hideKeyboard()
         }
 
         // 이메일 텍스트필드
@@ -146,9 +151,17 @@ class LoginFragment : Fragment() {
             }
         })
     }
-        // 이메일 유효성 검사
-        fun isValidEmail(email: String): Boolean {
-            val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$")
-            return emailRegex.matches(email)
-        }
+
+    // 이메일 유효성 검사
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$")
+        return emailRegex.matches(email)
     }
+
+    // 키보드 숨기기
+    private fun Fragment.hideKeyboard() {
+        val inputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+}

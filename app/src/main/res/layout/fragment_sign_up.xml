@@ -317,6 +317,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signUpContainer2"/>
 
+        <TextView
+            android:id="@+id/signUpPwdIncorrectText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendardregular"
+            android:text="사용가능한 비밀번호 입니다."
+            android:textColor="@color/green"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/dimens20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signUpContainer2"/>
+
         <LinearLayout
             android:id="@+id/signUpContainer3"
             android:layout_width="match_parent"
