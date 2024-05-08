@@ -68,7 +68,11 @@
             app:popExitAnim="@anim/exit_to_right"/>
         <action
             android:id="@+id/action_mapFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -99,6 +103,19 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_settingFragment_to_adminReportFragment"
+            app:destination="@id/adminReportFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"/>
+        <action
+            android:id="@+id/action_settingFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_adminReportFragment2"
+            app:destination="@id/adminReportFragment2" />
     </fragment>
     <fragment
         android:id="@+id/emailFragment"
@@ -133,4 +150,13 @@
         android:name="com.example.trashapp.view.fragments.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/adminReportFragment"
+        android:name="com.example.trashapp.view.fragments.AdminBinFragment"
+        android:label="fragment_admin_report"
+        tools:layout="@layout/fragment_admin_bin" />
+    <fragment
+        android:id="@+id/adminReportFragment2"
+        android:name="com.example.trashapp.view.fragments.AdminReportFragment"
+        android:label="AdminReportFragment" />
 </navigation>

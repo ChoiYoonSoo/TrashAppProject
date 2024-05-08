@@ -1,17 +1,21 @@
 package com.example.trashapp.view.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Outline
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.trashapp.R
@@ -19,6 +23,8 @@ import com.example.trashapp.databinding.FragmentSettingBinding
 import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.repository.UserTokenRepository
 import com.example.trashapp.view.activities.MainActivity
+import com.example.trashapp.viewmodel.AdminBinViewModel
+import com.example.trashapp.viewmodel.AdminReportViewModel
 import com.example.trashapp.viewmodel.UserInfoViewModel
 import com.example.trashapp.viewmodel.UserTokenViewModel
 
@@ -28,6 +34,10 @@ class SettingFragment : Fragment() {
     private val userInfoViewModel : UserInfoViewModel by activityViewModels()
 
     private lateinit var userTokenViewModel: UserTokenViewModel
+
+    private val viewModel : AdminBinViewModel by activityViewModels()
+
+    private val adminReportviewModel : AdminReportViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +53,8 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        buttonAnim()
 
         // UserTokenViewModel 의존성 주입
         val userRepository = UserTokenRepository(requireContext()) // UserTokenRepository 인스턴스를 생성하거나 의존성 주입을 통해 제공받습니다.
@@ -75,6 +87,18 @@ class SettingFragment : Fragment() {
             activity?.finish()
         }
 
+        // 쓰레기통 관리 버튼 클릭 시
+        binding.settingBinButton.setOnClickListener {
+            viewModel.findAllUnknownTrashcans()
+            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment)
+        }
+
+        // 사용자 시고 목록 버튼 클릭 시
+        binding.settingReportButton.setOnClickListener {
+            adminReportviewModel.findAllReportTrashcan()
+            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment2)
+        }
+
         binding.settingBackButton.setOnClickListener{
             parentFragmentManager.popBackStack()
         }
@@ -105,6 +129,46 @@ class SettingFragment : Fragment() {
                 }
             }
             imageView.clipToOutline = true
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun buttonAnim() {
+        // 애니메이션
+        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+
+        binding.settingBackButton.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        binding.settingLoginOrout.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
         }
     }
 

@@ -11,9 +11,10 @@
         android:id="@+id/settingBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimens40dp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
         android:background="@android:color/transparent"
         android:paddingLeft="@dimen/dimens20dp"
+        android:paddingTop="@dimen/dimens20dp"
         android:paddingBottom="18dp"
         android:src="@drawable/backbutton"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,8 @@
         android:id="@+id/settingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimens40dp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:paddingTop="@dimen/dimens20dp"
         android:fontFamily="@font/pretendardregular"
         android:text="설정"
         android:textColor="@color/black"
@@ -105,7 +107,7 @@
         android:fontFamily="@font/pretendardregular"
         android:text="내 정보 수정하기"
         android:textSize="@dimen/dimens12sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingNickName" />
 
@@ -116,13 +118,44 @@
         android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendardregular"
-        android:text="개인 정보 보호"
+        android:text="신고"
         android:textColor="@color/baseGreen"
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingProfIleImage" />
 
     <Button
+        android:id="@+id/settingBinButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimens20dp"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/next_button"
+        android:fontFamily="@font/pretendardregular"
+        android:text="쓰레기통 관리"
+        android:textAlignment="textStart"
+        android:textSize="@dimen/dimens14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
+
+    <Button
+        android:id="@+id/settingReportButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimens20dp"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/next_button"
+        android:fontFamily="@font/pretendardregular"
+        android:text="사용자 신고 목록"
+        android:textAlignment="textStart"
+        android:textSize="@dimen/dimens14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingBinButton" />
+
+    <Button
+        android:visibility="gone"
         android:id="@+id/settingEmailButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,6 +171,7 @@
         app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
 
     <Button
+        android:visibility="gone"
         android:id="@+id/settingPrivacyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -157,13 +191,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
         android:fontFamily="@font/pretendardregular"
         android:text="기타"
         android:textColor="@color/baseGreen"
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingPrivacyButton" />
+        app:layout_constraintTop_toBottomOf="@+id/settingReportButton" />
 
     <Button
         android:id="@+id/settingContactButton"
@@ -174,6 +208,7 @@
         android:drawableEnd="@drawable/next_button"
         android:fontFamily="@font/pretendardregular"
         android:text="문의하기"
+        android:visibility="gone"
         android:textAlignment="textStart"
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"

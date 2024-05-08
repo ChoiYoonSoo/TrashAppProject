@@ -21,6 +21,8 @@ class ApiListViewModel : ViewModel() {
     private val _mapData = MutableLiveData<List<MapData>>()
     val mapData: LiveData<List<MapData>> get() = _mapData
 
+    var mapDataList: List<MapData>? = null
+
     var selectMapData: MapData? = null
 
     private val _gpsList = MutableLiveData<GpsList>()
@@ -138,7 +140,7 @@ class ApiListViewModel : ViewModel() {
     fun findReportCount(trashcanid : Int) = viewModelScope.launch {
         Log.d("쓰레기통 신고 횟수 API 호출", "쓰레기통 아이디 : $trashcanid")
         try{
-            val result = netWorkRepository.findReportCount(trashcanid.toString())
+            val result = netWorkRepository.findReportCount(trashcanid.toLong())
             reportCount = result
             _trashcanReportCount.postValue(reportCount)
             Log.d("쓰레기통 신고 횟수 API 호출", "신고횟수 : $reportCount")

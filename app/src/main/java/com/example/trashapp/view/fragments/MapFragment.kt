@@ -1,6 +1,7 @@
 package com.example.trashapp.view.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -18,6 +19,7 @@ import android.text.style.StyleSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -64,6 +66,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private lateinit var mapView: MapView              // 카카오 지도 뷰
     private var lastY: Float = 0.0f
     private var isEnable = false
+    private var lastMapPoint: MapPoint? = null
+    private var removeList: MutableList<MapPOIItem> = mutableListOf()
 
     private lateinit var permissionsUtil: RequestPermissionsUtil
     private lateinit var userTokenViewModel: UserTokenViewModel
@@ -100,6 +104,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        buttonAnim()
 
         // 신고 성공 변화 감지
         viewModel.isReportSuccess.observe(viewLifecycleOwner) { isSuccess ->
@@ -318,6 +324,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         // 현 지도에서 다시 검색 버튼 이벤트
         binding.refreshBtn.setOnClickListener {
+            removeMark()
             getCurrentMapBounds()
             binding.refreshBtn.visibility = View.GONE
             binding.mapSearchRV.visibility = View.GONE
@@ -345,6 +352,15 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         view?.let { Navigation.findNavController(it).navigate(R.id.action_mapFragment_to_cameraFragment) }
     }
 
+    fun removeMark(){
+        if(removeList.isNotEmpty()){
+            for (data in removeList) {
+                mapView.removePOIItem(data)
+            }
+            removeList.clear()
+        }
+    }
+
     // 지도 마커 띄우기
     private fun setMark(dataList: List<MapData>) {
         Log.d("마커찍기", "ok")
@@ -364,6 +380,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 markerList.add(marker)
             }
             mapView.addPOIItem(marker)
+            removeList.add(marker)
         }
     }
 
@@ -424,57 +441,182 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun buttonAnim(){
+        // 애니메이션
+        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+
+        binding.mapSettingBtn.setOnTouchListener{v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.roadViewMoveBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.createBinBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.gpsBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        val binImageView = binding.root.findViewById<ImageView>(R.id.binLoadImage)
+        binImageView.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        val tmapBtn = binding.root.findViewById<Button>(R.id.tMapBtn)
+        tmapBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        val binReportBtn = binding.root.findViewById<Button>(R.id.binReportBtn)
+        binReportBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d("맵뷰초기화", "ok")
+            currentGpsViewModel.lastLocation.observe(viewLifecycleOwner) { location ->
+                Log.d("currentGps!!!", "${location.latitude}, ${location.longitude}")
 
-        currentGpsViewModel.lastLocation.observe(viewLifecycleOwner) { location ->
-            Log.d("currentGps!!!", "${location.latitude}, ${location.longitude}")
+                // 기존 마커 제거
+                mapView.findPOIItemByTag(1001)?.let {
+                    mapView.removePOIItem(it)
+                }
 
-            // 기존 마커 제거
-            mapView.findPOIItemByTag(1001)?.let {
-                mapView.removePOIItem(it)
+                var marker = MapPOIItem()
+                marker.apply {
+                    itemName = "현재 위치"
+                    mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
+                    customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
+                    markerType = MapPOIItem.MarkerType.CustomImage
+                    isShowCalloutBalloonOnTouch = false
+                    tag = 1001
+                }
+                mapView.addPOIItem(marker)
             }
 
-            var marker = MapPOIItem()
-            marker.apply {
-                itemName = "현재 위치"
-                mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
-                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
-                markerType = MapPOIItem.MarkerType.CustomImage
-                isShowCalloutBalloonOnTouch = false
-                tag = 1001
-            }
-            mapView.addPOIItem(marker)
-        }
+            currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
+                binding.loadingContainer.visibility = View.GONE
+                binding.createBinBtn.visibility = View.VISIBLE
+                binding.gpsBtn.visibility = View.VISIBLE
+                Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
+                mapView.setMapCenterPoint(
+                    MapPoint.mapPointWithGeoCoord(
+                        location.latitude,
+                        location.longitude
+                    ), true
+                )
 
-        currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
-            binding.loadingContainer.visibility = View.GONE
-            binding.createBinBtn.visibility = View.VISIBLE
-            binding.gpsBtn.visibility = View.VISIBLE
-            Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
-            mapView.setMapCenterPoint(
-                MapPoint.mapPointWithGeoCoord(
-                    location.latitude,
-                    location.longitude
-                ), true
-            )
+                // 기존 마커 제거
+                mapView.findPOIItemByTag(1001)?.let {
+                    mapView.removePOIItem(it)
+                }
 
-            // 기존 마커 제거
-            mapView.findPOIItemByTag(1001)?.let {
-                mapView.removePOIItem(it)
+                var marker = MapPOIItem()
+                marker.apply {
+                    itemName = "현재 위치"
+                    mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
+                    customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
+                    markerType = MapPOIItem.MarkerType.CustomImage
+                    isShowCalloutBalloonOnTouch = false
+                    tag = 1001
+                }
+                mapView.addPOIItem(marker)
             }
 
-            var marker = MapPOIItem()
-            marker.apply {
-                itemName = "현재 위치"
-                mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
-                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
-                markerType = MapPOIItem.MarkerType.CustomImage
-                isShowCalloutBalloonOnTouch = false
-                tag = 1001
-            }
-            mapView.addPOIItem(marker)
+        lastMapPoint?.let { point ->
+            mapView.setMapCenterPoint(point, true)
+            Log.d("시작위치", point.toString())
         }
     }
 
@@ -523,6 +665,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+        lastMapPoint = p1
+        Log.d("마지막 위치", lastMapPoint.toString())
+
         // 첫 지도 로딩 시에만 현재 범위의 쓰레기통 데이터를 가져옴
         if(!currentGpsViewModel.isMapPoint){
             getCurrentMapBounds()

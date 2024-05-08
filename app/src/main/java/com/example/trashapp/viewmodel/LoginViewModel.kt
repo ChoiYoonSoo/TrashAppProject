@@ -14,6 +14,7 @@ class LoginViewModel : ViewModel(){
 
     var email: String = ""
     var password: String = ""
+    var token: String = ""
 
     private val _isLoginSuccess = MutableLiveData<Boolean?>()
     var isLoginSuccess : LiveData<Boolean?> = _isLoginSuccess
@@ -21,21 +22,32 @@ class LoginViewModel : ViewModel(){
     private val _isPasswordSuccess = MutableLiveData<Boolean?>()
     var isPasswordSuccess: LiveData<Boolean?> = _isPasswordSuccess
 
-    private val _token = MutableLiveData<String?>()
-    val token: LiveData<String?> = _token
+    private val _isTokenSuccess = MutableLiveData<Boolean?>()
+    val isTokenSuccess: LiveData<Boolean?> = _isTokenSuccess
 
     // 로그인
     fun login(login: Login) = viewModelScope.launch{
         try {
             val response = newWorkRepository.login(login)
             val newToken = response.headers()["Authorization"]
-            _token.postValue(newToken)
-            Log.d("API 통신하여 받아온 토큰 값 : ", response.headers()["Authorization"].toString())
-            Log.d("로그인 통신 ", "성공")
+            if(newToken != null){
+                token = newToken.toString()
+                _isTokenSuccess.postValue(true)
+                resetClear()
+                Log.d("API 통신하여 받아온 토큰 값 : ", response.headers()["Authorization"].toString())
+                Log.d("로그인 통신 ", "성공")
+            }
+            else{
+                token = ""
+                _isTokenSuccess.postValue(false)
+                resetClear2()
+            }
 
         }catch (e: Exception) {
             Log.e("로그인 통신 ", "실패")
-            _token.postValue(null)
+            resetClear2()
+            token = ""
+            _isTokenSuccess.postValue(false)
         }
     }
 
@@ -48,8 +60,19 @@ class LoginViewModel : ViewModel(){
     }
 
     fun resetClear() {
+        email = ""
+        password = ""
         _isLoginSuccess.value = null
         _isPasswordSuccess.value = null
+    }
+
+    fun resetClear2(){
+        _isLoginSuccess.value = null
+        _isPasswordSuccess.value = null
+    }
+
+    fun tokenClear() {
+        _isTokenSuccess.value = null
     }
 
 }

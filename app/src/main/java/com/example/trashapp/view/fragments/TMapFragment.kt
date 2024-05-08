@@ -1,5 +1,6 @@
 package com.example.trashapp.view.fragments
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -8,8 +9,10 @@ import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -53,6 +56,7 @@ class TMapFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -133,6 +137,26 @@ class TMapFragment : Fragment() {
             }
             binding.tmapText2.text = timeText
             binding.tmapCardView.visibility = View.VISIBLE
+        }
+
+        // 애니메이션
+        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+
+        binding.tmapBackBtn.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
         }
 
     }

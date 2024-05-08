@@ -7,4 +7,5 @@
     <string name="loginText"><u>로그인</u></string>
     <string name="logoutText"><u>로그아웃</u></string>
     <string name="searchText">주소 검색</string>
+    <string name="deleteText">삭제</string>
 </resources>

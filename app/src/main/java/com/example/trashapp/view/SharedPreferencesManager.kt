@@ -2,11 +2,14 @@ package com.example.trashapp.view
 
 import android.content.Context
 import android.util.Log
+import com.example.trashapp.R
 
 object SharedPreferencesManager {
     private const val PREF_NAME = "user"
     private const val TOKEN_KEY = "token"
     private const val LOCATION = "location"
+    private const val FRAGMENT_ID = "fragment_id"
+
 
     fun saveToken(context: Context, token: String) {
         Log.d("SharedPreference saveToken : ", token)
@@ -40,5 +43,15 @@ object SharedPreferencesManager {
         val latitude = java.lang.Double.longBitsToDouble(sharedPreferences.getLong("latitude", java.lang.Double.doubleToRawLongBits(0.0)))
         val longitude = java.lang.Double.longBitsToDouble(sharedPreferences.getLong("longitude", java.lang.Double.doubleToRawLongBits(0.0)))
         return Pair(latitude, longitude)
+    }
+
+    fun saveFragmentId(context: Context, fragmentId: Int) {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().putInt(FRAGMENT_ID, fragmentId).apply()
+    }
+
+    fun getFragmentId(context: Context): Int {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getInt(FRAGMENT_ID, R.id.introFragment)
     }
 }

@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimensTop20dp"
-        android:fontFamily="@font/pretendardregular"
         android:focusableInTouchMode="true"
+        android:fontFamily="@font/pretendardregular"
         android:text="쓰레기통 등록"
         android:textColor="@color/black"
         android:textSize="@dimen/dimens20sp"
@@ -109,22 +109,22 @@
                 android:id="@+id/baseBin"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="@dimen/dimensTop20dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/category_button"
                 android:fontFamily="@font/pretendardregular"
                 android:text="일반 쓰레기통"
                 android:textSize="@dimen/dimens14sp"
                 app:layout_constraintEnd_toStartOf="@id/recyclingBin"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cameraImageContainer"/>
+                app:layout_constraintTop_toBottomOf="@id/cameraImageContainer" />
 
             <Button
                 android:id="@+id/recyclingBin"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="@dimen/dimensTop20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimensTop20dp"
                 android:background="@drawable/category_button"
                 android:fontFamily="@font/pretendardregular"
                 android:text="일반/재활용 쓰레기통"
@@ -189,6 +189,30 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:src="@drawable/camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cameraProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/baseGreen"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

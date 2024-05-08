@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.SettingFragment">
+
+    <ImageButton
+        android:id="@+id/adminBinBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:paddingTop="@dimen/dimens20dp"
+        android:background="@android:color/transparent"
+        android:paddingLeft="20dp"
+        android:paddingBottom="18dp"
+        android:src="@drawable/backbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adminBinTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:paddingTop="@dimen/dimens20dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="쓰레기통 등록 관리"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dimens16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/adminBinTitle">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/adminBinRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/adminBinDetailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimens20dp"
+            android:background="@drawable/map_search_border"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/adminBinCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:src="@drawable/close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/binImageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adminBinCloseBtn">
+
+                <ImageView
+                    android:id="@+id/binImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/camera_loading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/trashCanIdTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="쓰레기통 ID :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/binImageContainer" />
+
+            <TextView
+                android:id="@+id/trashCanId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="쓰레기통 ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/trashCanIdTitle"
+                app:layout_constraintTop_toBottomOf="@id/binImageContainer" />
+
+            <TextView
+                android:id="@+id/userIdTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="신고한 유저 ID :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/trashCanId" />
+
+            <TextView
+                android:id="@+id/userId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="신고한 유저 ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/userIdTitle"
+                app:layout_constraintTop_toBottomOf="@id/trashCanId" />
+
+            <TextView
+                android:id="@+id/locationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="좌표값 :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userId" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="좌표값"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/locationTitle"
+                app:layout_constraintTop_toBottomOf="@id/userId" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

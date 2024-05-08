@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.SettingFragment">
+
+    <ImageButton
+        android:id="@+id/adminReportBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:paddingTop="@dimen/dimens20dp"
+        android:background="@android:color/transparent"
+        android:paddingLeft="20dp"
+        android:paddingBottom="18dp"
+        android:src="@drawable/backbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adminReportTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        android:paddingTop="@dimen/dimens20dp"
+        android:fontFamily="@font/pretendardregular"
+        android:text="사용자 신고 목록"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dimens16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dimensTop20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/adminReportTitle">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/adminReportRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/adminReportDetailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimens20dp"
+            android:background="@drawable/map_search_border"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/adminReportCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:src="@drawable/close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/reportImageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adminReportCloseBtn">
+
+                <ImageView
+                    android:id="@+id/binImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/camera_loading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/reportTrashCanIdTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="쓰레기통 ID :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reportImageContainer" />
+
+            <TextView
+                android:id="@+id/reportTrashCanId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="쓰레기통 ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/reportTrashCanIdTitle"
+                app:layout_constraintTop_toBottomOf="@id/reportImageContainer" />
+
+            <TextView
+                android:id="@+id/reportUserIdTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="신고한 유저 ID :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reportTrashCanId" />
+
+            <TextView
+                android:id="@+id/reportUserId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="신고한 유저 ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/reportUserIdTitle"
+                app:layout_constraintTop_toBottomOf="@id/reportTrashCanId" />
+
+            <TextView
+                android:id="@+id/reportLocationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="좌표값 :  "
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reportUserId" />
+
+            <TextView
+                android:id="@+id/reportLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="좌표값"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintStart_toEndOf="@id/reportLocationTitle"
+                app:layout_constraintTop_toBottomOf="@id/reportUserId" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

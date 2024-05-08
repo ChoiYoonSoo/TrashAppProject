@@ -8,7 +8,9 @@ import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.TmapApi
+import com.example.trashapp.network.model.UnknownTrashcan
 import com.example.trashapp.network.model.User
+import com.example.trashapp.network.model.UserReportList
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -79,8 +81,17 @@ interface API {
     )
     
     @POST("findReportCount")
-    suspend fun findReportCount(@Body trashcanId: String) : Int
+    suspend fun findReportCount(@Body trashcanId: Long) : Int
 
     @POST("reportTrashcan")
     suspend fun reportTrashcan(@Body reportTrashcan : ReportTrashCan, @Header("Authorization") token : String)
+
+    @GET("findAllUnknownTrashcans")
+    suspend fun findAllUnknownTrashcans() : List<UnknownTrashcan>
+
+    @POST("deleteUnknownTrashcan")
+    suspend fun deleteUnknownTrashcan(@Body trashcanId: Long)
+
+    @GET("findAllReportTrashcan")
+    suspend fun findAllReportTrashcan() : List<UserReportList>
 }

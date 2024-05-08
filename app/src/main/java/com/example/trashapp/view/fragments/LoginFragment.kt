@@ -1,5 +1,6 @@
 package com.example.trashapp.view.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -7,11 +8,15 @@ import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -48,6 +53,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        buttonAnim()
+
         // UserTokenViewModel 의존성 주입
         val userRepository =
             UserTokenRepository(requireContext())
@@ -58,25 +65,27 @@ class LoginFragment : Fragment() {
         binding.loginBackButton.setOnClickListener {
             parentFragmentManager.popBackStack()
             viewModel.resetClear()
+            viewModel.tokenClear()
         }
 
         // 회원가입 버튼
         binding.loginSignUpBtn.setOnClickListener {
             binding.loginEmailText.setText("")
             binding.loginPasswordText.setText("")
+            viewModel.tokenClear()
+            viewModel.resetClear()
             Navigation.findNavController(view)
                 .navigate(R.id.action_loginFragment2_to_signUpFragment)
         }
 
-        viewModel.token.observe(viewLifecycleOwner) { token ->
-            // token 값이 변경되면, 그 값이 null이 아닐 때 SharedPreferences에 저장
-            token?.let {
-                userTokenViewModel.saveToken(it)
+        viewModel.isTokenSuccess.observe(viewLifecycleOwner) { isTokenSuccess ->
+            // token 값이 변경되면, 그 값이 빈 문자열이 아닐 때 SharedPreferences에 저장
+            if (isTokenSuccess == true) {
+                userTokenViewModel.saveToken(viewModel.token)
                 Log.d("login token : ", userTokenViewModel.getToken().toString())
                 Navigation.findNavController(view)
                     .navigate(R.id.action_loginFragment2_to_mapFragment)
-
-            } ?: run {
+            } else if(isTokenSuccess == false) {
                 Toast.makeText(context, "아이디와 비밀번호가 맞지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -94,7 +103,6 @@ class LoginFragment : Fragment() {
 
             val login = Login(viewModel.email, viewModel.password)
             viewModel.login(login)
-            viewModel.resetClear()
             hideKeyboard()
         }
 
@@ -109,6 +117,11 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(viewModel.password.isNotEmpty()) {
+                    viewModel.isPasswordSuccess(true)
+                }else{
+                    viewModel.isPasswordSuccess(false)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -138,6 +151,12 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(viewModel.email.isNotEmpty()){
+                    viewModel.isLoginSuccess(true)
+                }
+                else{
+                    viewModel.isLoginSuccess(false)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -164,4 +183,57 @@ class LoginFragment : Fragment() {
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun buttonAnim(){
+        // 애니메이션
+        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+
+        binding.loginBtn.setOnTouchListener{ v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.loginSignUpBtn.setOnTouchListener{ v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.loginBackButton.setOnTouchListener{ v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
 }

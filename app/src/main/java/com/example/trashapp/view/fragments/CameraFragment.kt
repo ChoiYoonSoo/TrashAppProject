@@ -73,6 +73,8 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        buttonAnim()
+
         // 뒤로가기 버튼 클릭 시
         binding.cameraBackBtn.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -89,28 +91,6 @@ class CameraFragment : Fragment() {
         }
 
         startCamera()
-
-        // 카메라 버튼 애니메이션 효과
-        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
-        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
-
-        // 카메라 캡처 버튼 터치 시
-        binding.cameraCaptureBtn.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    v.startAnimation(scaleDown)
-                    true
-                }
-
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    v.startAnimation(scaleUp)
-                    v.performClick()
-                    true
-                }
-
-                else -> false
-            }
-        }
 
         // 토큰 및 현재 위치 받기
         val token = SharedPreferencesManager.getToken(requireContext())
@@ -152,9 +132,11 @@ class CameraFragment : Fragment() {
 
         // 쓰레기통 통신 성공 여부
         cameraViewModel.isSuccess.observe(viewLifecycleOwner) {
+            binding.cameraProgressBar.visibility = View.GONE
             binding.addressEditText.setText("")
             binding.recyclingBin.isSelected = false
             binding.baseBin.isSelected = false
+            cameraViewModel.category = null
             if (it == true) {
                 Toast.makeText(context, "쓰레기통 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 cameraViewModel.resetIsSuccess()
@@ -172,6 +154,7 @@ class CameraFragment : Fragment() {
             } else if (cameraViewModel.addressEditText == "") {
                 Toast.makeText(context, "위치를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
+                binding.cameraProgressBar.visibility = View.VISIBLE
                 Log.d(
                     "쓰레기통 등록 버튼 클릭",
                     "위도 : ${cameraViewModel.currentLatitude}, 경도 : ${cameraViewModel.currentLongitude})), 토큰 : ${cameraViewModel.token}"
@@ -334,5 +317,94 @@ class CameraFragment : Fragment() {
         val gson = Gson()
         val json = gson.toJson(this)
         return json.toRequestBody("application/json".toMediaTypeOrNull())
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun buttonAnim(){
+        // 카메라 버튼 애니메이션 효과
+        val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+
+        // 뒤로가기 버튼 클릭 애니메이션
+        binding.cameraBackBtn.setOnTouchListener{
+                v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 카메라 캡처 버튼 터치 시
+        binding.cameraCaptureBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        binding.cameraReportBtn.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        binding.baseBin.setOnTouchListener{
+                v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.recyclingBin.setOnTouchListener{
+                v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

@@ -55,8 +55,17 @@ class NetWorkRepository {
     suspend fun newTrashcan(token: String, location: RequestBody, image: MultipartBody.Part) = client.newTrashcan(token, location, image)
 
     // 쓰레기통 신고 횟수
-    suspend fun findReportCount(trashcanId: String) = client.findReportCount(trashcanId)
+    suspend fun findReportCount(trashcanId: Long) = client.findReportCount(trashcanId)
 
     // 쓰레기통 신고
     suspend fun reportTrashcan(reportTrashcan : ReportTrashCan, token : String) = client.reportTrashcan(reportTrashcan, token)
+
+    // 사용자 쓰레기통 등록 조회
+    suspend fun findAllUnknownTrashcans() = client.findAllUnknownTrashcans()
+
+    // 사용자 쓰레기통 등록 삭제
+    suspend fun deleteUnknownTrashcan(trashcanId: Long) = client.deleteUnknownTrashcan(trashcanId)
+
+    // 사용자 쓰레기통 신고 조회
+    suspend fun findAllReportTrashcan() = client.findAllReportTrashcan()
 }

@@ -16,5 +16,6 @@
     <dimen name="dimens14sp">12sp</dimen>
     <dimen name="dimens250dp">250dp</dimen>
     <dimen name="dimens450dp">450dp</dimen>
+    <dimen name="dimens70dp">70dp</dimen>
 </resources>
 

@@ -14,10 +14,8 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
@@ -32,6 +30,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.jakewharton.threetenabp.AndroidThreeTen
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,12 +42,15 @@ class MainActivity : AppCompatActivity() {
 
     private var permissionDialog: AlertDialog? = null
 
+    var isOnResume = false
+
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidThreeTen.init(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -168,11 +170,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        when (intent.getStringExtra("fragmentToLoad")) {
-            "mapFragment" -> {
-                val navController = findNavController(R.id.fragmentContainerView)
-                if (navController.currentDestination?.id != R.id.mapFragment) {
-                    binding.fragmentContainerView.findNavController().navigate(R.id.action_introFragment_to_mapFragment)
+        if(!isOnResume) {
+            when (intent.getStringExtra("fragmentToLoad")) {
+                "mapFragment" -> {
+                    isOnResume = true
+                    binding.fragmentContainerView.findNavController()
+                        .navigate(R.id.action_introFragment_to_mapFragment)
                 }
             }
         }

@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:layout_margin="@dimen/dimens20dp"
-                android:background="@drawable/map_search_border"
+                android:background="@drawable/dialog_border"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -1,7 +1,7 @@
 <!-- res/color/button_text_color.xml -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 활성화 상태 -->
-    <item android:color="@android:color/white" android:state_enabled="true"/>
+    <item android:color="@android:color/black" android:state_enabled="true"/>
     <!-- 비활성화 상태 -->
     <item android:color="@color/grey" android:state_enabled="false"/>
 </selector>

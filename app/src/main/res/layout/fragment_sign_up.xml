@@ -12,7 +12,6 @@
         android:paddingRight="@dimen/dimens20dp"
         tools:context=".view.fragments.SignUpFragment">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/signUpContainer"
             android:layout_width="match_parent"

@@ -91,4 +91,8 @@ dependencies {
     implementation ("androidx.camera:camera-lifecycle:1.1.0-alpha06")
     // CameraX View class
     implementation ("androidx.camera:camera-view:1.0.0-alpha27")
+
+    // java time
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.3.0")
+
 }
