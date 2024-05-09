@@ -14,12 +14,12 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/adminReportDate"
+                android:id="@+id/adminReportTrashcanId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimens20dp"
                 android:fontFamily="@font/pretendardregular"
-                android:text="날짜"
+                android:text="쓰레기통 ID"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -27,42 +27,30 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/adminReportAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:fontFamily="@font/pretendardregular"
-                android:text="장소"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimens16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/adminReportDate"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/adminReportCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="@dimen/dimens20dp"
                 android:padding="5dp"
                 android:fontFamily="@font/pretendardregular"
                 android:textColor="@color/green"
                 android:background="@drawable/select_button"
-                android:text="종류"
+                android:text="지도에 나온 위치와 다른 곳에 있어요"
                 android:textSize="@dimen/dimens12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/adminReportCreateBtn"
+                app:layout_constraintStart_toEndOf="@id/adminReportTrashcanId"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/adminReportCreateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="등록"
+                android:text="수정"
                 android:paddingTop="@dimen/dimens20dp"
                 android:paddingRight="@dimen/dimens20dp"
                 android:paddingBottom="@dimen/dimens20dp"
                 android:textSize="@dimen/dimens12sp"
+                android:visibility="visible"
                 android:background="@android:color/transparent"
                 android:textColor="@color/baseGreen"
                 app:layout_constraintEnd_toStartOf="@id/adminReportDeleteBtn"

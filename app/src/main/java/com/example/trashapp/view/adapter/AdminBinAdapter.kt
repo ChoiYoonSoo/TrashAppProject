@@ -21,7 +21,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
 class AdminBinAdapter(
-    val adminReportList: List<UnknownTrashcan>,
+    val adminBinList: List<UnknownTrashcan>,
     val viewModel: AdminBinViewModel
 ) : RecyclerView.Adapter<AdminBinAdapter.Holder>() {
 
@@ -34,15 +34,15 @@ class AdminBinAdapter(
         val scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up)
 
         fun bind(item: UnknownTrashcan, position: Int) {
-            val inputString = adminReportList[position].date
+            val inputString = adminBinList[position].date
             // 날짜 형식으로 변환
             val dateObj = LocalDate.parse(inputString, DateTimeFormatter.ofPattern("yyMMdd"))
             // 출력 형식에 맞게 포맷팅
             val formattedDate = dateObj.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
             binding.adminDate.text = formattedDate
-            binding.adminAddress.text = adminReportList[position].detailAddress
-            if(adminReportList[position].categories == "general") {
+            binding.adminAddress.text = adminBinList[position].detailAddress
+            if(adminBinList[position].categories == "general") {
                 binding.adminCategory.text = "일반"
             } else {
                 binding.adminCategory.text = "일반/재활용"
@@ -75,10 +75,10 @@ class AdminBinAdapter(
                 val cancelButton : Button = dialog.findViewById(R.id.adminDialogCancel)
 
                 confirmButton.setOnClickListener {
-                    Log.d("신고 삭제 버튼 클릭","${adminReportList[position]}")
+                    Log.d("신고 삭제 버튼 클릭","${adminBinList[position]}")
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
-                        viewModel.deleteAdminUnknownList(adminReportList[position])
+                        viewModel.deleteAdminUnknownList(adminBinList[position])
                     }
                     Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
@@ -107,11 +107,11 @@ class AdminBinAdapter(
 
             }
             itemView.setOnClickListener {
-                Log.d("신고 아이템 클릭","${adminReportList[position]}")
-                viewModel.trachcanId = adminReportList[position].unknown_trashcan_id.toString()
-                viewModel.userId = adminReportList[position].userId.toString()
-                viewModel.location = adminReportList[position].latitude.toString() + ", " + adminReportList[position].longitude.toString()
-                viewModel.image = adminReportList[position].roadviewImgpath
+                Log.d("신고 아이템 클릭","${adminBinList[position]}")
+                viewModel.trachcanId = adminBinList[position].unknown_trashcan_id.toString()
+                viewModel.userId = adminBinList[position].userId.toString()
+                viewModel.location = adminBinList[position].latitude.toString() + ", " + adminBinList[position].longitude.toString()
+                viewModel.image = adminBinList[position].roadviewImgpath
                 viewModel.itemClicked(true)
             }
 
@@ -124,12 +124,12 @@ class AdminBinAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val item = adminReportList[position]
+        val item = adminBinList[position]
         holder.bind(item, position)
     }
 
     override fun getItemCount(): Int {
-        return adminReportList.size
+        return adminBinList.size
     }
 
 }

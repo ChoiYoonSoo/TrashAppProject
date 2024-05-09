@@ -5,6 +5,7 @@ import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
+import com.example.trashapp.network.model.ModifyTrashcan
 import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.TmapApi
@@ -94,4 +95,11 @@ interface API {
 
     @GET("findAllReportTrashcan")
     suspend fun findAllReportTrashcan() : List<UserReportList>
+
+    @POST("deleteTrashcan")
+    suspend fun deleteTrashcan(@Body trashcanId: Long)
+
+    @POST("modifyTrashcan")
+    suspend fun modifyTrashcan(@Body modifyTrashcan: ModifyTrashcan)
+
 }

@@ -93,7 +93,7 @@ class SettingFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment)
         }
 
-        // 사용자 시고 목록 버튼 클릭 시
+        // 사용자 신고 목록 버튼 클릭 시
         binding.settingReportButton.setOnClickListener {
             adminReportviewModel.findAllReportTrashcan()
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment2)

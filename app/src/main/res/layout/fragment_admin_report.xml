@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimensTop20dp"
-        android:paddingTop="@dimen/dimens20dp"
         android:background="@android:color/transparent"
         android:paddingLeft="20dp"
+        android:paddingTop="@dimen/dimens20dp"
         android:paddingBottom="18dp"
         android:src="@drawable/backbutton"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +24,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimensTop20dp"
-        android:paddingTop="@dimen/dimens20dp"
         android:fontFamily="@font/pretendardregular"
+        android:paddingTop="@dimen/dimens20dp"
         android:text="사용자 신고 목록"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -53,11 +53,26 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/adminReportDetailLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dimens20dp"
             android:background="@drawable/map_search_border"
             android:visibility="gone">
+
+            <TextView
+                android:id="@+id/adminReportModifyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimensTop20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/pretendardregular"
+                android:text="좌표 수정"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/adminReportCloseBtn"
@@ -71,28 +86,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/reportImageContainer"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_margin="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/adminReportCloseBtn">
-
-                <ImageView
-                    android:id="@+id/binImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/camera_loading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <TextView
                 android:id="@+id/reportTrashCanIdTitle"
                 android:layout_width="wrap_content"
@@ -105,7 +98,7 @@
                 android:textSize="@dimen/dimens14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reportImageContainer" />
+                app:layout_constraintTop_toBottomOf="@id/adminReportModifyTitle" />
 
             <TextView
                 android:id="@+id/reportTrashCanId"
@@ -117,7 +110,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens14sp"
                 app:layout_constraintStart_toEndOf="@id/reportTrashCanIdTitle"
-                app:layout_constraintTop_toBottomOf="@id/reportImageContainer" />
+                app:layout_constraintTop_toBottomOf="@id/adminReportModifyTitle" />
 
             <TextView
                 android:id="@+id/reportUserIdTitle"
@@ -159,17 +152,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reportUserId" />
 
-            <TextView
-                android:id="@+id/reportLocation"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/reportLatitude"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="@dimen/dimens20dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/edittext_background"
                 android:fontFamily="@font/pretendardregular"
-                android:text="좌표값"
+                android:hint="위도 입력"
+                android:paddingLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens14sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/reportLocationTitle"
                 app:layout_constraintTop_toBottomOf="@id/reportUserId" />
+
+            <EditText
+                android:id="@+id/reportLongitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/pretendardregular"
+                android:hint="경도 입력"
+                android:paddingLeft="5dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/reportLocationTitle"
+                app:layout_constraintTop_toBottomOf="@id/reportLatitude" />
+
+            <Button
+                android:id="@+id/adminReportBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/base_button_border"
+                android:text="완료"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reportLongitude" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
