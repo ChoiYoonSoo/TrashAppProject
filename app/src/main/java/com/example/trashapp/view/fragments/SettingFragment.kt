@@ -22,9 +22,11 @@ import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentSettingBinding
 import com.example.trashapp.factory.UserTokenViewModelFactory
 import com.example.trashapp.repository.UserTokenRepository
+import com.example.trashapp.view.SharedPreferencesManager
 import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.AdminBinViewModel
 import com.example.trashapp.viewmodel.AdminReportViewModel
+import com.example.trashapp.viewmodel.MyReportViewModel
 import com.example.trashapp.viewmodel.UserInfoViewModel
 import com.example.trashapp.viewmodel.UserTokenViewModel
 
@@ -38,6 +40,8 @@ class SettingFragment : Fragment() {
     private val viewModel : AdminBinViewModel by activityViewModels()
 
     private val adminReportviewModel : AdminReportViewModel by activityViewModels()
+
+    private val myReportViewModel : MyReportViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +101,12 @@ class SettingFragment : Fragment() {
         binding.settingReportButton.setOnClickListener {
             adminReportviewModel.findAllReportTrashcan()
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment2)
+        }
+
+        // 나의 신고 내역 버튼 클릭 시
+        binding.settingMyReportButton.setOnClickListener {
+            myReportViewModel.myReportTrashcans(SharedPreferencesManager.getToken(requireContext())!!)
+            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_myReportFragment)
         }
 
         binding.settingBackButton.setOnClickListener{

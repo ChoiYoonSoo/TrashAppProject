@@ -6,6 +6,7 @@ import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ModifyTrashcan
+import com.example.trashapp.network.model.MyReportList
 import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.ResultSearchKeyword
 import com.example.trashapp.network.model.TmapApi
@@ -101,5 +102,8 @@ interface API {
 
     @POST("modifyTrashcan")
     suspend fun modifyTrashcan(@Body modifyTrashcan: ModifyTrashcan)
+
+    @POST("myReportTrashcans")
+    suspend fun myReportTrashcans(@Header("Authorization") token : String) : List<MyReportList>
 
 }

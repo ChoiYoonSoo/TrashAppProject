@@ -34,7 +34,7 @@ class AdminReportAdapter(
 
             binding.adminReportTrashcanId.text = item.trashcanId.toString()
             if(item.reportCategory == "0") {
-                binding.adminReportCategory.text = "지도에 나온 위치와 다른 곳에 있어요"
+                binding.adminReportCategory.text = "지도에 나온 위치와 다른 곳에치 있어요"
                 binding.adminReportCreateBtn.visibility = View.VISIBLE
             } else {
                 binding.adminReportCategory.text = "지도에 나온 위치에 없어요"

@@ -93,8 +93,16 @@ class AdminBinFragment : Fragment() {
 
         // 사용자 신고목록 RecyclerView
         viewModel.adminBinList.observe(viewLifecycleOwner){ adminBinList ->
-            binding.adminBinRV.adapter = AdminBinAdapter(adminBinList, viewModel)
-            binding.adminBinRV.layoutManager = LinearLayoutManager(context)
+            if(adminBinList.isEmpty()){
+                binding.adminBinRV.visibility = View.GONE
+                binding.reportView.visibility = View.VISIBLE
+            }
+            else{
+                binding.adminBinRV.visibility = View.VISIBLE
+                binding.reportView.visibility = View.GONE
+                binding.adminBinRV.adapter = AdminBinAdapter(adminBinList, viewModel)
+                binding.adminBinRV.layoutManager = LinearLayoutManager(context)
+            }
         }
     }
 

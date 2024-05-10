@@ -116,6 +116,9 @@
         <action
             android:id="@+id/action_settingFragment_to_adminReportFragment2"
             app:destination="@id/adminReportFragment2" />
+        <action
+            android:id="@+id/action_settingFragment_to_myReportFragment"
+            app:destination="@id/myReportFragment" />
     </fragment>
     <fragment
         android:id="@+id/emailFragment"
@@ -159,4 +162,9 @@
         android:id="@+id/adminReportFragment2"
         android:name="com.example.trashapp.view.fragments.AdminReportFragment"
         android:label="AdminReportFragment" />
+    <fragment
+        android:id="@+id/myReportFragment"
+        android:name="com.example.trashapp.view.fragments.MyReportFragment"
+        android:label="fragment_my_report"
+        tools:layout="@layout/fragment_my_report" />
 </navigation>

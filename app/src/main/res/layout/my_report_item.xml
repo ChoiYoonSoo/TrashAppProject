@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/myReportTrashcanId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:text="쓰레기통 ID"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/myReportCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimens20dp"
+                android:background="@drawable/select_button"
+                android:fontFamily="@font/pretendardregular"
+                android:padding="5dp"
+                android:text="지도에 나온 위치와 다른 곳에 있어요"
+                android:textColor="@color/green"
+                android:textSize="@dimen/dimens12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/myReportTrashcanId"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/myReportModify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingTop="@dimen/dimens20dp"
+                android:paddingRight="@dimen/dimens20dp"
+                android:paddingBottom="@dimen/dimens20dp"
+                android:text="처리 상태"
+                android:textColor="@color/baseGreen"
+                android:textSize="@dimen/dimens12sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/myReportDeleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingTop="@dimen/dimens20dp"
+                android:paddingRight="@dimen/dimens20dp"
+                android:paddingBottom="@dimen/dimens20dp"
+                android:text="@string/deleteText"
+                android:textColor="@color/red"
+                android:textSize="@dimen/dimens12sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

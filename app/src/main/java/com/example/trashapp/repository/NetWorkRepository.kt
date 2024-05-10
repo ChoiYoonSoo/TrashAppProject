@@ -75,4 +75,7 @@ class NetWorkRepository {
 
     // 쓰레기통 수정
     suspend fun modifyTrashcan(modifyTrashcan: ModifyTrashcan) = client.modifyTrashcan(modifyTrashcan)
+
+    // 나의 쓰레기통 신고 내역
+    suspend fun myReportTrashcans(token: String) = client.myReportTrashcans(token)
 }

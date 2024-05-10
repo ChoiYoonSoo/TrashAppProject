@@ -153,8 +153,16 @@ class AdminReportFragment : Fragment() {
 
         // 사용자 신고목록 RecyclerView
         viewModel.adminReportList.observe(viewLifecycleOwner){ adminReportList ->
-            binding.adminReportRV.adapter = AdminReportAdapter(adminReportList, viewModel)
-            binding.adminReportRV.layoutManager = LinearLayoutManager(context)
+            if(adminReportList.isEmpty()){
+                binding.adminReportRV.visibility = View.GONE
+                binding.reportView.visibility = View.VISIBLE
+            }
+            else{
+                binding.adminReportRV.visibility = View.VISIBLE
+                binding.reportView.visibility = View.GONE
+                binding.adminReportRV.adapter = AdminReportAdapter(adminReportList, viewModel)
+                binding.adminReportRV.layoutManager = LinearLayoutManager(context)
+            }
         }
 
     }
