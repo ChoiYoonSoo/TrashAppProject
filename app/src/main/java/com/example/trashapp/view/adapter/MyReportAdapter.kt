@@ -1,18 +1,24 @@
 package com.example.trashapp.view.adapter
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.R
 import com.example.trashapp.databinding.AdminReportItemBinding
 import com.example.trashapp.databinding.MyReportItemBinding
 import com.example.trashapp.network.model.MyReportList
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.UserReportList
+import com.example.trashapp.view.SharedPreferencesManager
 import com.example.trashapp.viewmodel.MyReportViewModel
 
 class MyReportAdapter(
@@ -30,11 +36,11 @@ class MyReportAdapter(
 
         fun bind(item: MyReportList, position: Int) {
 
-            binding.myReportTrashcanId.text = item.trashcanId.toString()
+            binding.myReportTrashcanId.text = item.detailAddress
             if(item.reportCategory == "0"){
-                binding.myReportCategory.text = "지도에 나온 위치와 다른 곳에 있어요"
+                binding.myReportCategory.text = "위치가 다름"
             } else{
-                binding.myReportCategory.text = "지도에 나온 위치에 없어요"
+                binding.myReportCategory.text = "위치에 없음"
             }
 
             if(item.modifyStatus){
@@ -44,6 +50,49 @@ class MyReportAdapter(
             else{
                 binding.myReportModify.text = "처리 중"
                 binding.myReportModify.setTextColor(ContextCompat.getColor(context, R.color.red)) // 초록색
+
+            }
+
+            // 삭제 버튼 클릭 시
+            binding.myReportDeleteBtn.setOnClickListener {
+                val dialog = Dialog(context)
+                dialog.setContentView(R.layout.my_report_dialog)
+                dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                val confirmButton : Button = dialog.findViewById(R.id.myReportDialogConfirm)
+                val cancelButton : Button = dialog.findViewById(R.id.myReportDialogCancel)
+
+                confirmButton.setOnClickListener {
+                    Log.d("신고 삭제 버튼 클릭","${myReportList[position]}")
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val reportTrashCan = ReportTrashCan(item.trashcanId.toString(), item.reportCategory)
+                        viewModel.deleteReportTrashcan(reportTrashCan, SharedPreferencesManager.getToken(context)!!)
+                    }
+                    Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                cancelButton.setOnClickListener {
+                    dialog.dismiss()
+                }
+                dialog.show()
+            }
+
+            // 삭제 버튼 애니메이션
+            binding.myReportDeleteBtn.setOnTouchListener{v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.startAnimation(scaleDown)
+                        true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        v.startAnimation(scaleUp)
+                        v.performClick()
+                        true
+                    }
+                    else -> false
+                }
 
             }
 

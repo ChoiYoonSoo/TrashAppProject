@@ -46,10 +46,12 @@ class IntroFragment : Fragment() {
 
         userTokenViewModel.removeToken()
 
+        // 로그인없이 시작하기 버튼
         binding.startWithoutLogin.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_mapFragment)
         }
 
+        // 로그인 버튼
         binding.introLoginBtn.setOnClickListener{
             Navigation.findNavController(view).navigate(R.id.action_introFragment_to_loginFragment2)
         }
@@ -61,6 +63,7 @@ class IntroFragment : Fragment() {
         val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
 
+        // 로그인 버튼
         binding.introLoginBtn.setOnTouchListener{v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -76,6 +79,7 @@ class IntroFragment : Fragment() {
             }
         }
 
+        // 카카오톡으로 시작하기 버튼
         binding.introKaKaoBtn.setOnTouchListener{v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -91,6 +95,7 @@ class IntroFragment : Fragment() {
             }
         }
 
+        // 로그인 없이 시작하기 버튼
         binding.startWithoutLogin.setOnTouchListener{v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

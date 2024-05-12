@@ -15,7 +15,6 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.trashapp.R
@@ -37,9 +36,9 @@ class SettingFragment : Fragment() {
 
     private lateinit var userTokenViewModel: UserTokenViewModel
 
-    private val viewModel : AdminBinViewModel by activityViewModels()
+    private val adminBinViewModel : AdminBinViewModel by activityViewModels()
 
-    private val adminReportviewModel : AdminReportViewModel by activityViewModels()
+    private val adminReportViewModel : AdminReportViewModel by activityViewModels()
 
     private val myReportViewModel : MyReportViewModel by activityViewModels()
 
@@ -93,13 +92,13 @@ class SettingFragment : Fragment() {
 
         // 쓰레기통 관리 버튼 클릭 시
         binding.settingBinButton.setOnClickListener {
-            viewModel.findAllUnknownTrashcans()
+            adminBinViewModel.findAllUnknownTrashcans()
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment)
         }
 
         // 사용자 신고 목록 버튼 클릭 시
         binding.settingReportButton.setOnClickListener {
-            adminReportviewModel.findAllReportTrashcan()
+            adminReportViewModel.findAllReportTrashcan()
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_adminReportFragment2)
         }
 
@@ -109,8 +108,14 @@ class SettingFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_myReportFragment)
         }
 
+        // 뒤로가기 버튼
         binding.settingBackButton.setOnClickListener{
             parentFragmentManager.popBackStack()
+        }
+
+        // 탈퇴하기 버튼
+        binding.settingUnSubButton.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
         }
 
         binding.settingEmailButton.setOnClickListener{
@@ -123,10 +128,6 @@ class SettingFragment : Fragment() {
 
         binding.settingContactButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_contactFragment)
-        }
-
-        binding.settingUnSubButton.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
         }
 
         // 프로필 이미지 원형 변경
@@ -148,6 +149,7 @@ class SettingFragment : Fragment() {
         val scaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         val scaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
 
+        // 뒤로가기 버튼 애니메이션
         binding.settingBackButton.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -165,7 +167,76 @@ class SettingFragment : Fragment() {
             }
         }
 
+        // 로그인 or 로그아웃 버튼 애니메이션
         binding.settingLoginOrout.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 쓰레기통 관리 버튼 애니메이션
+        binding.settingBinButton.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 사용자 신고 목록 버튼 애니메이션
+        binding.settingReportButton.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 내 신고내역 버튼 애니메이션
+        binding.settingMyReportButton.setOnTouchListener{
+            v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.startAnimation(scaleDown)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.startAnimation(scaleUp)
+                    v.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 탈퇴하기 버튼 애니메이션
+        binding.settingUnSubButton.setOnTouchListener{
             v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

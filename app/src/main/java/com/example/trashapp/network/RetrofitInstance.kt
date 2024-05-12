@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // http://10.0.2.2:8080/ 가상 디바이스
 // http://192.168.0.16:8080/ 집 내부 ip
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.0.16:8080/"
+    private const val BASE_URL = "http://192.168.0.14:8080/"
 
     private val client = Retrofit
         .Builder()

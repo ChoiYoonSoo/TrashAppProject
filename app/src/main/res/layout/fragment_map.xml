@@ -32,7 +32,7 @@
                 android:id="@+id/mapSearchEdit"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
-                android:layout_marginLeft="17dp"
+                android:layout_marginLeft="@dimen/dimens20dp"
                 android:background="@drawable/map_search_border"
                 android:fontFamily="@font/pretendardregular"
                 app:iconifiedByDefault="false"
@@ -84,7 +84,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roadViewContainer"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="300dp"
                 android:layout_margin="@dimen/dimens20dp"
                 android:background="@drawable/dialog_border"
                 android:visibility="gone"

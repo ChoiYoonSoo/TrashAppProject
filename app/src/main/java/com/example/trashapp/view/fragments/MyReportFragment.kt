@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentMyReportBinding
-import com.example.trashapp.view.adapter.AdminReportAdapter
 import com.example.trashapp.view.adapter.MyReportAdapter
 import com.example.trashapp.viewmodel.MyReportViewModel
 

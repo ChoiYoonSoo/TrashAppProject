@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trashapp.R
 import com.example.trashapp.databinding.AdminReportItemBinding
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.UserReportList
 import com.example.trashapp.viewmodel.AdminReportViewModel
 
@@ -34,7 +35,7 @@ class AdminReportAdapter(
 
             binding.adminReportTrashcanId.text = item.trashcanId.toString()
             if(item.reportCategory == "0") {
-                binding.adminReportCategory.text = "지도에 나온 위치와 다른 곳에치 있어요"
+                binding.adminReportCategory.text = "지도에 나온 위치와 다른 곳에 있어요"
                 binding.adminReportCreateBtn.visibility = View.VISIBLE
             } else {
                 binding.adminReportCategory.text = "지도에 나온 위치에 없어요"
@@ -55,7 +56,8 @@ class AdminReportAdapter(
                     Log.d("신고 삭제 버튼 클릭","${adminReportList[position]}")
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
-                        viewModel.deleteTrashcan(item.trashcanId)
+                        val reportTrashCan = ReportTrashCan(item.trashcanId.toString(), item.reportCategory)
+                        viewModel.deleteTrashcan(reportTrashCan)
                     }
                     Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()

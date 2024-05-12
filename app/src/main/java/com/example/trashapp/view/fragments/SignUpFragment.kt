@@ -30,7 +30,7 @@ class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
 
-    private val viewModel: SignUpViewModel by activityViewModels()
+    private val signUpViewModel: SignUpViewModel by activityViewModels()
 
     private val emailAuthViewModel: EmailAuthViewModel by activityViewModels()
 
@@ -53,14 +53,14 @@ class SignUpFragment : Fragment() {
 
         buttonAnim()
 
-        viewModel.clearAll()
+        signUpViewModel.clearAll()
 
         // 인증번호 버튼 비활성화
         binding.signUpConfirmBtn.isEnabled = false
 
         // 뒤로 가기 버튼 클릭 시
         binding.signUpBackButton.setOnClickListener {
-            viewModel.clearAll()
+            signUpViewModel.clearAll()
             emailAuthViewModel.resetClear()
             parentFragmentManager.popBackStack()
         }
@@ -74,7 +74,7 @@ class SignUpFragment : Fragment() {
         // 인증번호 확인 버튼 클릭 시
         binding.signUpConfirmBtn.setOnClickListener {
             Log.d("이메일 인증번호 확인 ", emailAuthViewModel.authNumber)
-            val emailAuth = EmailAuth(viewModel.afterEmail, emailAuthViewModel.authNumber)
+            val emailAuth = EmailAuth(signUpViewModel.afterEmail, emailAuthViewModel.authNumber)
             emailAuthViewModel.getEmailAuth(emailAuth)
         }
 
@@ -125,35 +125,35 @@ class SignUpFragment : Fragment() {
         // 이메일 인증번호 받기 버튼 클릭 시
         binding.signUpAuthBtn.setOnClickListener {
             hideKeyboard()
-            if(viewModel.email.isEmpty()) {
+            if(signUpViewModel.email.isEmpty()) {
                 Toast.makeText(context, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
-            else if (viewModel.isSignUpSuccess.value == true) {
-                viewModel.afterEmail = viewModel.email
-                viewModel.duplicateEmailCheck(viewModel.email)
+            else if (signUpViewModel.isSignUpSuccess.value == true) {
+                signUpViewModel.afterEmail = signUpViewModel.email
+                signUpViewModel.duplicateEmailCheck(signUpViewModel.email)
             } else {
                 Log.d("버튼 클릭", "회원 가입 성공 상태가 아님")
             }
         }
 
         // 이메일 중복 확인
-        viewModel.isDuplicateEmail.observe(viewLifecycleOwner) { isDuplicateEmail ->
+        signUpViewModel.isDuplicateEmail.observe(viewLifecycleOwner) { isDuplicateEmail ->
             Log.d("이메일 증복 검사 확인", "$isDuplicateEmail")
             if (isDuplicateEmail == true) {
-                Log.d("이메일 중복 검사 성공 ", viewModel.email)
+                Log.d("이메일 중복 검사 성공 ", signUpViewModel.email)
                 if(timer != null){
                     timer?.cancel()
                     timer = null
                 }
                 startTimer(180000)
-                viewModel.isEmailSuccess(true)
+                signUpViewModel.isEmailSuccess(true)
                 binding.duplicateEmailText.visibility = View.GONE
                 binding.signUpAuthTimeText.visibility = View.VISIBLE
                 binding.signUpAuthTimeText2.visibility = View.GONE
                 binding.signUpConfirmBtn.isEnabled = true
             } else if(isDuplicateEmail == false) {
                 Log.d("이메일 중복 검사 ", "실패")
-                viewModel.isEmailSuccess(false)
+                signUpViewModel.isEmailSuccess(false)
                 binding.duplicateEmailText.visibility = View.VISIBLE
                 binding.signUpAuthTimeText.visibility = View.GONE
             }
@@ -161,17 +161,17 @@ class SignUpFragment : Fragment() {
 
         // 닉네임 중복 확인 버튼 클릭 시
         binding.signUpDuplicateBtn.setOnClickListener {
-            viewModel.duplicateNickCheck(viewModel.nickname)
+            signUpViewModel.duplicateNickCheck(signUpViewModel.nickname)
             hideKeyboard()
-            viewModel.isDuplicateNick.observe(viewLifecycleOwner) { isDuplicateNick ->
+            signUpViewModel.isDuplicateNick.observe(viewLifecycleOwner) { isDuplicateNick ->
                 if (isDuplicateNick == true) {
-                    Log.d("닉네임 중복 검사 성공 ", viewModel.nickname)
-                    viewModel.isNickSuccess(true)
+                    Log.d("닉네임 중복 검사 성공 ", signUpViewModel.nickname)
+                    signUpViewModel.isNickSuccess(true)
                     binding.duplicateNickText.visibility = View.GONE
                     binding.validateSuccsessNickText.visibility = View.VISIBLE
                 } else if(isDuplicateNick == false) {
                     Log.d("닉네임 중복 검사 ", "실패")
-                    viewModel.isNickSuccess(false)
+                    signUpViewModel.isNickSuccess(false)
                     binding.duplicateNickText.visibility = View.VISIBLE
                     binding.validateSuccsessNickText.visibility = View.GONE
                 }
@@ -179,11 +179,11 @@ class SignUpFragment : Fragment() {
         }
 
         // 회원가입 버튼 활성화 코드
-        viewModel.isEmailSuccess.observe(viewLifecycleOwner) { isEmailSuccess ->
-            viewModel.isNickSuccess.observe(viewLifecycleOwner) { isNickSuccess ->
-                viewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
-                    viewModel.isAgree.observe(viewLifecycleOwner) { isAgree ->
-                        viewModel.isSignUpSuccess.observe(viewLifecycleOwner){ isSignUpSuccess ->
+        signUpViewModel.isEmailSuccess.observe(viewLifecycleOwner) { isEmailSuccess ->
+            signUpViewModel.isNickSuccess.observe(viewLifecycleOwner) { isNickSuccess ->
+                signUpViewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
+                    signUpViewModel.isAgree.observe(viewLifecycleOwner) { isAgree ->
+                        signUpViewModel.isSignUpSuccess.observe(viewLifecycleOwner){ isSignUpSuccess ->
                             emailAuthViewModel.isEmailAuthSuccess.observe(viewLifecycleOwner){isEmailSuccess ->
                                 binding.signUpButton.isEnabled = isEmailSuccess == true && isNickSuccess == true && isPasswordSuccess == true && isAgree == true && isSignUpSuccess == true && isEmailSuccess == true
                             }
@@ -195,43 +195,43 @@ class SignUpFragment : Fragment() {
 
         // 회원가입 버튼 클릭 시
         binding.signUpButton.setOnClickListener {
-            if(viewModel.afterEmail != viewModel.email){
+            if(signUpViewModel.afterEmail != signUpViewModel.email){
                 Toast.makeText(context, "이메일 인증을 완료해주세요", Toast.LENGTH_SHORT).show()
             }else{
                 hideKeyboard()
-                val signUp = SignUp(viewModel.email, viewModel.password, viewModel.nickname)
+                val signUp = SignUp(signUpViewModel.email, signUpViewModel.password, signUpViewModel.nickname)
                 lifecycleScope.launch {
-                    viewModel.signUp(signUp)
+                    signUpViewModel.signUp(signUp)
                     delay(500)
                 }
                 Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 emailAuthViewModel.resetClear()
-                viewModel.clearAll()
+                signUpViewModel.clearAll()
                 parentFragmentManager.popBackStack()
             }
         }
 
         // 개인정보 처리방침 클릭 시
         binding.signUpContainer4.setOnClickListener {
-            viewModel.agree = !viewModel.agree
-            if(viewModel.agree){
-                viewModel.isAgree(true)
+            signUpViewModel.agree = !signUpViewModel.agree
+            if(signUpViewModel.agree){
+                signUpViewModel.isAgree(true)
                 binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircleselected)
             }
             else{
-                viewModel.isAgree(false)
+                signUpViewModel.isAgree(false)
                 binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircle)
             }
         }
 
         binding.signUpAcceptBtn.setOnClickListener {
-            viewModel.agree = !viewModel.agree
-            if(viewModel.agree){
-                viewModel.isAgree(true)
+            signUpViewModel.agree = !signUpViewModel.agree
+            if(signUpViewModel.agree){
+                signUpViewModel.isAgree(true)
                 binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircleselected)
             }
             else{
-                viewModel.isAgree(false)
+                signUpViewModel.isAgree(false)
                 binding.signUpAcceptBtn.setImageResource(R.drawable.checkcircle)
             }
         }
@@ -254,14 +254,14 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                viewModel.email = s.toString()
-                Log.d("afterTextChanged email : ", viewModel.email)
+                signUpViewModel.email = s.toString()
+                Log.d("afterTextChanged email : ", signUpViewModel.email)
 
                 if (isValidEmail(s.toString())) {
-                    viewModel.isSignUpSuccess(true)
+                    signUpViewModel.isSignUpSuccess(true)
                 }
                 else{
-                    viewModel.isSignUpSuccess(false)
+                    signUpViewModel.isSignUpSuccess(false)
                 }
 
                 if (isValidEmail(s.toString()) || s.toString().isEmpty()) {
@@ -279,11 +279,11 @@ class SignUpFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewModel.afterPassword != s.toString()){
-                    viewModel.isPasswordSuccess(false)
+                if(signUpViewModel.afterPassword != s.toString()){
+                    signUpViewModel.isPasswordSuccess(false)
                     binding.signUpPwdIncorrectText2.visibility = View.VISIBLE
                 }else{
-                    viewModel.isPasswordSuccess(true)
+                    signUpViewModel.isPasswordSuccess(true)
                     binding.signUpPwdIncorrectText2.visibility = View.GONE
                 }
             }
@@ -292,11 +292,11 @@ class SignUpFragment : Fragment() {
                 if(s.toString().isEmpty()){
                     binding.signUpPwdIncorrectText.visibility = View.GONE
                 }else{
-                    viewModel.password = s.toString()
-                    Log.d("afterTextChanged password : ", viewModel.password)
-                    viewModel.validatePassword(s.toString())
+                    signUpViewModel.password = s.toString()
+                    Log.d("afterTextChanged password : ", signUpViewModel.password)
+                    signUpViewModel.validatePassword(s.toString())
 
-                    viewModel.isValidatePassword.observe(viewLifecycleOwner) { isValidatePassword ->
+                    signUpViewModel.isValidatePassword.observe(viewLifecycleOwner) { isValidatePassword ->
                         if (isValidatePassword == true) {
                             binding.signUpPwdIncorrectText.visibility = View.GONE
                             binding.passwordEditText2.isEnabled = true
@@ -319,14 +319,14 @@ class SignUpFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                viewModel.afterPassword = s.toString()
-                if (viewModel.password == s.toString()) {
-                    viewModel.isPasswordSuccess(true)
+                signUpViewModel.afterPassword = s.toString()
+                if (signUpViewModel.password == s.toString()) {
+                    signUpViewModel.isPasswordSuccess(true)
                     binding.signUpPwdIncorrectText3.visibility = View.VISIBLE
                     binding.signUpPwdIncorrectText2.visibility = View.GONE
 
                 } else {
-                    viewModel.isPasswordSuccess(false)
+                    signUpViewModel.isPasswordSuccess(false)
                     binding.signUpPwdIncorrectText3.visibility = View.GONE
                     binding.signUpPwdIncorrectText2.visibility = View.VISIBLE
                 }
@@ -339,7 +339,7 @@ class SignUpFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.isNickSuccess(false)
+                signUpViewModel.isNickSuccess(false)
                 binding.validateSuccsessNickText.visibility = View.GONE
             }
 
@@ -347,17 +347,17 @@ class SignUpFragment : Fragment() {
                 if(s.toString().isEmpty()){
                     binding.validateNickText.visibility = View.VISIBLE
                     binding.validateSuccsessNickText.visibility = View.GONE
-                    viewModel.isNickSuccess(false)
+                    signUpViewModel.isNickSuccess(false)
                 }
                 else{
-                    viewModel.nickname = s.toString()
-                    Log.d("afterTextChanged nickname : ", viewModel.nickname)
+                    signUpViewModel.nickname = s.toString()
+                    Log.d("afterTextChanged nickname : ", signUpViewModel.nickname)
 
                     if (isValidNickName(s.toString())) {
                         binding.signUpDuplicateBtn.isEnabled = true
                         binding.validateNickText.visibility = View.GONE
                     } else {
-                        viewModel.isNickSuccess(false)
+                        signUpViewModel.isNickSuccess(false)
                         binding.signUpDuplicateBtn.isEnabled = false
                         binding.validateNickText.visibility = View.VISIBLE
                         binding.duplicateNickText.visibility = View.GONE

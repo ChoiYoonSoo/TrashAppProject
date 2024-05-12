@@ -24,7 +24,7 @@ class AdminReportFragment : Fragment() {
 
     private lateinit var binding : FragmentAdminReportBinding
 
-    private val viewModel : AdminReportViewModel by activityViewModels()
+    private val adminReportViewModel : AdminReportViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class AdminReportFragment : Fragment() {
 
         // 뒤로가기 버튼 클릭 시
         binding.adminReportBackBtn.setOnClickListener {
-            viewModel.itemClicked(false)
+            adminReportViewModel.itemClicked(false)
             parentFragmentManager.popBackStack()
         }
 
@@ -70,22 +70,27 @@ class AdminReportFragment : Fragment() {
 
         // 닫기 버튼 클릭
         binding.adminReportCloseBtn.setOnClickListener {
-            viewModel.itemClicked(false)
+            adminReportViewModel.itemClicked(false)
         }
 
-        viewModel.isItemClicked.observe(viewLifecycleOwner){ isItemClicked ->
+        // 아이템 클릭 처리
+        adminReportViewModel.isItemClicked.observe(viewLifecycleOwner){ isItemClicked ->
             if(isItemClicked){
+                // 슬라이드 애니메이션으로 디테일 레이아웃 보이기
                 val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
                 binding.adminReportDetailLayout.startAnimation(slideUpAnimation)
                 binding.adminReportDetailLayout.visibility = View.VISIBLE
-                binding.reportTrashCanId.text = viewModel.trashcanId.toString()
-                binding.reportUserId.text = viewModel.userId.toString()
+
+                // 아이템 설정
+                binding.reportTrashCanId.text = adminReportViewModel.trashcanId.toString()
+                binding.reportUserId.text = adminReportViewModel.userId.toString()
                 binding.adminReportRV.visibility = View.GONE
             }
             else{
-                viewModel.isModify()
-                viewModel.latitude = ""
-                viewModel.longitude = ""
+                // 초기화
+                adminReportViewModel.isModify()
+                adminReportViewModel.latitude = ""
+                adminReportViewModel.longitude = ""
                 binding.reportLatitude.setText("")
                 binding.reportLongitude.setText("")
                 binding.adminReportDetailLayout.visibility = View.GONE
@@ -95,25 +100,26 @@ class AdminReportFragment : Fragment() {
         }
 
         // 쓰레기통 수정 완료 처리
-        viewModel.isModify.observe(viewLifecycleOwner){ isModify ->
+        adminReportViewModel.isModify.observe(viewLifecycleOwner){ isModify ->
             if(isModify == true){
-                viewModel.itemClicked(false)
+                adminReportViewModel.itemClicked(false)
                 Toast.makeText(context,"신고 처리 완료되었습니다.",Toast.LENGTH_SHORT).show()
             }
             else if(isModify == false){
                 Log.d("쓰레기통 수정 API 통신","error")
+                Toast.makeText(context,"다시 시도해 주십시오.",Toast.LENGTH_SHORT).show()
             }
         }
 
         // 수정 완료 버튼 클릭 시
         binding.adminReportBtn.setOnClickListener {
-            if(viewModel.isSuccess.value == true){
+            if(adminReportViewModel.isSuccess.value == true){
                 // 쓰레기통 정보와 위도 경도 보내는 API 통신 필요
-                val modifyTrashcan = ModifyTrashcan(viewModel.reportId.toString(),viewModel.trashcanId.toString(),viewModel.latitude.toDouble(),viewModel.longitude.toDouble())
-                viewModel.modifyTrashcan(modifyTrashcan)
+                val modifyTrashcan = ModifyTrashcan(adminReportViewModel.reportId.toString(),adminReportViewModel.trashcanId.toString(),adminReportViewModel.latitude.toDouble(),adminReportViewModel.longitude.toDouble())
+                adminReportViewModel.modifyTrashcan(modifyTrashcan)
             }
             else{
-                Toast.makeText(context,"위도와 경도를 입력해주세요",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"위도와 경도를 모두 입력해주세요",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -122,15 +128,15 @@ class AdminReportFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewModel.latitude.isNotEmpty() && viewModel.longitude.isNotEmpty()){
-                    viewModel.isSuccess(true)
+                if(adminReportViewModel.latitude.isNotEmpty() && adminReportViewModel.longitude.isNotEmpty()){
+                    adminReportViewModel.isSuccess(true)
                 }
                 else{
-                    viewModel.isSuccess(false)
+                    adminReportViewModel.isSuccess(false)
                 }
             }
             override fun afterTextChanged(s: Editable?) {
-                viewModel.latitude = s.toString()
+                adminReportViewModel.latitude = s.toString()
             }
         })
 
@@ -139,20 +145,20 @@ class AdminReportFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewModel.latitude.isNotEmpty() && viewModel.longitude.isNotEmpty()){
-                    viewModel.isSuccess(true)
+                if(adminReportViewModel.latitude.isNotEmpty() && adminReportViewModel.longitude.isNotEmpty()){
+                    adminReportViewModel.isSuccess(true)
                 }
                 else{
-                    viewModel.isSuccess(false)
+                    adminReportViewModel.isSuccess(false)
                 }
             }
             override fun afterTextChanged(s: Editable?) {
-                viewModel.longitude = s.toString()
+                adminReportViewModel.longitude = s.toString()
             }
         })
 
         // 사용자 신고목록 RecyclerView
-        viewModel.adminReportList.observe(viewLifecycleOwner){ adminReportList ->
+        adminReportViewModel.adminReportList.observe(viewLifecycleOwner){ adminReportList ->
             if(adminReportList.isEmpty()){
                 binding.adminReportRV.visibility = View.GONE
                 binding.reportView.visibility = View.VISIBLE
@@ -160,7 +166,7 @@ class AdminReportFragment : Fragment() {
             else{
                 binding.adminReportRV.visibility = View.VISIBLE
                 binding.reportView.visibility = View.GONE
-                binding.adminReportRV.adapter = AdminReportAdapter(adminReportList, viewModel)
+                binding.adminReportRV.adapter = AdminReportAdapter(adminReportList, adminReportViewModel)
                 binding.adminReportRV.layoutManager = LinearLayoutManager(context)
             }
         }

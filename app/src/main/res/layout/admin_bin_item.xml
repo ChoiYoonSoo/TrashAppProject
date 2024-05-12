@@ -28,14 +28,18 @@
 
             <TextView
                 android:id="@+id/adminAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:fontFamily="@font/pretendardregular"
                 android:text="장소"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimens16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/adminCategory"
                 app:layout_constraintStart_toEndOf="@+id/adminDate"
                 app:layout_constraintTop_toTopOf="parent" />
 

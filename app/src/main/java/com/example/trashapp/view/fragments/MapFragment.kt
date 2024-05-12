@@ -113,7 +113,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 Toast.makeText(context, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                 viewModel.resetReportSuccess()
             } else if(isSuccess == false) {
-                Toast.makeText(context, "이미 신고한 쓰레기통입니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "신고는 1분에 1번만 가능합니다.", Toast.LENGTH_SHORT).show()
                 viewModel.resetReportSuccess()
             }
         }
@@ -243,6 +243,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             }
         }
 
+        // 쓰레기통 신고 횟수
         viewModel.trashcanReportCount.observe(viewLifecycleOwner) { count ->
             reportCount.text = count.toString()
         }
@@ -343,6 +344,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             }
         }
 
+        // 로드뷰 이동 버튼
         binding.roadViewMoveBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mapFragment_to_webViewFragment)
         }
@@ -352,7 +354,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         view?.let { Navigation.findNavController(it).navigate(R.id.action_mapFragment_to_cameraFragment) }
     }
 
-    fun removeMark(){
+    // 지도 마커 삭제
+    private fun removeMark(){
         if(removeList.isNotEmpty()){
             for (data in removeList) {
                 mapView.removePOIItem(data)
@@ -421,7 +424,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     // 마커 위치를 기준으로 원을 생성하고 지도에 추가하는 함수
-    fun addCirclesAroundMarkers(mapView: MapView, markers: List<MapPOIItem>, radius: Int) {
+    private fun addCirclesAroundMarkers(mapView: MapView, markers: List<MapPOIItem>, radius: Int) {
         mapView.removeAllCircles()
         markers.forEachIndexed { index, marker ->
             // 마커의 위치를 가져옵니다.
@@ -589,6 +592,12 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 binding.loadingContainer.visibility = View.GONE
                 binding.createBinBtn.visibility = View.VISIBLE
                 binding.gpsBtn.visibility = View.VISIBLE
+
+                // 기존 마커 제거
+                mapView.findPOIItemByTag(1001)?.let {
+                    mapView.removePOIItem(it)
+                }
+
                 Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
                 mapView.setMapCenterPoint(
                     MapPoint.mapPointWithGeoCoord(
@@ -596,11 +605,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                         location.longitude
                     ), true
                 )
-
-                // 기존 마커 제거
-                mapView.findPOIItemByTag(1001)?.let {
-                    mapView.removePOIItem(it)
-                }
 
                 var marker = MapPOIItem()
                 marker.apply {
@@ -614,6 +618,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                 mapView.addPOIItem(marker)
             }
 
+        // 마지막 이동 위치가 있을 경우 해당 위치부터 지도 시작
         lastMapPoint?.let { point ->
             mapView.setMapCenterPoint(point, true)
             Log.d("시작위치", point.toString())

@@ -21,7 +21,7 @@ class AdminBinFragment : Fragment() {
 
     private lateinit var binding : FragmentAdminBinBinding
 
-    private val viewModel : AdminBinViewModel by activityViewModels()
+    private val adminBinViewModel : AdminBinViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,40 +59,43 @@ class AdminBinFragment : Fragment() {
             }
         }
 
-        viewModel.isItemClicked.observe(viewLifecycleOwner){ isItemClicked ->
+        // 아이템 클릭 했을 때 처리
+        adminBinViewModel.isItemClicked.observe(viewLifecycleOwner){ isItemClicked ->
             if(isItemClicked){
+                // 슬라이드 애니메이션으로 디테일 레이아웃 띄우기
                 val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
                 binding.adminBinDetailLayout.startAnimation(slideUpAnimation)
                 binding.adminBinDetailLayout.visibility = View.VISIBLE
-                binding.trashCanId.text = viewModel.trachcanId
-                binding.userId.text = viewModel.userId
-                binding.location.text = viewModel.location
+
+                // 아이템 설정
+                binding.trashCanId.text = adminBinViewModel.trachcanId
+                binding.userId.text = adminBinViewModel.userId
+                binding.location.text = adminBinViewModel.location
                 binding.adminBinRV.visibility = View.GONE
-                Log.d("이미지",viewModel.image)
+                Log.d("관리자 쓰레기통 등록 이미지",adminBinViewModel.image)
                 Glide.with(this)
-                    .load(viewModel.image)
+                    .load(adminBinViewModel.image)
                     .into(binding.binImage)
             }
             else{
                 binding.adminBinDetailLayout.visibility = View.GONE
                 binding.adminBinRV.visibility = View.VISIBLE
-
             }
         }
 
         // 뒤로가기 버튼 클릭 시
         binding.adminBinBackBtn.setOnClickListener {
-            viewModel.itemClicked(false)
+            adminBinViewModel.itemClicked(false)
             parentFragmentManager.popBackStack()
         }
 
         // 닫기 버튼 클릭
         binding.adminBinCloseBtn.setOnClickListener {
-            viewModel.itemClicked(false)
+            adminBinViewModel.itemClicked(false)
         }
 
         // 사용자 신고목록 RecyclerView
-        viewModel.adminBinList.observe(viewLifecycleOwner){ adminBinList ->
+        adminBinViewModel.adminBinList.observe(viewLifecycleOwner){ adminBinList ->
             if(adminBinList.isEmpty()){
                 binding.adminBinRV.visibility = View.GONE
                 binding.reportView.visibility = View.VISIBLE
@@ -100,11 +103,9 @@ class AdminBinFragment : Fragment() {
             else{
                 binding.adminBinRV.visibility = View.VISIBLE
                 binding.reportView.visibility = View.GONE
-                binding.adminBinRV.adapter = AdminBinAdapter(adminBinList, viewModel)
+                binding.adminBinRV.adapter = AdminBinAdapter(adminBinList, adminBinViewModel)
                 binding.adminBinRV.layoutManager = LinearLayoutManager(context)
             }
         }
     }
-
-
 }

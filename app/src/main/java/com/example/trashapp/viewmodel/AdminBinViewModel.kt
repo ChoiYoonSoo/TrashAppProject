@@ -28,21 +28,20 @@ class AdminBinViewModel : ViewModel() {
         try {
             val result = netWorkRepository.findAllUnknownTrashcans()
             _adminBinList.postValue(result)
-            Log.d("사용자 목록 조회 API 통신 성공", result.toString())
+            Log.d("사용자 쓰레기통 등록 조회 성공", result.toString())
         } catch (e: Exception) {
-            Log.d("사용자 목록 조회 API 통신","실패")
+            Log.d("사용자 쓰레기통 등록 조회","실패")
         }
     }
 
     fun deleteAdminUnknownList(deleteAdminUnknownList: UnknownTrashcan) = viewModelScope.launch {
-        Log.d("쓰레기통 삭제 ID", deleteAdminUnknownList.unknown_trashcan_id.toString())
         try {
             val result = netWorkRepository.deleteUnknownTrashcan(deleteAdminUnknownList.unknown_trashcan_id)
             findAllUnknownTrashcans()
-            Log.d("사용자 목록 삭제 API 통신 성공", deleteAdminUnknownList.toString())
+            Log.d("사용자 쓰레기통 등록 삭제 성공", deleteAdminUnknownList.toString())
             Log.d("삭제된 후 리스트", result.toString())
         } catch (e: Exception) {
-            Log.d("사용자 목록 삭제 API 통신",e.toString())
+            Log.d("사용자 쓰레기통 등록 삭제 실패",e.toString())
         }
     }
 

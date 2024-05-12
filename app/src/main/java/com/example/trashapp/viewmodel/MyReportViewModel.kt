@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.network.model.MyReportList
+import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.repository.NetWorkRepository
 import kotlinx.coroutines.launch
 
@@ -20,9 +21,19 @@ class MyReportViewModel : ViewModel() {
         try {
             val result = netWorkRepository.myReportTrashcans(token)
             _myReportList.postValue(result)
-            Log.d("내가 신고한 쓰레기통 조회 API 통신 성공", result.toString())
+            Log.d("나의 신고 내역 조회 성공", result.toString())
         } catch (e: Exception) {
-            Log.d("내가 신고한 쓰레기통 조회 API 통신 실패",e.printStackTrace().toString())
+            Log.d("나의 신고 내역 조회 실패",e.printStackTrace().toString())
+        }
+    }
+
+    fun deleteReportTrashcan(reportTrashCan: ReportTrashCan, token: String) = viewModelScope.launch {
+        try {
+            netWorkRepository.deleteReportTrashcan(reportTrashCan, token)
+            myReportTrashcans(token)
+            Log.d("나의 신고 내역 삭제 성공", reportTrashCan.toString())
+        } catch (e: Exception) {
+            Log.d("나의 신고 내역 삭제 실패",e.printStackTrace().toString())
         }
     }
 }

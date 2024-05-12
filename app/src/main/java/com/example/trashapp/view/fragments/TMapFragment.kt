@@ -23,7 +23,6 @@ import com.example.trashapp.databinding.FragmentTMapBinding
 import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.ApiListViewModel
 import com.example.trashapp.viewmodel.CurrentGpsViewModel
-import com.skt.Tmap.TMapCircle
 import com.skt.Tmap.TMapData
 import com.skt.Tmap.TMapMarkerItem
 import com.skt.Tmap.TMapPoint
@@ -31,8 +30,6 @@ import com.skt.Tmap.TMapView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
 
 class TMapFragment : Fragment() {
 
@@ -40,7 +37,7 @@ class TMapFragment : Fragment() {
 
     private lateinit var binding: FragmentTMapBinding
 
-    private val viewModel: ApiListViewModel by activityViewModels()
+    private val apiListViewModel: ApiListViewModel by activityViewModels()
 
     private val currentGpsViewModel: CurrentGpsViewModel by activityViewModels()
 
@@ -90,27 +87,27 @@ class TMapFragment : Fragment() {
                     setMarker(location.latitude + 0.0001, location.longitude, "start")
                 setMarker(location.latitude, location.longitude, "current")
                     setMarker(
-                        viewModel.selectMapData!!.latitude,
-                        viewModel.selectMapData!!.longitude,
+                        apiListViewModel.selectMapData!!.latitude,
+                        apiListViewModel.selectMapData!!.longitude,
                         "end"
                     )
                     drawPedestrianPath(location.latitude, location.longitude)
                     val tmapApi = TmapApiRequest(
                         location.longitude,
                         location.latitude,
-                        viewModel.selectMapData!!.longitude,
-                        viewModel.selectMapData!!.latitude,
+                        apiListViewModel.selectMapData!!.longitude,
+                        apiListViewModel.selectMapData!!.latitude,
                         "출발지",
                         "도착지",
                         10
                     )
-                    viewModel.getTmapApi(tmapApi)
+                apiListViewModel.getTmapApi(tmapApi)
                 }
 
         }, 1000)
 
         // 출발지와 도착지 거리 구하기
-        viewModel.totalDistance.observe(viewLifecycleOwner) { distance ->
+        apiListViewModel.totalDistance.observe(viewLifecycleOwner) { distance ->
             val distanceText = if (distance < 1000) {
                 "${distance}m"
             }else{
@@ -122,7 +119,7 @@ class TMapFragment : Fragment() {
         }
 
         // 출발지와 도착지 소요시간 구하기
-        viewModel.totalTime.observe(viewLifecycleOwner) { time ->
+        apiListViewModel.totalTime.observe(viewLifecycleOwner) { time ->
             val timeText = if (time < 60) {
                 "1분 미만"
             }else{
@@ -162,7 +159,7 @@ class TMapFragment : Fragment() {
     }
 
     // 마커 찍기
-    fun setMarker(latitude: Double, longitude: Double, markerId: String) {
+    private fun setMarker(latitude: Double, longitude: Double, markerId: String) {
         Log.d("마커", "ok")
         val markerItem = TMapMarkerItem()
         val tMapPoint = TMapPoint(latitude, longitude)
@@ -186,7 +183,7 @@ class TMapFragment : Fragment() {
         // 출발지와 목적지 설정
         val startPoint = TMapPoint(lat, lon)
         val endPoint =
-            TMapPoint(viewModel.selectMapData!!.latitude, viewModel.selectMapData!!.longitude)
+            TMapPoint(apiListViewModel.selectMapData!!.latitude, apiListViewModel.selectMapData!!.longitude)
 
         // 보행자 경로 데이터 검색 및 표시
         lifecycleScope.launch(Dispatchers.IO) {

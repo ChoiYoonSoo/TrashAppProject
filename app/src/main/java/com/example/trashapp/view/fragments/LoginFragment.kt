@@ -15,9 +15,6 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.trashapp.R
@@ -32,7 +29,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
 
-    private val viewModel: LoginViewModel by activityViewModels()
+    private val loginViewModel: LoginViewModel by activityViewModels()
 
     private lateinit var userTokenViewModel: UserTokenViewModel
 
@@ -64,45 +61,49 @@ class LoginFragment : Fragment() {
         // 뒤로가기 버튼
         binding.loginBackButton.setOnClickListener {
             parentFragmentManager.popBackStack()
-            viewModel.resetClear()
-            viewModel.tokenClear()
+            loginViewModel.resetClear()
+            loginViewModel.tokenClear()
         }
 
         // 회원가입 버튼
         binding.loginSignUpBtn.setOnClickListener {
             binding.loginEmailText.setText("")
             binding.loginPasswordText.setText("")
-            viewModel.tokenClear()
-            viewModel.resetClear()
+            loginViewModel.tokenClear()
+            loginViewModel.resetClear()
             Navigation.findNavController(view)
                 .navigate(R.id.action_loginFragment2_to_signUpFragment)
         }
 
-        viewModel.isTokenSuccess.observe(viewLifecycleOwner) { isTokenSuccess ->
+        // 로그인 성공하여 토큰값이 변경되었을 때
+        loginViewModel.isTokenSuccess.observe(viewLifecycleOwner) { isTokenSuccess ->
             // token 값이 변경되면, 그 값이 빈 문자열이 아닐 때 SharedPreferences에 저장
             if (isTokenSuccess == true) {
-                userTokenViewModel.saveToken(viewModel.token)
+                loginViewModel.resetClear()
+                loginViewModel.tokenClear()
+                userTokenViewModel.saveToken(loginViewModel.token)
                 Log.d("login token : ", userTokenViewModel.getToken().toString())
                 Navigation.findNavController(view)
                     .navigate(R.id.action_loginFragment2_to_mapFragment)
             } else if(isTokenSuccess == false) {
-                Toast.makeText(context, "아이디와 비밀번호가 맞지 않습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "아이디 또는 비밀번호가 맞지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.isLoginSuccess.observe(viewLifecycleOwner) { isLoginSuccess ->
-            viewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
+        // 로그인 조건에 부합할 경우
+        loginViewModel.isLoginSuccess.observe(viewLifecycleOwner) { isLoginSuccess ->
+            loginViewModel.isPasswordSuccess.observe(viewLifecycleOwner) { isPasswordSuccess ->
                binding.loginBtn.isEnabled = isLoginSuccess == true && isPasswordSuccess == true
             }
         }
 
         // 로그인 버튼 및 유저 토큰값 SharedPreferences에 저장
         binding.loginBtn.setOnClickListener {
-            Log.d("login email : ", viewModel.email)
-            Log.d("login password : ", viewModel.password)
+            Log.d("login email : ", loginViewModel.email)
+            Log.d("login password : ", loginViewModel.password)
 
-            val login = Login(viewModel.email, viewModel.password)
-            viewModel.login(login)
+            val login = Login(loginViewModel.email, loginViewModel.password)
+            loginViewModel.login(login)
             hideKeyboard()
         }
 
@@ -117,24 +118,24 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewModel.password.isNotEmpty()) {
-                    viewModel.isPasswordSuccess(true)
+                if(loginViewModel.password.isNotEmpty()) {
+                    loginViewModel.isPasswordSuccess(true)
                 }else{
-                    viewModel.isPasswordSuccess(false)
+                    loginViewModel.isPasswordSuccess(false)
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 Log.d("afterTextChanged email : ", s.toString())
                 if (isValidEmail(s.toString()) && s.toString().isNotEmpty()) {
-                    viewModel.isLoginSuccess(true)
-                    viewModel.email = s.toString()
+                    loginViewModel.isLoginSuccess(true)
+                    loginViewModel.email = s.toString()
                     binding.validateEmailErrorText.visibility = View.GONE
                 } else if (s.toString().isEmpty()) {
-                    viewModel.isLoginSuccess(false)
+                    loginViewModel.isLoginSuccess(false)
                     binding.validateEmailErrorText.visibility = View.GONE
                 } else {
-                    viewModel.isLoginSuccess(false)
+                    loginViewModel.isLoginSuccess(false)
                     binding.validateEmailErrorText.visibility = View.VISIBLE
                 }
             }
@@ -151,21 +152,21 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(viewModel.email.isNotEmpty()){
-                    viewModel.isLoginSuccess(true)
+                if(loginViewModel.email.isNotEmpty()){
+                    loginViewModel.isLoginSuccess(true)
                 }
                 else{
-                    viewModel.isLoginSuccess(false)
+                    loginViewModel.isLoginSuccess(false)
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 Log.d("afterTextChanged password : ", s.toString())
                 if (s.toString().isNotEmpty()) {
-                    viewModel.isPasswordSuccess(true)
-                    viewModel.password = s.toString()
+                    loginViewModel.isPasswordSuccess(true)
+                    loginViewModel.password = s.toString()
                 } else {
-                    viewModel.isPasswordSuccess(false)
+                    loginViewModel.isPasswordSuccess(false)
                 }
             }
         })

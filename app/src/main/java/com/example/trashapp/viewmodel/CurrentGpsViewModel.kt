@@ -1,13 +1,11 @@
 package com.example.trashapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trashapp.data.Location
 import kotlinx.coroutines.launch
-import net.daum.mf.map.api.MapPoint
 
 class CurrentGpsViewModel : ViewModel() {
 

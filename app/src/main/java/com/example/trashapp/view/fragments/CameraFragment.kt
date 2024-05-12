@@ -32,7 +32,6 @@ import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.CameraViewModel
 import com.example.trashapp.viewmodel.CurrentGpsViewModel
 import com.google.gson.Gson
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -90,6 +89,7 @@ class CameraFragment : Fragment() {
             binding.baseBin.isSelected = false
         }
 
+        // 카메라 시작
         startCamera()
 
         // 토큰 및 현재 위치 받기
@@ -359,6 +359,8 @@ class CameraFragment : Fragment() {
                 else -> false
             }
         }
+
+        // 쓰레기통 등록 버튼
         binding.cameraReportBtn.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -375,6 +377,7 @@ class CameraFragment : Fragment() {
             }
         }
 
+        // 일반 쓰레기통 버튼
         binding.baseBin.setOnTouchListener{
                 v, event ->
             when (event.action) {
@@ -391,6 +394,7 @@ class CameraFragment : Fragment() {
             }
         }
 
+        // 일반/재활용 쓰레기통 버튼
         binding.recyclingBin.setOnTouchListener{
                 v, event ->
             when (event.action) {

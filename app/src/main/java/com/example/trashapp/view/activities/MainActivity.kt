@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private var permissionDialog: AlertDialog? = null
 
-    var isOnResume = false
+    private var isOnResume = false
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 위치 권한 검사
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             RequestPermissionsUtil(this).requestLocation() // 위치 권한 요청
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             getLocation()
         }
 
+        // 토큰값이 있으면 저장하기
         intent.getStringExtra("token")?.let { token ->
             userInfoViewModel.token = token
         }
@@ -113,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     // 위치 업데이트 시작
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
-        Log.d("위치 업데이트@@@@@@@","실행")
+        Log.d("3초간 위치 업데이트 startLocationUpdates","실행")
         permissionDialog?.dismiss()
         val locationRequest = LocationRequest.Builder(3000L) // 업데이트 간격을 3초로 설정
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY) // 높은 정확도 요구
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
     // 위치 업데이트 중지
     fun stopLocationUpdates() {
-        Log.d("위치 업데이트@@@@@@@","중지")
+        Log.d("3초간 위치 업데이트 정지 stopLocationUpdates","중지")
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
@@ -134,14 +136,13 @@ class MainActivity : AppCompatActivity() {
     // 현재 위치 가져오기
     @SuppressLint("MissingPermission")
     fun getLocation() {
-        Log.d("현재위치 가져오기@@@@","실행")
+        Log.d("현재 위치 가져오기 getLocation","실행")
         val fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(this)
 
         fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
             .addOnSuccessListener { success: Location? ->
                 success?.let { location ->
-//                    currentGpsViewModel.currentGps(36.8330149230957, 127.17927825927734)
                     currentGpsViewModel.currentGps(location.latitude, location.longitude)
                 }
             }
@@ -170,6 +171,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        // 처음 화면 로딩 시 로그인 되어있으면 맵프래그먼트로 바로 이동하는 코드
         if(!isOnResume) {
             when (intent.getStringExtra("fragmentToLoad")) {
                 "mapFragment" -> {

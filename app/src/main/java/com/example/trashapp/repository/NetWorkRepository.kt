@@ -71,11 +71,14 @@ class NetWorkRepository {
     suspend fun findAllReportTrashcan() = client.findAllReportTrashcan()
 
     // 쓰레기통 삭제
-    suspend fun deleteTrashcan(trashcanId: Long) = client.deleteTrashcan(trashcanId)
+    suspend fun deleteTrashcan(reportTrashCan: ReportTrashCan) = client.deleteTrashcan(reportTrashCan)
 
     // 쓰레기통 수정
     suspend fun modifyTrashcan(modifyTrashcan: ModifyTrashcan) = client.modifyTrashcan(modifyTrashcan)
 
     // 나의 쓰레기통 신고 내역
     suspend fun myReportTrashcans(token: String) = client.myReportTrashcans(token)
+
+    // 나의 쓰레기통 신고 내역 삭제
+    suspend fun deleteReportTrashcan(reportTrashcan: ReportTrashCan, token: String) = client.deleteReportTrashcan(reportTrashcan, token)
 }

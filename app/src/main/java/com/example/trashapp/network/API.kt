@@ -98,7 +98,7 @@ interface API {
     suspend fun findAllReportTrashcan() : List<UserReportList>
 
     @POST("deleteTrashcan")
-    suspend fun deleteTrashcan(@Body trashcanId: Long)
+    suspend fun deleteTrashcan(@Body reportTrashCan: ReportTrashCan)
 
     @POST("modifyTrashcan")
     suspend fun modifyTrashcan(@Body modifyTrashcan: ModifyTrashcan)
@@ -106,4 +106,6 @@ interface API {
     @POST("myReportTrashcans")
     suspend fun myReportTrashcans(@Header("Authorization") token : String) : List<MyReportList>
 
+    @POST("deleteReportTrashcan")
+    suspend fun deleteReportTrashcan(@Body reportTrashcan: ReportTrashCan, @Header("Authorization") token : String)
 }
