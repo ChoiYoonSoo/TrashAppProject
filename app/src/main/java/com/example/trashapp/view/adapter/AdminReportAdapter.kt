@@ -37,14 +37,22 @@ class AdminReportAdapter(
             if(item.reportCategory == "0") {
                 binding.adminReportCategory.text = "지도에 나온 위치와 다른 곳에 있어요"
                 binding.adminReportCreateBtn.visibility = View.VISIBLE
+                binding.adminReportDeleteBtn.visibility = View.GONE
             } else {
                 binding.adminReportCategory.text = "지도에 나온 위치에 없어요"
                 binding.adminReportCreateBtn.visibility = View.GONE
+                binding.adminReportDeleteBtn.visibility = View.VISIBLE
+            }
+
+            // 취소 버튼 클릭 이벤트
+            binding.adminReportCancelBtn.setOnClickListener {
+                viewModel.cancelTrashcanId = item.trashcanId
+                viewModel.cancelReportCategory = item.reportCategory
+                viewModel.isCancelClicked(true)
             }
 
             // 삭제 버튼 클릭 이벤트
             binding.adminReportDeleteBtn.setOnClickListener {
-
                 val dialog = Dialog(context)
                 dialog.setContentView(R.layout.admin_report_dialog)
                 dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -95,7 +103,7 @@ class AdminReportAdapter(
                 viewModel.itemClicked(true)
             }
 
-            // 등록 버튼 터치 이벤트
+            // 수정 버튼 터치 이벤트
             binding.adminReportCreateBtn.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {

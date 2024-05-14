@@ -5,4 +5,5 @@ data class ModifyTrashcan(
     val trashcanId : String,
     val latitude : Double,
     val longitude : Double,
+    val reportCategory: String
 )

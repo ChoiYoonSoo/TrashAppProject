@@ -5,5 +5,5 @@ data class UserReportList(
     val userId : Long,
     val trashcanId : Long,
     val reportCategory : String,
-    val modifyStatus : Boolean
+    val modifyStatus : Int
 )

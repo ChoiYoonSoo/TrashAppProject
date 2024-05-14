@@ -30,7 +30,7 @@ class AdminBinViewModel : ViewModel() {
             _adminBinList.postValue(result)
             Log.d("사용자 쓰레기통 등록 조회 성공", result.toString())
         } catch (e: Exception) {
-            Log.d("사용자 쓰레기통 등록 조회","실패")
+            Log.d("사용자 쓰레기통 등록 조회 실패",e.toString())
         }
     }
 

@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trashapp.R
 import com.example.trashapp.databinding.FragmentAdminReportBinding
+import com.example.trashapp.network.model.CancelReport
 import com.example.trashapp.network.model.ModifyTrashcan
 import com.example.trashapp.view.adapter.AdminReportAdapter
 import com.example.trashapp.viewmodel.AdminReportViewModel
@@ -73,6 +74,23 @@ class AdminReportFragment : Fragment() {
             adminReportViewModel.itemClicked(false)
         }
 
+        // 취소 클릭 처리
+        adminReportViewModel.isCancelClicked.observe(viewLifecycleOwner){ isCancelClicked ->
+            if(isCancelClicked){
+                // 슬라이드 애니메이션으로 디테일 레이아웃 보이기
+                val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
+                binding.adminCancelDetailLayout.startAnimation(slideUpAnimation)
+                binding.adminCancelDetailLayout.visibility = View.VISIBLE
+
+                binding.adminReportRV.visibility = View.GONE
+            }else{
+                adminReportViewModel.cancelText = ""
+                binding.cancelText.setText("")
+                binding.adminCancelDetailLayout.visibility = View.GONE
+                binding.adminReportRV.visibility = View.VISIBLE
+            }
+        }
+
         // 아이템 클릭 처리
         adminReportViewModel.isItemClicked.observe(viewLifecycleOwner){ isItemClicked ->
             if(isItemClicked){
@@ -115,13 +133,60 @@ class AdminReportFragment : Fragment() {
         binding.adminReportBtn.setOnClickListener {
             if(adminReportViewModel.isSuccess.value == true){
                 // 쓰레기통 정보와 위도 경도 보내는 API 통신 필요
-                val modifyTrashcan = ModifyTrashcan(adminReportViewModel.reportId.toString(),adminReportViewModel.trashcanId.toString(),adminReportViewModel.latitude.toDouble(),adminReportViewModel.longitude.toDouble())
+                val modifyTrashcan = ModifyTrashcan(adminReportViewModel.reportId.toString(),adminReportViewModel.trashcanId.toString(),adminReportViewModel.latitude.toDouble(),adminReportViewModel.longitude.toDouble(),"0")
                 adminReportViewModel.modifyTrashcan(modifyTrashcan)
             }
             else{
                 Toast.makeText(context,"위도와 경도를 모두 입력해주세요",Toast.LENGTH_SHORT).show()
             }
         }
+
+        // 취소 사유 창 닫기 버튼 클릭 시
+        binding.adminCancelCloseBtn.setOnClickListener {
+            adminReportViewModel.isCancelApiSuccess()
+            adminReportViewModel.isCancelClicked(false)
+        }
+
+        // 취소 사유 API 통신 성공 여부
+        adminReportViewModel.isCancelApiSuccess.observe(viewLifecycleOwner){ isCancelApiSuccess ->
+            if(isCancelApiSuccess == true){
+                adminReportViewModel.isCancelClicked(false)
+                Toast.makeText(context,"신고가 취소되었습니다.",Toast.LENGTH_SHORT).show()
+            }
+            else if(isCancelApiSuccess == false){
+                Toast.makeText(context,"다시 시도해 주십시오.",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 취소 완료 버튼 클릭 시
+        binding.adminCancelBtn.setOnClickListener {
+            if(adminReportViewModel.isCancelSuccess.value == true){
+                // 취소 사유 보내는 API 통신
+                Log.d("취소 사유",adminReportViewModel.cancelText)
+                val cancelReport = CancelReport(adminReportViewModel.cancelTrashcanId.toString(),adminReportViewModel.cancelReportCategory,adminReportViewModel.cancelText)
+                adminReportViewModel.cancelReport(cancelReport)
+            }
+            else{
+                Toast.makeText(context,"취소 사유를 입력해주세요",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 취소 사유 입력 텍스트 필드
+        binding.cancelText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString().isNotEmpty()){
+                    adminReportViewModel.isCancelSuccess(true)
+                }
+                else{
+                    adminReportViewModel.isCancelSuccess(false)
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+                adminReportViewModel.cancelText = s.toString()
+            }
+        })
 
         // 위도 입력 텍스트 필드
         binding.reportLatitude.addTextChangedListener(object : TextWatcher {

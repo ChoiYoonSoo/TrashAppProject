@@ -9,6 +9,8 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -43,14 +45,17 @@ class MyReportAdapter(
                 binding.myReportCategory.text = "위치에 없음"
             }
 
-            if(item.modifyStatus){
+            if(item.modifyStatus == 1){
                 binding.myReportModify.text = "처리 완료"
                 binding.myReportModify.setTextColor(ContextCompat.getColor(context, R.color.green)) // 초록색
             }
+            else if(item.modifyStatus == 2){
+                binding.myReportModify.text = "처리 취소\n(사유 보기)"
+                binding.myReportModify.setTextColor(ContextCompat.getColor(context, R.color.red)) // 빨간색
+            }
             else{
                 binding.myReportModify.text = "처리 중"
-                binding.myReportModify.setTextColor(ContextCompat.getColor(context, R.color.red)) // 초록색
-
+                binding.myReportModify.setTextColor(ContextCompat.getColor(context, R.color.blue)) // 빨간색
             }
 
             // 삭제 버튼 클릭 시
@@ -69,7 +74,6 @@ class MyReportAdapter(
                         val reportTrashCan = ReportTrashCan(item.trashcanId.toString(), item.reportCategory)
                         viewModel.deleteReportTrashcan(reportTrashCan, SharedPreferencesManager.getToken(context)!!)
                     }
-                    Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
 
@@ -94,6 +98,24 @@ class MyReportAdapter(
                     else -> false
                 }
 
+            }
+
+            binding.myReportModify.setOnClickListener {
+                if(item.modifyStatus == 2){
+                    val dialog = Dialog(context)
+                    dialog.setContentView(R.layout.my_report_cancel_dialog)
+                    dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                    val closeButton : ImageButton = dialog.findViewById(R.id.CancelCloseBtn)
+                    val cancelText : TextView = dialog.findViewById(R.id.cancelDialogSubTitle)
+
+                    cancelText.text = item.reasonReportCancel
+
+                    closeButton.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                }
             }
 
             itemView.setOnTouchListener{v, event ->

@@ -5,6 +5,7 @@ import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
 import com.example.trashapp.network.API
 import com.example.trashapp.network.RetrofitInstance
+import com.example.trashapp.network.model.CancelReport
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ModifyTrashcan
@@ -21,6 +22,8 @@ class NetWorkRepository {
     private val kakaoClient = RetrofitInstance.getKakaoInstance().create(API::class.java)
 
     private val tmapClient = RetrofitInstance.getTmapInstance().create(API::class.java)
+
+    private val yoloClient = RetrofitInstance.getYoloInstance().create(API::class.java)
 
     // 전체 위도 경도 API 호출
     suspend fun getApiTest() = client.getApiTest()
@@ -81,4 +84,10 @@ class NetWorkRepository {
 
     // 나의 쓰레기통 신고 내역 삭제
     suspend fun deleteReportTrashcan(reportTrashcan: ReportTrashCan, token: String) = client.deleteReportTrashcan(reportTrashcan, token)
+
+    // 사진 욜로 판별
+    suspend fun imageYolo(image : MultipartBody.Part) = yoloClient.imageYolo(image)
+
+    // 사용자 신고 내역 취소
+    suspend fun cancelReport(cancelReport: CancelReport) = client.cancelReport(cancelReport)
 }

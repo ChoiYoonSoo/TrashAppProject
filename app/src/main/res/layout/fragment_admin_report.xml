@@ -48,7 +48,9 @@
             android:id="@+id/adminReportRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="-19dp"
+            tools:layout_editor_absoluteY="-292dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/adminReportDetailLayout"
@@ -198,6 +200,87 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reportLongitude" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/adminCancelDetailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dimens20dp"
+            android:background="@drawable/map_search_border"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/adminCancelModifyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimensTop20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/pretendardregular"
+                android:text="취소 사유"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/adminCancelCloseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:src="@drawable/close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/cancelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:fontFamily="@font/pretendardregular"
+                android:padding="5dp"
+                android:text="취소 사유 :"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adminCancelModifyTitle" />
+
+            <EditText
+                android:id="@+id/cancelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/dimens20dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/pretendardregular"
+                android:hint="내용을 입력하세요."
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cancelTitle"
+                app:layout_constraintTop_toBottomOf="@id/adminCancelModifyTitle" />
+
+            <Button
+                android:id="@+id/adminCancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/base_button_border"
+                android:text="완료"
+                android:textSize="@dimen/dimens14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cancelText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

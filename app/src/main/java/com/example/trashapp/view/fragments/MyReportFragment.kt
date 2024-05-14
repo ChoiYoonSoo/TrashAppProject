@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trashapp.R
@@ -43,6 +44,7 @@ class MyReportFragment : Fragment() {
 
         // 뒤로가기 버튼 클릭 시
         binding.myReportBackBtn.setOnClickListener {
+            viewModel.isReportSuccessFalse()
             parentFragmentManager.popBackStack()
         }
 
@@ -59,6 +61,24 @@ class MyReportFragment : Fragment() {
                     true
                 }
                 else -> false
+            }
+        }
+
+        // 나의 신고 내역 조회 에러에 따른 처리
+        viewModel.isReportSuccess.observe(viewLifecycleOwner){ isReportSuccess ->
+            if(isReportSuccess == true){
+                if(viewModel.reportError == "6"){
+                    Toast.makeText(context, "삭제에 실패했습니다. 잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else if(viewModel.reportError == "7"){
+                    Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else if(isReportSuccess == false){
+                Toast.makeText(context, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -135,6 +135,7 @@
         android:text="쓰레기통 관리"
         android:textAlignment="textStart"
         android:textSize="@dimen/dimens14sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
@@ -152,7 +153,7 @@
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingBinButton" />
+        app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
 
     <Button
         android:id="@+id/settingMyReportButton"

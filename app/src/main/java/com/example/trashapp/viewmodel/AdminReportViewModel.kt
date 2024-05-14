@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trashapp.network.model.CancelReport
 import com.example.trashapp.network.model.ModifyTrashcan
 import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.network.model.UserReportList
@@ -21,17 +22,30 @@ class AdminReportViewModel : ViewModel(){
     private val _isItemClicked = MutableLiveData<Boolean>()
     val isItemClicked: LiveData<Boolean> get() = _isItemClicked
 
+    private val _isCancelClicked = MutableLiveData<Boolean>()
+    val isCancelClicked: LiveData<Boolean> get() = _isCancelClicked
+
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess: LiveData<Boolean> get() = _isSuccess
 
     private val _isModify = MutableLiveData<Boolean?>()
     val isModify: LiveData<Boolean?> get() = _isModify
 
+    private val _isCancelSuccess = MutableLiveData<Boolean>()
+    val isCancelSuccess: LiveData<Boolean> get() = _isCancelSuccess
+
+    private val _isCancelApiSuccess = MutableLiveData<Boolean?>()
+    val isCancelApiSuccess: LiveData<Boolean?> get() = _isCancelApiSuccess
+
     var latitude : String = ""
     var longitude : String = ""
     var trashcanId : Long = 0
     var userId : Long = 0
     var reportId : Long = 0
+
+    var cancelTrashcanId : Long = 0
+    var cancelReportCategory : String = ""
+    var cancelText: String = ""
 
     fun findAllReportTrashcan() = viewModelScope.launch {
         try {
@@ -46,8 +60,8 @@ class AdminReportViewModel : ViewModel(){
     fun deleteTrashcan(reportTrashCan : ReportTrashCan) = viewModelScope.launch {
         try{
             val result = netWorkRepository.deleteTrashcan(reportTrashCan)
-            Log.d("모든 유저 신고 삭제 성공", result.toString())
             findAllReportTrashcan()
+            Log.d("모든 유저 신고 삭제 성공", result.toString())
         } catch (e: Exception) {
             Log.d("모든 유저 신고 삭제 실패","error : ${e.message}")
         }
@@ -65,6 +79,18 @@ class AdminReportViewModel : ViewModel(){
         }
     }
 
+    fun cancelReport(cancelReport: CancelReport) = viewModelScope.launch {
+        try {
+            val result = netWorkRepository.cancelReport(cancelReport)
+            Log.d("신고 사유 성공", result.toString())
+            findAllReportTrashcan()
+            _isCancelApiSuccess.postValue(true)
+        } catch (e: Exception) {
+            _isCancelApiSuccess.postValue(false)
+            Log.d("신고 사유 실패","error : ${e.message}")
+        }
+    }
+
     fun itemClicked(value : Boolean) {
         _isItemClicked.postValue(value)
     }
@@ -73,7 +99,19 @@ class AdminReportViewModel : ViewModel(){
         _isSuccess.postValue(value)
     }
 
+    fun isCancelSuccess(value: Boolean) {
+        _isCancelSuccess.postValue(value)
+    }
+
     fun isModify() {
         _isModify.postValue(null)
+    }
+
+    fun isCancelApiSuccess() {
+        _isCancelApiSuccess.postValue(null)
+    }
+
+    fun isCancelClicked(value: Boolean) {
+        _isCancelClicked.postValue(value)
     }
 }

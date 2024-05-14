@@ -5,6 +5,7 @@ data class MyReportList(
     val email: String,
     val trashcanId: Long,
     val reportCategory: String,
-    val modifyStatus: Boolean,
-    val detailAddress: String
+    val modifyStatus: Int,
+    val detailAddress: String,
+    val reasonReportCancel: String
 )

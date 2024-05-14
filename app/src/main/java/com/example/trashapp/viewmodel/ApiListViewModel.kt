@@ -13,6 +13,8 @@ import com.example.trashapp.network.model.Place
 import com.example.trashapp.network.model.ReportTrashCan
 import com.example.trashapp.repository.NetWorkRepository
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 class ApiListViewModel : ViewModel() {
 
@@ -41,6 +43,9 @@ class ApiListViewModel : ViewModel() {
 
     // 쓰레기통 id
     var id : Int = 0
+
+    // 신고 에러 종류
+    var reportError = ""
 
     // 신고 횟수
     var reportCount : Int = 0
@@ -126,12 +131,20 @@ class ApiListViewModel : ViewModel() {
     fun reportApi(reportTrashCan: ReportTrashCan, token: String) = viewModelScope.launch {
         Log.d("신고 API 호출로 필요한 파라미터 값 확인 : ","${reportTrashCan.trashcanId}, ${reportTrashCan.reportCategory}")
         try {
-            Log.d("신고 API 호출",  " 쓰레기통 아이디: ${reportTrashCan.trashcanId}, 카테고리 번호 : ${reportTrashCan.reportCategory}")
             val result = netWorkRepository.reportTrashcan(reportTrashCan , token)
+            Log.d("신고 API 호출",  " 쓰레기통 아이디: ${reportTrashCan.trashcanId}, 카테고리 번호 : ${reportTrashCan.reportCategory}")
             findReportCount(reportTrashCan.trashcanId.toInt())
-            Log.d("신고 API 호출 성공", result.toString())
+
+            if(result.isSuccessful){
+                reportError = result.body().toString()
+            }else{
+                reportError = result.errorBody()!!.string()
+            }
+
+            Log.d("신고 API 호출 성공 에러 메시지 종류 : ", reportError)
             _isReportSuccess.postValue(true)
         } catch (e: Exception) {
+            reportError = ""
             Log.e("신고 API 호출 실패", e.toString())
             _isReportSuccess.postValue(false)
         }

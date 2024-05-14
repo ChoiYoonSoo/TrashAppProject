@@ -8,9 +8,9 @@
         android:id="@+id/cameraBackBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="@dimen/dimensTop20dp"
         android:background="@android:color/transparent"
+        android:paddingLeft="@dimen/dimens20dp"
         android:src="@drawable/backarrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,6 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/dimensTop20dp"
             android:background="@drawable/map_search_border"
-            android:padding="10dp"
             android:visibility="gone">
 
             <ImageButton
@@ -80,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:padding="10dp"
                 android:src="@drawable/close"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -88,6 +88,7 @@
                 android:id="@+id/cameraImageContainer"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +110,7 @@
                 android:id="@+id/baseBin"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="@dimen/dimensTop20dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/category_button"
@@ -125,6 +127,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="@dimen/dimensTop20dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/category_button"
                 android:fontFamily="@font/pretendardregular"
                 android:text="일반/재활용 쓰레기통"
@@ -150,6 +153,7 @@
                 android:id="@+id/addressEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_margin="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edittext_background"
                 android:hint="대략적인 위치를 적어주세요."

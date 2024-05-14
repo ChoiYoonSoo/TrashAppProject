@@ -42,30 +42,52 @@
                 android:text="지도에 나온 위치와 다른 곳에 있어요"
                 android:textSize="@dimen/dimens12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/adminReportCreateBtn"
+                app:layout_constraintEnd_toStartOf="@id/adminReportBtnLayout"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/adminReportCreateBtn"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/adminReportBtnLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="수정"
                 android:paddingTop="@dimen/dimens20dp"
                 android:paddingRight="@dimen/dimens20dp"
                 android:paddingBottom="@dimen/dimens20dp"
-                android:textSize="@dimen/dimens12sp"
-                android:visibility="visible"
-                android:background="@android:color/transparent"
-                android:textColor="@color/baseGreen"
-                app:layout_constraintEnd_toStartOf="@id/adminReportDeleteBtn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/adminReportCancelBtn">
+
+                <TextView
+                    android:id="@+id/adminReportCreateBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수정"
+                    android:textSize="@dimen/dimens12sp"
+                    android:visibility="visible"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/baseGreen"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/adminReportDeleteBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="삭제"
+                    android:textSize="@dimen/dimens12sp"
+                    android:visibility="gone"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/red"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/adminReportDeleteBtn"
+                android:id="@+id/adminReportCancelBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/deleteText"
+                android:text="취소"
                 android:paddingTop="@dimen/dimens20dp"
                 android:paddingRight="@dimen/dimens20dp"
                 android:paddingBottom="@dimen/dimens20dp"

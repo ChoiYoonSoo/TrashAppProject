@@ -44,7 +44,7 @@ class LoginViewModel : ViewModel(){
             }
 
         }catch (e: Exception) {
-            Log.e("로그인 통신 ", "실패")
+            Log.e("로그인 통신 실패", e.toString())
             resetClear2()
             token = ""
             _isTokenSuccess.postValue(false)

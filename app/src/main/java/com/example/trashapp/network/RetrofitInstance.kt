@@ -9,8 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 // http://192.168.194.205:8080/ 학교 내부 ip
 // http://10.0.2.2:8080/ 가상 디바이스
 // http://192.168.0.16:8080/ 집 내부 ip
+// http://ec2-13-125-241-55.ap-northeast-2.compute.amazonaws.com:8080/
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.0.14:8080/"
+    private const val BASE_URL = "http://192.168.0.18:8080/"
 
     private val client = Retrofit
         .Builder()
@@ -30,6 +31,12 @@ object RetrofitInstance {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    private val yoloClient = Retrofit
+        .Builder()
+        .baseUrl("http://ec2-13-125-241-55.ap-northeast-2.compute.amazonaws.com:5000/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     fun getInstance(): Retrofit {
         return client
     }
@@ -38,6 +45,9 @@ object RetrofitInstance {
     }
     fun getTmapInstance(): Retrofit {
         return tmapClient
+    }
+    fun getYoloInstance(): Retrofit {
+        return yoloClient
     }
 
 }

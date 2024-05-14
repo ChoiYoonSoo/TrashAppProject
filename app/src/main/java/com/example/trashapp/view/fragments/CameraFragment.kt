@@ -72,7 +72,12 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.cameraImage.setImageResource(R.drawable.camera_loading)
+        val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
+        binding.cameraContainer.startAnimation(slideUpAnimation)
+
         buttonAnim()
+        cameraViewModel.resetIsYoloSuccess()
 
         // 뒤로가기 버튼 클릭 시
         binding.cameraBackBtn.setOnClickListener {
@@ -103,14 +108,21 @@ class CameraFragment : Fragment() {
         // 카메라 캡처 버튼 클릭 시
         binding.cameraCaptureBtn.setOnClickListener {
             cameraViewModel.category = null
-            binding.cameraImage.setImageResource(R.drawable.camera_loading)
-            val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
-            binding.cameraContainer.startAnimation(slideUpAnimation)
-            binding.cameraContainer.visibility = View.VISIBLE
-            binding.cameraCaptureBtn.visibility = View.GONE
-
+            binding.cameraProgressBar.visibility = View.VISIBLE
             (activity as? MainActivity)?.getLocation()
             takePhoto()
+        }
+
+        // 욜로 성공 여부
+        cameraViewModel.isYoloSuccess.observe(viewLifecycleOwner){
+            binding.cameraProgressBar.visibility = View.GONE
+            if(it == true){
+                binding.cameraContainer.visibility = View.VISIBLE
+                binding.cameraCaptureBtn.visibility = View.GONE
+            }
+            else if(it == false){
+                Toast.makeText(context, "쓰레기통을 정확히 찍어주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 재활용 쓰레기통 버튼 클릭 시
@@ -138,11 +150,19 @@ class CameraFragment : Fragment() {
             binding.baseBin.isSelected = false
             cameraViewModel.category = null
             if (it == true) {
-                Toast.makeText(context, "쓰레기통 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                cameraViewModel.resetIsSuccess()
-                parentFragmentManager.popBackStack()
+                if(cameraViewModel.newTrashcanError == "10"){
+                    Toast.makeText(context, "쓰레기통 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    cameraViewModel.resetIsSuccess()
+                    parentFragmentManager.popBackStack()
+                }
+                else{
+                    Toast.makeText(context, "이미 등록되어 있는 쓰레기통입니다.", Toast.LENGTH_SHORT).show()
+                    cameraViewModel.resetIsSuccess()
+                    parentFragmentManager.popBackStack()
+                }
+
             } else if(it == false) {
-                Toast.makeText(context, "이미 신고되어 있는 지역입니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 cameraViewModel.resetIsSuccess()
             }
         }
@@ -253,6 +273,7 @@ class CameraFragment : Fragment() {
                         cameraViewModel.image =
                             MultipartBody.Part.createFormData("image", it.name, requestFile)
                         Log.d("MultipartBody.Part 생성", "성공 ${cameraViewModel.image}")
+                        cameraViewModel.imageYolo(cameraViewModel.image!!)
 
                     }
                 }

@@ -28,10 +28,12 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -98,6 +100,14 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        // 뒤로가기 버튼 동작을 제어하는 콜백 등록
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 뒤로가기 버튼 동작을 막음
+            }
+        })
+
         binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -110,10 +120,20 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 신고 성공 변화 감지
         viewModel.isReportSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess == true) {
-                Toast.makeText(context, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                when (viewModel.reportError) {
+                    "5" -> {
+                        Toast.makeText(context, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    "3" -> {
+                        Toast.makeText(context, "신고는 1분에 1번만 가능합니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    "4" -> {
+                        Toast.makeText(context, "목록당 1번의 신고만 가능합니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 viewModel.resetReportSuccess()
             } else if(isSuccess == false) {
-                Toast.makeText(context, "신고는 1분에 1번만 가능합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 viewModel.resetReportSuccess()
             }
         }
@@ -362,6 +382,10 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             }
             removeList.clear()
         }
+
+        if(markerList.isNotEmpty()){
+            markerList.clear()
+        }
     }
 
     // 지도 마커 띄우기
@@ -424,9 +448,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     }
 
     // 마커 위치를 기준으로 원을 생성하고 지도에 추가하는 함수
-    private fun addCirclesAroundMarkers(mapView: MapView, markers: List<MapPOIItem>, radius: Int) {
+    private fun addCirclesAroundMarkers(mapView: MapView, markers: List<MapPOIItem>?, radius: Int) {
         mapView.removeAllCircles()
-        markers.forEachIndexed { index, marker ->
+        markers?.forEachIndexed { index, marker ->
             // 마커의 위치를 가져옵니다.
             val markerPoint = marker.mapPoint
 
@@ -621,6 +645,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         // 마지막 이동 위치가 있을 경우 해당 위치부터 지도 시작
         lastMapPoint?.let { point ->
             mapView.setMapCenterPoint(point, true)
+            removeMark()
+            getCurrentMapBounds()
             Log.d("시작위치", point.toString())
         }
     }
@@ -685,8 +711,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
 
         // 신고 할 때 필요한 쓰레기통 ID
-        val id = p1?.userObject as MapData
-        viewModel.id = id.id
+        val id = p1?.userObject as? MapData
+        if(id != null){
+            viewModel.id = id.id
+        }
+        else{
+            Log.d("맵데이터 아직 로드 안됨", "실패")
+        }
 
         // 신고 횟수 API 호출
         viewModel.findReportCount(viewModel.id)

@@ -3,6 +3,7 @@ package com.example.trashapp.network
 import com.example.trashapp.data.ApiValue
 import com.example.trashapp.data.SignUp
 import com.example.trashapp.data.TmapApiRequest
+import com.example.trashapp.network.model.CancelReport
 import com.example.trashapp.network.model.EmailAuth
 import com.example.trashapp.network.model.GpsList
 import com.example.trashapp.network.model.ModifyTrashcan
@@ -75,18 +76,18 @@ interface API {
     suspend fun getEmailAuth(@Body emailAuth: EmailAuth)
 
     @Multipart
-    @POST("newTrashcan")
+    @POST("registerTrashcan")
     suspend fun newTrashcan(
         @Header("Authorization") token: String,
         @Part("RegisterTrashcanDTO") location: RequestBody,
         @Part image: MultipartBody.Part
-    )
+    ) : Response<String>
     
     @POST("findReportCount")
     suspend fun findReportCount(@Body trashcanId: Long) : Int
 
     @POST("reportTrashcan")
-    suspend fun reportTrashcan(@Body reportTrashcan : ReportTrashCan, @Header("Authorization") token : String)
+    suspend fun reportTrashcan(@Body reportTrashcan : ReportTrashCan, @Header("Authorization") token : String) : Response<String>
 
     @GET("findAllUnknownTrashcans")
     suspend fun findAllUnknownTrashcans() : List<UnknownTrashcan>
@@ -107,5 +108,12 @@ interface API {
     suspend fun myReportTrashcans(@Header("Authorization") token : String) : List<MyReportList>
 
     @POST("deleteReportTrashcan")
-    suspend fun deleteReportTrashcan(@Body reportTrashcan: ReportTrashCan, @Header("Authorization") token : String)
+    suspend fun deleteReportTrashcan(@Body reportTrashcan: ReportTrashCan, @Header("Authorization") token : String) : Response<String>
+
+    @Multipart
+    @POST("detect")
+    suspend fun imageYolo(@Part image: MultipartBody.Part)
+
+    @POST("cancelReport")
+    suspend fun cancelReport(@Body cancelReport: CancelReport)
 }
