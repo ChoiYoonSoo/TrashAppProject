@@ -97,12 +97,11 @@
         android:id="@+id/unSubText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimens16dp"
+        android:layout_margin="20dp"
         android:fontFamily="@font/pretendardregular"
-        android:text="회원 탈퇴 후에는 1개월 간 동일한 계정으로 재가입이 불가능하며, 복구는 어떠한 경우에도 불가능합니다."
+        android:text="회원 탈퇴 후에는 1개월 간 동일한 계정으로 재가입이 불가능하며,\n복구는 어떠한 경우에도 불가능합니다."
         android:textColor="@color/grey"
         android:textSize="@dimen/dimens12sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/unSubText3" />
 

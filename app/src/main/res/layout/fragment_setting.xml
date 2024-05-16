@@ -117,6 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimens20dp"
         android:layout_marginTop="30dp"
+        android:visibility="visible"
         android:fontFamily="@font/pretendardregular"
         android:text="신고"
         android:textColor="@color/baseGreen"

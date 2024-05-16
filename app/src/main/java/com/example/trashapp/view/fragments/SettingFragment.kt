@@ -68,9 +68,17 @@ class SettingFragment : Fragment() {
             val userToken = userTokenViewModel.getToken().toString()
             userInfoViewModel.getUserInfo(userToken)
             binding.settingLoginOrout.text = getString(R.string.logoutText)
+            binding.settingPrivacyTitle.visibility = View.VISIBLE
+            binding.settingReportContainer.visibility = View.VISIBLE
+            binding.settingOtherTitle.visibility = View.VISIBLE
+            binding.settingUnSubButton.visibility = View.VISIBLE
         }else{
             binding.settingLoginOrout.text = getString(R.string.loginText)
             binding.settingEditMyInfo.visibility = View.GONE
+            binding.settingPrivacyTitle.visibility = View.GONE
+            binding.settingReportContainer.visibility = View.GONE
+            binding.settingOtherTitle.visibility = View.GONE
+            binding.settingUnSubButton.visibility = View.GONE
             Log.d("유저 토큰 ","없음")
         }
 
@@ -125,7 +133,8 @@ class SettingFragment : Fragment() {
 
         // 탈퇴하기 버튼
         binding.settingUnSubButton.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
+//            Navigation.findNavController(view).navigate(R.id.action_settingFragment_to_unsubFragment)
+            Log.d("탈퇴하기 버튼","클릭")
         }
 
         binding.settingEmailButton.setOnClickListener{
