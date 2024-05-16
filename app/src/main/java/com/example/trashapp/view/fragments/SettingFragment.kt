@@ -81,6 +81,16 @@ class SettingFragment : Fragment() {
         userInfoViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.settingNickName.text = nickname
         }
+        userInfoViewModel.roleType.observe(viewLifecycleOwner) { roleType ->
+            if(roleType == "admin"){
+                binding.settingReportButton.visibility = View.VISIBLE
+                binding.settingMyReportButton.visibility = View.GONE
+            }
+            else{
+                binding.settingReportButton.visibility = View.GONE
+                binding.settingMyReportButton.visibility = View.VISIBLE
+            }
+        }
 
         // 로그인 or 로그아웃 클릭 시
         binding.settingLoginOrout.setOnClickListener {

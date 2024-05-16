@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // http://192.168.0.16:8080/ 집 내부 ip
 // http://ec2-13-125-241-55.ap-northeast-2.compute.amazonaws.com:8080/
 object RetrofitInstance {
-    private const val BASE_URL = "http://192.168.0.18:8080/"
+    private const val BASE_URL = "https://api.have-bin.com"
 
     private val client = Retrofit
         .Builder()

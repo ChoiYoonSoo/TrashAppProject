@@ -140,35 +140,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
 
-    <Button
-        android:id="@+id/settingReportButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingReportContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:background="@android:color/transparent"
-        android:drawableEnd="@drawable/next_button"
-        android:fontFamily="@font/pretendardregular"
-        android:text="사용자 신고 목록"
-        android:textAlignment="textStart"
-        android:textSize="@dimen/dimens14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/settingPrivacyTitle">
 
-    <Button
-        android:id="@+id/settingMyReportButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:background="@android:color/transparent"
-        android:drawableEnd="@drawable/next_button"
-        android:fontFamily="@font/pretendardregular"
-        android:text="나의 신고 내역"
-        android:textAlignment="textStart"
-        android:textSize="@dimen/dimens14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingReportButton" />
+        <Button
+            android:id="@+id/settingReportButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/next_button"
+            android:fontFamily="@font/pretendardregular"
+            android:text="사용자 신고 목록"
+            android:visibility="gone"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/dimens14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Button
+            android:id="@+id/settingMyReportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/next_button"
+            android:fontFamily="@font/pretendardregular"
+            android:text="나의 신고 내역"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/dimens14sp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:visibility="gone"
@@ -213,7 +227,7 @@
         android:textColor="@color/baseGreen"
         android:textSize="@dimen/dimens14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingMyReportButton" />
+        app:layout_constraintTop_toBottomOf="@+id/settingReportContainer" />
 
     <Button
         android:id="@+id/settingContactButton"

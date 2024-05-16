@@ -19,6 +19,9 @@ class UserInfoViewModel : ViewModel() {
     private val _nickname = MutableLiveData<String?>()
     val nickname : LiveData<String?> = _nickname
 
+    private val _roleType = MutableLiveData<String?>()
+    val roleType : LiveData<String?> = _roleType
+
     private val _profileImgPath = MutableLiveData<String?>()
     var profileImgPath : LiveData<String?> = _profileImgPath
 
@@ -27,10 +30,12 @@ class UserInfoViewModel : ViewModel() {
             val user = netWorkRepository.getUserdata(token)
             Log.d("이메일", user.email)
             Log.d("닉네임", user.nickname)
+            Log.d("역할", user.roleType)
             Log.d("프로필 이미지", user.profileImgPath.toString())
 
             _email.postValue(user.email)
             _nickname.postValue(user.nickname)
+            _roleType.postValue(user.roleType)
 
             if(user.profileImgPath == null){
                 _profileImgPath.postValue("")
