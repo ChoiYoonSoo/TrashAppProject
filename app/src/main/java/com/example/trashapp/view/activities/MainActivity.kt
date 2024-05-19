@@ -31,6 +31,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.jakewharton.threetenabp.AndroidThreeTen
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private var permissionDialog: AlertDialog? = null
 
     private var isOnResume = false
+
+    private var count = 0
 
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -128,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
     // 위치 업데이트 중지
     fun stopLocationUpdates() {
-        Log.d("3초간 위치 업데이트 정지 stopLocationUpdates","중지")
+        Log.d("3초간 위치 업데이트 정지 stopLocationUpdates", "중지")
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
@@ -151,7 +154,6 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             for (location in p0.locations) {
@@ -166,6 +168,50 @@ class MainActivity : AppCompatActivity() {
                 Log.d("---GPS---", "위치 정보 사용 불가")
             }
         }
+    }
+
+    // 카메라 캡처 위치 업데이트 시작
+    @SuppressLint("MissingPermission")
+    fun cameraStartLocationUpdates() {
+        count = 0
+        Log.d("0.5초간 위치 업데이트 cameraStartLocationUpdates","실행")
+        permissionDialog?.dismiss()
+//        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY,500L) // 배터리 소모와 위치 정확도 균형 맞춤 업데이트 간격을 0.5초로 설정
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,500L) // 정확도 최상 업데이트 간격을 0.5초로 설정
+            .setMinUpdateIntervalMillis(500L) // 업데이트 간격 최소 0.5초
+            .setMaxUpdateDelayMillis(500L)
+            .build()
+
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, cameraLocationCallback, Looper.getMainLooper())
+    }
+
+    // 카메라 캡처 위치 업데이트 콜백 함수
+    private val cameraLocationCallback = object : LocationCallback() {
+
+        override fun onLocationResult(p0: LocationResult) {
+            for (location in p0.locations) {
+                currentGpsViewModel.currentGpsList(location.latitude, location.longitude)
+            }
+            count++
+            if(count >= 5){
+                stopLocationUpdates2()
+                count = 0
+            }
+        }
+
+        override fun onLocationAvailability(p0: LocationAvailability) {
+            super.onLocationAvailability(p0)
+            if (p0?.isLocationAvailable == false) {
+                Log.d("---GPS---", "위치 정보 사용 불가")
+            }
+        }
+    }
+
+    fun stopLocationUpdates2() {
+        Log.d("카메라 위치 업데이트","중지")
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient.removeLocationUpdates(cameraLocationCallback)
     }
 
     override fun onResume() {

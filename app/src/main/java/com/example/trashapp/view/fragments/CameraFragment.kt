@@ -32,6 +32,10 @@ import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.CameraViewModel
 import com.example.trashapp.viewmodel.CurrentGpsViewModel
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -107,9 +111,10 @@ class CameraFragment : Fragment() {
 
         // 카메라 캡처 버튼 클릭 시
         binding.cameraCaptureBtn.setOnClickListener {
+            currentGpsViewModel.resetCurrentLocationList()
             cameraViewModel.category = null
             binding.cameraProgressBar.visibility = View.VISIBLE
-            (activity as? MainActivity)?.getLocation()
+            (activity as? MainActivity)?.cameraStartLocationUpdates()
             takePhoto()
         }
 
@@ -144,6 +149,7 @@ class CameraFragment : Fragment() {
 
         // 쓰레기통 통신 성공 여부
         cameraViewModel.isSuccess.observe(viewLifecycleOwner) {
+            currentGpsViewModel.resetCurrentLocationList()
             binding.cameraProgressBar.visibility = View.GONE
             binding.addressEditText.setText("")
             binding.recyclingBin.isSelected = false
@@ -173,19 +179,44 @@ class CameraFragment : Fragment() {
                 Toast.makeText(context, "쓰레기통 종류를 선택해주세요", Toast.LENGTH_SHORT).show()
             } else if (cameraViewModel.addressEditText == "") {
                 Toast.makeText(context, "위치를 입력해주세요", Toast.LENGTH_SHORT).show()
+            }else if(currentGpsViewModel.currentLocationList.size  == 0){
+                Toast.makeText(context, "위치정보를 불러오고 있습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 binding.cameraProgressBar.visibility = View.VISIBLE
                 Log.d(
                     "쓰레기통 등록 버튼 클릭",
                     "위도 : ${cameraViewModel.currentLatitude}, 경도 : ${cameraViewModel.currentLongitude})), 토큰 : ${cameraViewModel.token}"
                 )
+                (activity as? MainActivity)?.stopLocationUpdates2()
+
+                if(currentGpsViewModel.currentLocationList.size == 1){
+                    for (i in 0..3){
+                        currentGpsViewModel.currentGpsList(currentGpsViewModel.currentLocationList[0].latitude, currentGpsViewModel.currentLocationList[0].longitude)
+                    }
+                }
+                else if(currentGpsViewModel.currentLocationList.size == 2){
+                    for (i in 0..2){
+                        currentGpsViewModel.currentGpsList(currentGpsViewModel.currentLocationList[i].latitude, currentGpsViewModel.currentLocationList[i].longitude)
+                    }
+                }
+                else if(currentGpsViewModel.currentLocationList.size == 3){
+                    for (i in 0..1){
+                        currentGpsViewModel.currentGpsList(currentGpsViewModel.currentLocationList[i].latitude, currentGpsViewModel.currentLocationList[i].longitude)
+                    }
+                }
+                else if(currentGpsViewModel.currentLocationList.size == 4){
+                    currentGpsViewModel.currentGpsList(currentGpsViewModel.currentLocationList[0].latitude, currentGpsViewModel.currentLocationList[0].longitude)
+                }
+
+                for(currentGps in currentGpsViewModel.currentLocationList){
+                    Log.d("5개의 위도 경도 확인", "위도 : ${currentGps.latitude}, 경도 : ${currentGps.longitude}, 사이즈 : ${currentGpsViewModel.currentLocationList.size}")
+                }
+
                 var location = TrashcanLocation(
-                    cameraViewModel.currentLatitude!!,
-                    cameraViewModel.currentLongitude!!,
+                    currentGpsViewModel.currentLocationList,
                     cameraViewModel.category!!,
                     cameraViewModel.addressEditText!!
                 )
-                Log.d("쓰레기통을 등록합니다.", "위도 : ${location.latitude} 경도 : ${location.longitude} 주소 : ${location.detailAddress} 종류 : ${location.categories}")
                 val locationRequestBody = location.toJsonRequestBody()
                 cameraViewModel.newTrashcan(
                     cameraViewModel.token!!,

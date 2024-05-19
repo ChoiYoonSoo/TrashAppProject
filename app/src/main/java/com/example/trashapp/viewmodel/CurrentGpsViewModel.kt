@@ -1,9 +1,11 @@
 package com.example.trashapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trashapp.data.Coordinate
 import com.example.trashapp.data.Location
 import kotlinx.coroutines.launch
 
@@ -16,6 +18,8 @@ class CurrentGpsViewModel : ViewModel() {
     private val _currentLocation = MutableLiveData<Location>()
 
     var currentLocation: LiveData<Location> = _currentLocation
+
+    var currentLocationList: MutableList<Coordinate> = mutableListOf()
 
     var location : Location? = null
 
@@ -35,7 +39,17 @@ class CurrentGpsViewModel : ViewModel() {
         _currentLocation.postValue(location)
     }
 
+    fun currentGpsList(latitude: Double, longitude: Double) {
+        Log.d("5번 업데이트 실행", "$latitude, $longitude")
+        val location = Coordinate(latitude, longitude)
+        currentLocationList.add(location)
+    }
+
     fun setGpsEnabled(isEnabled: Boolean) = viewModelScope.launch {
         isGpsEnabled.postValue(isEnabled)
+    }
+
+    fun resetCurrentLocationList(){
+        currentLocationList.clear()
     }
 }
