@@ -697,7 +697,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         lastMapPoint = p1
-        Log.d("마지막 위치", lastMapPoint.toString())
+        Log.d("마지막 위치", lastMapPoint!!.mapPointGeoCoord.toString() + lastMapPoint!!.mapPointGeoCoord.toString())
 
         // 첫 지도 로딩 시에만 현재 범위의 쓰레기통 데이터를 가져옴
         if(!currentGpsViewModel.isMapPoint){
@@ -724,6 +724,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
 
         isEnable = false
         currentGpsViewModel.setGpsEnabled(isEnable)
+        binding.gpsBtn.setImageResource(R.drawable.gps)
 
         if (p1?.tag == 1001) {
             return

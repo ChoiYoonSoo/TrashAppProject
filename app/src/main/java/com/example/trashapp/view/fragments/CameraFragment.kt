@@ -32,10 +32,6 @@ import com.example.trashapp.view.activities.MainActivity
 import com.example.trashapp.viewmodel.CameraViewModel
 import com.example.trashapp.viewmodel.CurrentGpsViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -76,6 +72,8 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.cameraContainer.visibility = View.GONE
+
         binding.cameraImage.setImageResource(R.drawable.camera_loading)
         val slideUpAnimation = AnimationUtils.loadAnimation(context, R.anim.camera_slide_up)
         binding.cameraContainer.startAnimation(slideUpAnimation)
@@ -85,11 +83,13 @@ class CameraFragment : Fragment() {
 
         // 뒤로가기 버튼 클릭 시
         binding.cameraBackBtn.setOnClickListener {
+            (activity as? MainActivity)?.stopLocationUpdates2()
             parentFragmentManager.popBackStack()
         }
 
         // 카메라 닫기 버튼 클릭 시
         binding.cameraCloseBtn.setOnClickListener {
+            (activity as? MainActivity)?.stopLocationUpdates2()
             binding.cameraContainer.visibility = View.GONE
             binding.cameraCaptureBtn.visibility = View.VISIBLE
             binding.addressText.text = ""
@@ -114,6 +114,7 @@ class CameraFragment : Fragment() {
             currentGpsViewModel.resetCurrentLocationList()
             cameraViewModel.category = null
             binding.cameraProgressBar.visibility = View.VISIBLE
+            binding.cameraCaptureBtn.visibility = View.GONE
             (activity as? MainActivity)?.cameraStartLocationUpdates()
             takePhoto()
         }
@@ -121,11 +122,13 @@ class CameraFragment : Fragment() {
         // 욜로 성공 여부
         cameraViewModel.isYoloSuccess.observe(viewLifecycleOwner){
             binding.cameraProgressBar.visibility = View.GONE
+            binding.cameraCaptureBtn.visibility = View.VISIBLE
             if(it == true){
                 binding.cameraContainer.visibility = View.VISIBLE
                 binding.cameraCaptureBtn.visibility = View.GONE
             }
             else if(it == false){
+                (activity as? MainActivity)?.stopLocationUpdates2()
                 Toast.makeText(context, "쓰레기통을 정확히 찍어주세요.", Toast.LENGTH_SHORT).show()
             }
         }
