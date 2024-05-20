@@ -33,7 +33,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -269,6 +268,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             if (mapData.isNotEmpty()) {
                 Log.d("맵데이터 들어옴", mapData.toString())
                 setMark(mapData)
+            }
+            else{
+                Log.d("맵데이터 없음", "실패")
             }
         }
 
