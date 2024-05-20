@@ -171,8 +171,15 @@ class CameraFragment : Fragment() {
                 }
 
             } else if(it == false) {
-                Toast.makeText(context, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                (activity as? MainActivity)?.stopLocationUpdates2()
                 cameraViewModel.resetIsSuccess()
+                binding.cameraContainer.visibility = View.GONE
+                binding.cameraCaptureBtn.visibility = View.VISIBLE
+                binding.addressText.text = ""
+                binding.addressEditText.setText("")
+                binding.recyclingBin.isSelected = false
+                binding.baseBin.isSelected = false
             }
         }
 
