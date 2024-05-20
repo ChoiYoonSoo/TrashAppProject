@@ -94,7 +94,9 @@
                     android:layout_height="350dp"
                     android:layout_margin="10dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@drawable/base_button_border"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cameraCloseBtn">
 
@@ -110,35 +112,48 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <TextView
+                    android:id="@+id/categoryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimensTop20dp"
+                    android:fontFamily="@font/pretendardregular"
+                    android:text="종류"
+                    android:textColor="@color/baseGreen"
+                    android:textSize="@dimen/dimens16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cameraImageContainer" />
+
                 <Button
                     android:id="@+id/baseBin"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="@dimen/dimensTop20dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/category_button"
                     android:fontFamily="@font/pretendardregular"
                     android:text="일반 쓰레기통"
                     android:textSize="@dimen/dimens14sp"
                     app:layout_constraintEnd_toStartOf="@id/recyclingBin"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cameraImageContainer" />
+                    app:layout_constraintTop_toBottomOf="@id/categoryText" />
 
                 <Button
                     android:id="@+id/recyclingBin"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="@dimen/dimensTop20dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/category_button"
                     android:fontFamily="@font/pretendardregular"
                     android:text="일반/재활용 쓰레기통"
                     android:textSize="@dimen/dimens14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/baseBin"
-                    app:layout_constraintTop_toBottomOf="@id/cameraImageContainer" />
+                    app:layout_constraintTop_toBottomOf="@id/categoryText" />
 
                 <TextView
                     android:id="@+id/addressText"
@@ -147,7 +162,7 @@
                     android:layout_margin="@dimen/dimensTop20dp"
                     android:fontFamily="@font/pretendardregular"
                     android:text="세부 위치"
-                    android:textColor="@color/black"
+                    android:textColor="@color/baseGreen"
                     android:textSize="@dimen/dimens16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

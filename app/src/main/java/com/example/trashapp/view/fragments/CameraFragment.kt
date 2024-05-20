@@ -10,9 +10,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Rational
+import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -21,6 +24,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.ViewPort
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -38,6 +42,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -92,7 +97,6 @@ class CameraFragment : Fragment() {
             (activity as? MainActivity)?.stopLocationUpdates2()
             binding.cameraContainer.visibility = View.GONE
             binding.cameraCaptureBtn.visibility = View.VISIBLE
-            binding.addressText.text = ""
             binding.addressEditText.setText("")
             binding.recyclingBin.isSelected = false
             binding.baseBin.isSelected = false
@@ -176,7 +180,6 @@ class CameraFragment : Fragment() {
                 cameraViewModel.resetIsSuccess()
                 binding.cameraContainer.visibility = View.GONE
                 binding.cameraCaptureBtn.visibility = View.VISIBLE
-                binding.addressText.text = ""
                 binding.addressEditText.setText("")
                 binding.recyclingBin.isSelected = false
                 binding.baseBin.isSelected = false

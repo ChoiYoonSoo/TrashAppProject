@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // http://192.168.0.16:8080/ 집 내부 ip
 // https://api.have-bin.com/  서버
 object RetrofitInstance {
-    private const val BASE_URL = "http://172.30.148.215:8080/"
+    private const val BASE_URL = "https://api.have-bin.com/"
 
     private val client = Retrofit
         .Builder()

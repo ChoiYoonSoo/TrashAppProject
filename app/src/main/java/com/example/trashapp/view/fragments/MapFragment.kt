@@ -115,6 +115,56 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentGpsViewModel.lastLocation.observe(viewLifecycleOwner) { location ->
+            Log.d("currentGps!!!", "${location.latitude}, ${location.longitude}")
+
+            // 기존 마커 제거
+            mapView.findPOIItemByTag(1001)?.let {
+                mapView.removePOIItem(it)
+            }
+
+            var marker = MapPOIItem()
+            marker.apply {
+                itemName = "현재 위치"
+                mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
+                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
+                markerType = MapPOIItem.MarkerType.CustomImage
+                isShowCalloutBalloonOnTouch = false
+                tag = 1001
+            }
+            mapView.addPOIItem(marker)
+        }
+
+        currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
+            binding.loadingContainer.visibility = View.GONE
+            binding.createBinBtn.visibility = View.VISIBLE
+            binding.gpsBtn.visibility = View.VISIBLE
+
+            // 기존 마커 제거
+            mapView.findPOIItemByTag(1001)?.let {
+                mapView.removePOIItem(it)
+            }
+
+            Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
+            mapView.setMapCenterPoint(
+                MapPoint.mapPointWithGeoCoord(
+                    location.latitude,
+                    location.longitude
+                ), true
+            )
+
+            var marker = MapPOIItem()
+            marker.apply {
+                itemName = "현재 위치"
+                mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
+                customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
+                markerType = MapPOIItem.MarkerType.CustomImage
+                isShowCalloutBalloonOnTouch = false
+                tag = 1001
+            }
+            mapView.addPOIItem(marker)
+        }
+
         buttonAnim()
 
         // 신고 성공 변화 감지
@@ -592,55 +642,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     // MapViewEventListener
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d("맵뷰초기화", "ok")
-            currentGpsViewModel.lastLocation.observe(viewLifecycleOwner) { location ->
-                Log.d("currentGps!!!", "${location.latitude}, ${location.longitude}")
-
-                // 기존 마커 제거
-                mapView.findPOIItemByTag(1001)?.let {
-                    mapView.removePOIItem(it)
-                }
-
-                var marker = MapPOIItem()
-                marker.apply {
-                    itemName = "현재 위치"
-                    mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
-                    customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
-                    markerType = MapPOIItem.MarkerType.CustomImage
-                    isShowCalloutBalloonOnTouch = false
-                    tag = 1001
-                }
-                mapView.addPOIItem(marker)
-            }
-
-            currentGpsViewModel.currentLocation.observe(viewLifecycleOwner) { location ->
-                binding.loadingContainer.visibility = View.GONE
-                binding.createBinBtn.visibility = View.VISIBLE
-                binding.gpsBtn.visibility = View.VISIBLE
-
-                // 기존 마커 제거
-                mapView.findPOIItemByTag(1001)?.let {
-                    mapView.removePOIItem(it)
-                }
-
-                Log.d("처음실행위치!!!", "${location.latitude}, ${location.longitude}")
-                mapView.setMapCenterPoint(
-                    MapPoint.mapPointWithGeoCoord(
-                        location.latitude,
-                        location.longitude
-                    ), true
-                )
-
-                var marker = MapPOIItem()
-                marker.apply {
-                    itemName = "현재 위치"
-                    mapPoint = MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude)
-                    customImageBitmap = getBitmapFromVectorDrawable(R.drawable.current_gps)
-                    markerType = MapPOIItem.MarkerType.CustomImage
-                    isShowCalloutBalloonOnTouch = false
-                    tag = 1001
-                }
-                mapView.addPOIItem(marker)
-            }
 
         // 마지막 이동 위치가 있을 경우 해당 위치부터 지도 시작
         lastMapPoint?.let { point ->
@@ -649,6 +650,7 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             getCurrentMapBounds()
             Log.d("시작위치", point.toString())
         }
+
     }
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
