@@ -8,136 +8,169 @@
     tools:context=".view.fragments.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loginContainer1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimens40dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loginContainer1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimens40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- 뒤로가기 버튼 -->
+            <ImageButton
+                android:id="@+id/loginBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="back"
+                android:paddingLeft="@dimen/dimens20dp"
+                android:paddingRight="20dp"
+                android:src="@drawable/backarrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 로그인 텍스트 -->
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gmarketsansttfmedium"
+                android:text="로그인"
+                android:textColor="@color/black"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textSize="@dimen/dimens16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 이메일 입력 필드 -->
+        <EditText
+            android:id="@+id/loginEmailText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:layout_marginTop="@dimen/dimens35dp"
+            android:background="@drawable/edittext_background"
+            android:fontFamily="@font/pretendardregular"
+            android:hint="이메일 입력"
+            android:paddingLeft="10dp"
+            android:textSize="@dimen/dimens16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginContainer1" />
+
+        <TextView
+            android:id="@+id/validateEmailErrorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:text="이메일 형식이 올바르지 않습니다."
+            android:textColor="@color/red"
+            android:textSize="@dimen/dimens12sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginEmailText" />
+
+
+        <!-- 비밀번호 입력 필드 -->
+        <EditText
+            android:id="@+id/loginPasswordText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:layout_marginTop="@dimen/dimens27dp"
+            android:background="@drawable/edittext_background"
+            android:fontFamily="@font/pretendardregular"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="@dimen/dimens16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginEmailText" />
+
+        <!-- 로그인 버튼 -->
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:layout_marginTop="@dimen/dimens35dp"
+            android:background="@drawable/button_background"
+            android:enabled="false"
+            android:fontFamily="@font/pretendardregular"
+            android:text="로그인"
+            android:textColor="@color/button_text_color"
+            android:textSize="@dimen/dimens16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginPasswordText" />
+
+        <!-- 아이디/비밀번호 찾기 텍스트 -->
+        <TextView
+            android:id="@+id/loginFindAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimens27dp"
+            android:fontFamily="@font/pretendardregular"
+            android:text="아이디/비밀번호 찾기"
+            android:textSize="@dimen/dimens12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+
+        <!-- 회원가입 버튼 -->
+        <Button
+            android:id="@+id/loginSignUpBtn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens40dp"
+            android:layout_marginLeft="@dimen/dimens20dp"
+            android:layout_marginTop="@dimen/dimens27dp"
+            android:background="@drawable/edittext_background"
+            android:fontFamily="@font/pretendardregular"
+            android:text="회원가입"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/dimens16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginFindAccount" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- 뒤로가기 버튼 -->
-        <ImageButton
-            android:id="@+id/loginBackButton"
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="back"
-            android:paddingLeft="@dimen/dimens20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/backarrow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- 로그인 텍스트 -->
-        <TextView
-            android:id="@+id/loginTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/gmarketsansttfmedium"
-            android:text="로그인"
-            android:textColor="@color/black"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textSize="@dimen/dimens16sp"
+            android:indeterminateTint="@color/baseGreen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- 이메일 입력 필드 -->
-    <EditText
-        android:id="@+id/loginEmailText"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimens40dp"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:layout_marginTop="@dimen/dimens35dp"
-        android:background="@drawable/edittext_background"
-        android:fontFamily="@font/pretendardregular"
-        android:hint="이메일 입력"
-        android:paddingLeft="10dp"
-        android:textSize="@dimen/dimens16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginContainer1" />
-
-    <TextView
-        android:id="@+id/validateEmailErrorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:text="이메일 형식이 올바르지 않습니다."
-        android:textColor="@color/red"
-        android:textSize="@dimen/dimens12sp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginEmailText" />
-
-
-    <!-- 비밀번호 입력 필드 -->
-    <EditText
-        android:id="@+id/loginPasswordText"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimens40dp"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:layout_marginTop="@dimen/dimens27dp"
-        android:background="@drawable/edittext_background"
-        android:fontFamily="@font/pretendardregular"
-        android:hint="비밀번호"
-        android:inputType="textPassword"
-        android:paddingLeft="10dp"
-        android:textSize="@dimen/dimens16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginEmailText" />
-
-    <!-- 로그인 버튼 -->
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimens40dp"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:layout_marginTop="@dimen/dimens35dp"
-        android:background="@drawable/button_background"
-        android:enabled="false"
-        android:fontFamily="@font/pretendardregular"
-        android:text="로그인"
-        android:textColor="@color/button_text_color"
-        android:textSize="@dimen/dimens16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPasswordText" />
-
-    <!-- 아이디/비밀번호 찾기 텍스트 -->
-    <TextView
-        android:id="@+id/loginFindAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimens27dp"
-        android:fontFamily="@font/pretendardregular"
-        android:text="아이디/비밀번호 찾기"
-        android:textSize="@dimen/dimens12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
-
-    <!-- 회원가입 버튼 -->
-    <Button
-        android:id="@+id/loginSignUpBtn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimens40dp"
-        android:layout_marginLeft="@dimen/dimens20dp"
-        android:layout_marginTop="@dimen/dimens27dp"
-        android:background="@drawable/edittext_background"
-        android:fontFamily="@font/pretendardregular"
-        android:text="회원가입"
-        android:textColor="@color/grey"
-        android:textSize="@dimen/dimens16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginFindAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

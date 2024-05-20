@@ -77,6 +77,7 @@ class LoginFragment : Fragment() {
 
         // 로그인 성공하여 토큰값이 변경되었을 때
         loginViewModel.isTokenSuccess.observe(viewLifecycleOwner) { isTokenSuccess ->
+            binding.loginProgressBar.visibility = View.GONE
             // token 값이 변경되면, 그 값이 빈 문자열이 아닐 때 SharedPreferences에 저장
             if (isTokenSuccess == true) {
                 loginViewModel.resetClear()
@@ -99,6 +100,7 @@ class LoginFragment : Fragment() {
 
         // 로그인 버튼 및 유저 토큰값 SharedPreferences에 저장
         binding.loginBtn.setOnClickListener {
+            binding.loginProgressBar.visibility = View.VISIBLE
             Log.d("login email : ", loginViewModel.email)
             Log.d("login password : ", loginViewModel.password)
 
