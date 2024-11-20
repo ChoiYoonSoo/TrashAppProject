@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 // http://192.168.0.16:8080/ 집 내부 ip
 // https://api.have-bin.com/  서버
 object RetrofitInstance {
-    private const val BASE_URL = "https://api.have-bin.com/"
+    private const val BASE_URL = "http://121.133.3.6:8080/api/"
 
     private val client = Retrofit
         .Builder()
@@ -33,7 +33,7 @@ object RetrofitInstance {
 
     private val yoloClient = Retrofit
         .Builder()
-        .baseUrl("http://ec2-13-125-241-55.ap-northeast-2.compute.amazonaws.com:5000/")
+        .baseUrl("http://121.133.3.6:5000/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

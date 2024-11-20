@@ -1,6 +1,13 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+val properties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
 }
 
 android {
@@ -15,6 +22,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "KAKAO_MAP_KEY",  properties["KAKAO_MAP_KEY"] as String)
     }
 
     buildTypes {
@@ -37,6 +46,7 @@ android {
     buildFeatures {
         // 뷰 바인딩 활성화
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -61,6 +71,8 @@ dependencies {
 
     // kakaoMap Api
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+    implementation("com.kakao.maps.open:android:2.11.9")
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
